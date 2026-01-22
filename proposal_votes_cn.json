@@ -1,0 +1,4694 @@
+{
+    "generated_at": "2026-01-21T17:22:17Z",
+    "proposals": [
+        {
+            "proposal_id": 102,
+            "title": "test",
+            "description": "test01",
+            "proposer_snowflake": 546912613959729153,
+            "proposer_name": "SUCGLSakura#5944",
+            "created_at": "2026-01-20T17:51:26Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463229451520446585,
+            "discord_thread_id": 1463229451520446585,
+            "votes": [
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T18:30:36Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 97,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T17:27:09Z",
+            "closed_at": "2026-01-20T17:28:34Z",
+            "close_reason": "test",
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463223338913628252,
+            "discord_thread_id": 1463223338913628252,
+            "votes": []
+        },
+        {
+            "proposal_id": 96,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T17:27:08Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463223336073953300,
+            "discord_thread_id": 1463223336073953300,
+            "votes": [
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:37:22Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 91,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T16:56:42Z",
+            "closed_at": "2026-01-20T17:19:27Z",
+            "close_reason": "test",
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463215677555871933,
+            "discord_thread_id": 1463215677555871933,
+            "votes": []
+        },
+        {
+            "proposal_id": 90,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T16:56:42Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463215675215446354,
+            "discord_thread_id": 1463215675215446354,
+            "votes": []
+        },
+        {
+            "proposal_id": 89,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T16:21:43Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463206874924187783,
+            "discord_thread_id": 1463206874924187783,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:44Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:44Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:44Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:44Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:44Z"
+                },
+                {
+                    "voter_battle_tag": "Denic#11565",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:45Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:45Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:45Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:45Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:45Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:45Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:46Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 88,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T16:21:41Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463206865080025211,
+            "discord_thread_id": 1463206865080025211,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:41Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:42Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:42Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:42Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:42Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:42Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:43Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:43Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:43Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:23:36Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 87,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T16:21:39Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463206854933872764,
+            "discord_thread_id": 1463206854933872764,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:39Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:39Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:39Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:40Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:40Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:40Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:40Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:40Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:21:41Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:21:41Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 85,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T16:21:37Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463206846943990017,
+            "discord_thread_id": 1463206846943990017,
+            "votes": []
+        },
+        {
+            "proposal_id": 84,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T16:21:36Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463206842976178339,
+            "discord_thread_id": 1463206842976178339,
+            "votes": []
+        },
+        {
+            "proposal_id": 83,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T15:43:34Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463197274078449758,
+            "discord_thread_id": 1463197274078449758,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:35Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:35Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:35Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:35Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:36Z"
+                },
+                {
+                    "voter_battle_tag": "Denic#11565",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:36Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:36Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:36Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:36Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:36Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:37Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:37Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 82,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T15:43:32Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463197264129560702,
+            "discord_thread_id": 1463197264129560702,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:33Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:33Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:33Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:33Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:33Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:33Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:34Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:34Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:34Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:34Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 81,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T15:43:30Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463197253719298251,
+            "discord_thread_id": 1463197253719298251,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:30Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:30Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:30Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:31Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:31Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:43:31Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:31Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:31Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T15:43:31Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:59:12Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 79,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T15:43:28Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463197247905988729,
+            "discord_thread_id": 1463197247905988729,
+            "votes": [
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T15:59:04Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 78,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-20T15:43:28Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463197245859172437,
+            "discord_thread_id": 1463197245859172437,
+            "votes": []
+        },
+        {
+            "proposal_id": 77,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-19T18:45:39Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462880706555543605,
+            "discord_thread_id": 1462880706555543605,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:40Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:40Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:40Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:40Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:40Z"
+                },
+                {
+                    "voter_battle_tag": "Denic#11565",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:40Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:41Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:41Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:41Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:41Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:41Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:41Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 76,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-19T18:45:36Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462880695780245640,
+            "discord_thread_id": 1462880695780245640,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:37Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:37Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:37Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:38Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:38Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:38Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:38Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:38Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:39Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:39Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 75,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-19T18:45:34Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462880685369987306,
+            "discord_thread_id": 1462880685369987306,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:34Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:35Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:35Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:35Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:35Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:45:35Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:35Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:36Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:45:36Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:46:16Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 73,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-19T18:45:32Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462880679527448761,
+            "discord_thread_id": 1462880679527448761,
+            "votes": []
+        },
+        {
+            "proposal_id": 72,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-19T18:45:32Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462880677199610132,
+            "discord_thread_id": 1462880677199610132,
+            "votes": [
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T02:14:00Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 71,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-19T18:04:48Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462870425905139883,
+            "discord_thread_id": 1462870425905139883,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:04:48Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:04:49Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:04:49Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:04:49Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:04:49Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:04:49Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:04:49Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:12:22Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 70,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-19T18:04:46Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462870418695127217,
+            "discord_thread_id": 1462870418695127217,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:04:47Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:04:47Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:04:47Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:04:47Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:04:47Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:12:28Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 69,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-19T18:04:44Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462870410965024972,
+            "discord_thread_id": 1462870410965024972,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:04:45Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:04:45Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:04:45Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T18:04:45Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T18:04:46Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 67,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-19T18:04:43Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462870405193928795,
+            "discord_thread_id": 1462870405193928795,
+            "votes": []
+        },
+        {
+            "proposal_id": 66,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-19T18:04:42Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462870401154678795,
+            "discord_thread_id": 1462870401154678795,
+            "votes": []
+        },
+        {
+            "proposal_id": 65,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-19T17:23:33Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462860047053750398,
+            "discord_thread_id": 1462860047053750398,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:23:34Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:23:34Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:23:34Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:23:34Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T17:23:34Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T17:23:35Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T17:23:35Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:38:18Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 64,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-19T17:23:32Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462860040422686830,
+            "discord_thread_id": 1462860040422686830,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:23:32Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:23:32Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:23:32Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:23:33Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T17:23:33Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 63,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-19T17:23:30Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462860033112150078,
+            "discord_thread_id": 1462860033112150078,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:23:31Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:23:31Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:23:31Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:23:31Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T17:23:31Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 61,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-19T17:23:28Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462860026765901854,
+            "discord_thread_id": 1462860026765901854,
+            "votes": []
+        },
+        {
+            "proposal_id": 60,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-19T17:23:27Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462860022638841918,
+            "discord_thread_id": 1462860022638841918,
+            "votes": []
+        },
+        {
+            "proposal_id": 55,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T13:31:59Z",
+            "closed_at": "2026-01-18T13:55:21Z",
+            "close_reason": "1",
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462439380953206856,
+            "discord_thread_id": 1462439380953206856,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:55:14Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 54,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T13:31:58Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462439378684088555,
+            "discord_thread_id": 1462439378684088555,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:55:28Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-19T17:43:39Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 53,
+            "title": "test",
+            "description": "test01",
+            "proposer_snowflake": 546912613959729153,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T13:22:35Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462437016179314790,
+            "discord_thread_id": 1462437016179314790,
+            "votes": []
+        },
+        {
+            "proposal_id": 48,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T13:08:15Z",
+            "closed_at": "2026-01-18T13:08:44Z",
+            "close_reason": "test",
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462433411053391954,
+            "discord_thread_id": 1462433411053391954,
+            "votes": []
+        },
+        {
+            "proposal_id": 47,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T13:08:15Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462433408184483983,
+            "discord_thread_id": 1462433408184483983,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:31Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 42,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T13:07:32Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462433227578015897,
+            "discord_thread_id": 1462433227578015897,
+            "votes": [
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-19T15:45:33Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 41,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T13:07:31Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462433224612642846,
+            "discord_thread_id": 1462433224612642846,
+            "votes": []
+        },
+        {
+            "proposal_id": 36,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T12:54:41Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462429993861775623,
+            "discord_thread_id": 1462429993861775623,
+            "votes": []
+        },
+        {
+            "proposal_id": 35,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T12:54:40Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462429991315832934,
+            "discord_thread_id": 1462429991315832934,
+            "votes": []
+        },
+        {
+            "proposal_id": 30,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T12:25:30Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462422650742771937,
+            "discord_thread_id": 1462422650742771937,
+            "votes": []
+        },
+        {
+            "proposal_id": 29,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T12:25:29Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462422648008081472,
+            "discord_thread_id": 1462422648008081472,
+            "votes": []
+        },
+        {
+            "proposal_id": 24,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T11:37:14Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462410504931774477,
+            "discord_thread_id": 1462410504931774477,
+            "votes": []
+        },
+        {
+            "proposal_id": 23,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T11:37:14Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462410502893474016,
+            "discord_thread_id": 1462410502893474016,
+            "votes": []
+        },
+        {
+            "proposal_id": 18,
+            "title": "Review for Closed",
+            "description": "Automated test card: use the Close button manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T09:37:46Z",
+            "closed_at": "2026-01-18T09:38:13Z",
+            "close_reason": "test",
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462380438046769224,
+            "discord_thread_id": 1462380438046769224,
+            "votes": []
+        },
+        {
+            "proposal_id": 17,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T09:37:45Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462380435643433073,
+            "discord_thread_id": 1462380435643433073,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T10:25:23Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 12,
+            "title": "Review for Closed",
+            "description": "Automated test card: Closed (manual).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T09:16:11Z",
+            "closed_at": "2026-01-18T09:16:11Z",
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462375005697605642,
+            "discord_thread_id": 1462375005697605642,
+            "votes": []
+        },
+        {
+            "proposal_id": 11,
+            "title": "Review for Active",
+            "description": "Automated test card: Active.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T09:16:09Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462375001624678434,
+            "discord_thread_id": 1462375001624678434,
+            "votes": []
+        },
+        {
+            "proposal_id": 10,
+            "title": "Review for",
+            "description": "testtesttest001",
+            "proposer_snowflake": 546912613959729153,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T06:43:33Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462336598086520833,
+            "discord_thread_id": 1462336598086520833,
+            "votes": []
+        },
+        {
+            "proposal_id": 9,
+            "title": "Review for Active",
+            "description": "testtesttest001",
+            "proposer_snowflake": 546912613959729153,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-18T06:41:47Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462336152919998611,
+            "discord_thread_id": 1462336152919998611,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T06:42:07Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 8,
+            "title": "test02",
+            "description": "test0303030\\ntest01",
+            "proposer_snowflake": 546912613959729153,
+            "proposer_name": "\u6c38\u6052#54725",
+            "created_at": "2026-01-17T17:16:18Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462133447266009333,
+            "discord_thread_id": 1462133447266009333,
+            "votes": [
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-17T17:24:29Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-17T17:25:15Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T03:11:56Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T03:12:25Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T03:13:04Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T03:15:02Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 7,
+            "title": "test01",
+            "description": "testtest",
+            "proposer_snowflake": 546912613959729153,
+            "proposer_name": "\u6c38\u6052#54725",
+            "created_at": "2026-01-17T16:58:24Z",
+            "closed_at": "2026-01-17T16:59:41Z",
+            "close_reason": "1",
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462128940926636104,
+            "discord_thread_id": 1462128940926636104,
+            "votes": [
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-17T16:58:33Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 6,
+            "title": "test",
+            "description": "test01",
+            "proposer_snowflake": 546912613959729153,
+            "proposer_name": "\u6c38\u6052#54725",
+            "created_at": "2026-01-17T16:47:03Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462126085482221800,
+            "discord_thread_id": 1462126085482221800,
+            "votes": []
+        },
+        {
+            "proposal_id": 101,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-05T17:27:19Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463223370563846412,
+            "discord_thread_id": 1463223370563846412,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:17Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:17Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:17Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:17Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:17Z"
+                },
+                {
+                    "voter_battle_tag": "Denic#11565",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:18Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:18Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:18Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:18Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:18Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:18Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:19Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:19Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:19Z"
+                },
+                {
+                    "voter_battle_tag": "XZZzzz#51423",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:19Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 100,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-05T17:27:16Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463223357733601435,
+            "discord_thread_id": 1463223357733601435,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:14Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:14Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:14Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:14Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:14Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:15Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:15Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:15Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:15Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:15Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:15Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:16Z"
+                },
+                {
+                    "voter_battle_tag": "XZZzzz#51423",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:16Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:16Z"
+                },
+                {
+                    "voter_battle_tag": "Denic#11565",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:16Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 99,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-05T17:27:13Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": "2026-01-20T17:28:45Z",
+            "implemented_version": "2.3",
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463223344294924455,
+            "discord_thread_id": 1463223344294924455,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:10Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:11Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:11Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:11Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:11Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:11Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:12Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:12Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:12Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:12Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:12Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:12Z"
+                },
+                {
+                    "voter_battle_tag": "XZZzzz#51423",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:13Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T17:27:13Z"
+                },
+                {
+                    "voter_battle_tag": "Denic#11565",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T17:27:13Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 95,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-05T16:56:53Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463215709000831020,
+            "discord_thread_id": 1463215709000831020,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:50Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:50Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:51Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:51Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:51Z"
+                },
+                {
+                    "voter_battle_tag": "Denic#11565",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:51Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:51Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:51Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:52Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:52Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:52Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:52Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:52Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:52Z"
+                },
+                {
+                    "voter_battle_tag": "XZZzzz#51423",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:52Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 94,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-05T16:56:49Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463215696283435049,
+            "discord_thread_id": 1463215696283435049,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:47Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:47Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:47Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:47Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:48Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:48Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:48Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:48Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:48Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:49Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:49Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:49Z"
+                },
+                {
+                    "voter_battle_tag": "XZZzzz#51423",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:49Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:49Z"
+                },
+                {
+                    "voter_battle_tag": "Denic#11565",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:49Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 93,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2026-01-05T16:56:46Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": "2026-01-20T17:19:37Z",
+            "implemented_version": "2.215",
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463215683247538391,
+            "discord_thread_id": 1463215683247538391,
+            "votes": [
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:44Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:44Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:44Z"
+                },
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:44Z"
+                },
+                {
+                    "voter_battle_tag": "duang#11731",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:45Z"
+                },
+                {
+                    "voter_battle_tag": "Gladiator#23706",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:45Z"
+                },
+                {
+                    "voter_battle_tag": "Kielich#2137",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:45Z"
+                },
+                {
+                    "voter_battle_tag": "pajk#21150",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:45Z"
+                },
+                {
+                    "voter_battle_tag": "WhiteFang1#1819",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:45Z"
+                },
+                {
+                    "voter_battle_tag": "SUCGLSakura#5944",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:45Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:46Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:46Z"
+                },
+                {
+                    "voter_battle_tag": "XZZzzz#51423",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:46Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-20T16:56:46Z"
+                },
+                {
+                    "voter_battle_tag": "Denic#11565",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-20T16:56:46Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 59,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T13:32:08Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462439409545904169,
+            "discord_thread_id": 1462439409545904169,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:32:06Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:32:06Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:32:06Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:32:07Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:07Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:07Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:07Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:07Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:07Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:08Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 58,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T13:32:05Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": 546912613959729153,
+            "implemented_at": "2026-01-19T18:27:52Z",
+            "implemented_version": "2.22",
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462439399668322388,
+            "discord_thread_id": 1462439399668322388,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:32:04Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:32:04Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:32:04Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:32:04Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:04Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:05Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:05Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:05Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:05Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:05Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 57,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T13:32:03Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": "2026-01-18T13:55:09Z",
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462439388016545793,
+            "discord_thread_id": 1462439388016545793,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:32:01Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:32:01Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:32:01Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:32:02Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:02Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:02Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:02Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:03Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:03Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:32:03Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 52,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T13:08:24Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462433437175779361,
+            "discord_thread_id": 1462433437175779361,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:22Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:22Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:23Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:23Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:23Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:23Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:23Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:23Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:24Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:24Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 51,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T13:08:21Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462433427289669693,
+            "discord_thread_id": 1462433427289669693,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:20Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:20Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:20Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:20Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:20Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:21Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:21Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:21Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:21Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:21Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 50,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T13:08:19Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462433416493531346,
+            "discord_thread_id": 1462433416493531346,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:17Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:18Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:18Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:08:18Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:18Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:18Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:19Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:19Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:19Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:08:19Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 46,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T13:07:41Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462433255805686046,
+            "discord_thread_id": 1462433255805686046,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:07:39Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:07:39Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:07:39Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:07:40Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:40Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:40Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:40Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:40Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:40Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:41Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 45,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T13:07:38Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462433243394736263,
+            "discord_thread_id": 1462433243394736263,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:07:36Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:07:36Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:07:36Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:07:37Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:37Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:37Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:37Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:37Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:37Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:38Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 44,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T13:07:35Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": "2026-01-19T15:45:26Z",
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462433234045632714,
+            "discord_thread_id": 1462433234045632714,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:07:34Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:07:34Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:07:34Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T13:07:34Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:34Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:35Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:35Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:35Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:35Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T13:07:35Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 40,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T12:54:49Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462430020952920094,
+            "discord_thread_id": 1462430020952920094,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:54:47Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:54:48Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:54:48Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:54:48Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:48Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:48Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:48Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:49Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:49Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:49Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 39,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T12:54:47Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462430010798243870,
+            "discord_thread_id": 1462430010798243870,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:54:45Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:54:45Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:54:46Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:54:46Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:46Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:46Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:46Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:47Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:47Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:47Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 38,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T12:54:44Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462429999238742107,
+            "discord_thread_id": 1462429999238742107,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:54:43Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:54:43Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:54:43Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:54:43Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:43Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:44Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:44Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:44Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:44Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:54:44Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 34,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T12:25:38Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462422676218843136,
+            "discord_thread_id": 1462422676218843136,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:25:37Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:25:37Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:25:37Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:25:37Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:37Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:37Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:38Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:38Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:38Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:38Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 33,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T12:25:36Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462422666123280447,
+            "discord_thread_id": 1462422666123280447,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:25:34Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:25:34Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:25:34Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:25:35Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:35Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:35Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:35Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:35Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:36Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:36Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 32,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T12:25:33Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": "2026-01-18T12:45:46Z",
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462422655629131798,
+            "discord_thread_id": 1462422655629131798,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:25:32Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:25:32Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:25:32Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T12:25:32Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:32Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:33Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:33Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:33Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:33Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T12:25:33Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 28,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T11:37:23Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462410532379427051,
+            "discord_thread_id": 1462410532379427051,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T11:37:21Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T11:37:21Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T11:37:21Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T11:37:22Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:22Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:22Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:22Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:22Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:23Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:23Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 27,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T11:37:20Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462410521905987604,
+            "discord_thread_id": 1462410521905987604,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T11:37:19Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T11:37:19Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T11:37:19Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T11:37:19Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:19Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:20Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:20Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:20Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:20Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:20Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 26,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T11:37:18Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462410511160446997,
+            "discord_thread_id": 1462410511160446997,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T11:37:16Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T11:37:16Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T11:37:17Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T11:37:17Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:17Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:17Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:17Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:18Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:18Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T11:37:18Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 22,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T09:37:54Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462380464475213959,
+            "discord_thread_id": 1462380464475213959,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:37:52Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:37:53Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:37:53Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": -1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:37:53Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:53Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:53Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:53Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:54Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:54Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:54Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 21,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T09:37:52Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462380455188758664,
+            "discord_thread_id": 1462380455188758664,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:37:50Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:37:50Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:37:50Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:37:51Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:51Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:51Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:51Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:51Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:52Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:52Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 20,
+            "title": "Review for Implemented",
+            "description": "Automated test card: wait for it to become Passed, then click Implemented manually.",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T09:37:49Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": "2026-01-18T11:16:36Z",
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462380444917170377,
+            "discord_thread_id": 1462380444917170377,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:37:48Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:37:48Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:37:48Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:37:48Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:49Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:49Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:49Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:49Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:49Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:37:49Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 16,
+            "title": "Review for Rejected",
+            "description": "Automated test card: Rejected (>=10 voters, <=75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T09:16:48Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": "2026-01-18T09:57:12Z",
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462375119526694977,
+            "discord_thread_id": 1462375119526694977,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:16:38Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:16:39Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:16:39Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:16:40Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:40Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:41Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:46Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:46Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:47Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:47Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 15,
+            "title": "Review for Passed (Pending Implementation)",
+            "description": "Automated test card: Passed (>=10 voters, >75% approval after 14 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T09:16:37Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": 546912613959729153,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462375068901572767,
+            "discord_thread_id": 1462375068901572767,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:16:27Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:16:27Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:16:28Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:16:29Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:29Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:30Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:30Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:31Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:36Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:36Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 14,
+            "title": "Review for Implemented",
+            "description": "Automated test card: Implemented (manual).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2026-01-03T09:16:25Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": "2026-01-18T09:16:25Z",
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462375019660185714,
+            "discord_thread_id": 1462375019660185714,
+            "votes": [
+                {
+                    "voter_battle_tag": "Riyoshima#11335",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:16:15Z"
+                },
+                {
+                    "voter_battle_tag": "StarDuck#6409",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:16:15Z"
+                },
+                {
+                    "voter_battle_tag": "Melo#13534",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:16:16Z"
+                },
+                {
+                    "voter_battle_tag": "Bnetplayer#239723",
+                    "vote": 1,
+                    "voter_rank": "Master",
+                    "created_at": "2026-01-18T09:16:16Z"
+                },
+                {
+                    "voter_battle_tag": "\u6c38\u6052#54725",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:17Z"
+                },
+                {
+                    "voter_battle_tag": "\u7a7a\u767d#59764",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:18Z"
+                },
+                {
+                    "voter_battle_tag": "iLLuS#11488",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:18Z"
+                },
+                {
+                    "voter_battle_tag": "LegendarY#1572",
+                    "vote": 1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:19Z"
+                },
+                {
+                    "voter_battle_tag": "TheRandom#11322",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:24Z"
+                },
+                {
+                    "voter_battle_tag": "tralala#2125",
+                    "vote": -1,
+                    "voter_rank": "Diamond",
+                    "created_at": "2026-01-18T09:16:24Z"
+                }
+            ]
+        },
+        {
+            "proposal_id": 98,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2025-12-20T17:27:10Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463223342164344842,
+            "discord_thread_id": 1463223342164344842,
+            "votes": []
+        },
+        {
+            "proposal_id": 92,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2025-12-20T16:56:43Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463215680559120484,
+            "discord_thread_id": 1463215680559120484,
+            "votes": []
+        },
+        {
+            "proposal_id": 86,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2025-12-20T16:21:38Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463206851951853703,
+            "discord_thread_id": 1463206851951853703,
+            "votes": []
+        },
+        {
+            "proposal_id": 80,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2025-12-20T15:43:29Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1463197250665582944,
+            "discord_thread_id": 1463197250665582944,
+            "votes": []
+        },
+        {
+            "proposal_id": 74,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Bnetplayer#239723",
+            "created_at": "2025-12-19T18:45:34Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462880682429645025,
+            "discord_thread_id": 1462880682429645025,
+            "votes": []
+        },
+        {
+            "proposal_id": 68,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2025-12-19T18:04:44Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462870407991529607,
+            "discord_thread_id": 1462870407991529607,
+            "votes": []
+        },
+        {
+            "proposal_id": 62,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2025-12-19T17:23:30Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462860030322933898,
+            "discord_thread_id": 1462860030322933898,
+            "votes": []
+        },
+        {
+            "proposal_id": 56,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2025-12-18T13:32:00Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462439385138991281,
+            "discord_thread_id": 1462439385138991281,
+            "votes": []
+        },
+        {
+            "proposal_id": 49,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2025-12-18T13:08:16Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462433414316818595,
+            "discord_thread_id": 1462433414316818595,
+            "votes": []
+        },
+        {
+            "proposal_id": 43,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2025-12-18T13:07:33Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462433230442594384,
+            "discord_thread_id": 1462433230442594384,
+            "votes": []
+        },
+        {
+            "proposal_id": 37,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2025-12-18T12:54:42Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462429996487413938,
+            "discord_thread_id": 1462429996487413938,
+            "votes": []
+        },
+        {
+            "proposal_id": 31,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2025-12-18T12:25:31Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462422653032992950,
+            "discord_thread_id": 1462422653032992950,
+            "votes": []
+        },
+        {
+            "proposal_id": 25,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2025-12-18T11:37:15Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462410507897147415,
+            "discord_thread_id": 1462410507897147415,
+            "votes": []
+        },
+        {
+            "proposal_id": 19,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2025-12-18T09:37:47Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462380440881991770,
+            "discord_thread_id": 1462380440881991770,
+            "votes": []
+        },
+        {
+            "proposal_id": 13,
+            "title": "Review for Expired",
+            "description": "Automated test card: Expired (no quorum by 30 days).",
+            "proposer_snowflake": null,
+            "proposer_name": "Riyoshima#11335",
+            "created_at": "2025-12-18T09:16:13Z",
+            "closed_at": null,
+            "close_reason": null,
+            "claimed_by_snowflake": null,
+            "implemented_at": null,
+            "implemented_version": null,
+            "discord_guild_id": 404843989531885579,
+            "discord_channel_id": 1068401643214876772,
+            "discord_message_id": 1462375011653259447,
+            "discord_thread_id": 1462375011653259447,
+            "votes": []
+        }
+    ]
+}
