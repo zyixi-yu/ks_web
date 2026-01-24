@@ -1,9 +1,14 @@
 {
-  // 纯静态站点：由 Wrangler v4 直接上传 assets 目录
-  // 部署命令：npx wrangler deploy
+  // 静态资源 + Worker：部署命令 `npx wrangler deploy`
   "name": "ks-web",
   "compatibility_date": "2026-01-24",
+  "main": "worker/index.ts",
   "assets": {
-    "directory": "./public"
+    "directory": "./dist"
+  },
+  "env": {
+    "preview": {
+      "name": "ks-web-preview"
+    }
   }
 }

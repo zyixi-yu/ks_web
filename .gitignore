@@ -1,0 +1,25 @@
+# Node / pnpm
+node_modules/
+pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Wrangler / Cloudflare
+.wrangler/
+
+# Build outputs
+dist/
+.vite/
+
+# TypeScript
+*.tsbuildinfo
+
+# OS / editor
+.DS_Store
+.vscode/
+*.swp
+
+# Env files
+.env
+.env.*
