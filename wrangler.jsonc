@@ -1,0 +1,9 @@
+{
+  // 纯静态站点：由 Wrangler v4 直接上传 assets 目录
+  // 部署命令：npx wrangler deploy
+  "name": "ks-web",
+  "compatibility_date": "2026-01-24",
+  "assets": {
+    "directory": "./public"
+  }
+}
