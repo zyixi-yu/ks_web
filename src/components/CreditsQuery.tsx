@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { copyToClipboard } from "../lib/clipboard";
 import { computeCreditBreakdown, decodeCreditCode, type CreditsResponse } from "../lib/credits";
 import { formatTimeCN } from "../lib/time";
@@ -12,12 +12,58 @@ function isNonEmptyString(x: unknown): x is string {
   return typeof x === "string" && x.trim().length > 0;
 }
 
+type RecentHandle = {
+  handle: string;
+  lastUsed: number;
+};
+
+const RECENT_STORAGE_KEY = "ks_recent_handles_v1";
+const RECENT_MAX = 8;
+
+function loadRecentHandles(): RecentHandle[] {
+  try {
+    const raw = localStorage.getItem(RECENT_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((x) => ({
+        handle: String((x as any)?.handle || "").trim(),
+        lastUsed: Number((x as any)?.lastUsed || 0),
+      }))
+      .filter((x) => x.handle.length > 0)
+      .sort((a, b) => (b.lastUsed || 0) - (a.lastUsed || 0))
+      .slice(0, RECENT_MAX);
+  } catch {
+    return [];
+  }
+}
+
+function saveRecentHandle(nextHandle: string): RecentHandle[] {
+  const h = nextHandle.trim();
+  if (!h) return loadRecentHandles();
+  const now = Date.now();
+  const current = loadRecentHandles().filter((x) => x.handle.toUpperCase() !== h.toUpperCase());
+  const next = [{ handle: h, lastUsed: now }, ...current].slice(0, RECENT_MAX);
+  try {
+    localStorage.setItem(RECENT_STORAGE_KEY, JSON.stringify(next));
+  } catch {
+    // ignore
+  }
+  return next;
+}
+
 export default function CreditsQuery() {
   const [handle, setHandle] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<CreditsResult | null>(null);
   const [copied, setCopied] = useState(false);
+  const [recent, setRecent] = useState<RecentHandle[]>([]);
+
+  useEffect(() => {
+    setRecent(loadRecentHandles());
+  }, []);
 
   const command = useMemo(() => {
     if (!result?.data?.code) return "";
@@ -29,8 +75,8 @@ export default function CreditsQuery() {
     return computeCreditBreakdown(result.data, result.decoded);
   }, [result]);
 
-  async function fetchCredits() {
-    const val = handle.trim();
+  async function runQuery(rawHandle: string) {
+    const val = rawHandle.trim();
     if (!val) {
       setError("请输入玩家句柄");
       setResult(null);
@@ -49,6 +95,7 @@ export default function CreditsQuery() {
       if (!isNonEmptyString(data?.code)) throw new Error("返回数据格式错误或玩家不存在");
       const decoded = decodeCreditCode(data.code);
       setResult({ data, decoded });
+      setRecent(saveRecentHandle(val));
     } catch (e) {
       console.warn(e);
       setError("查询失败。请检查句柄是否正确（如：5-S2-1-xxxxx），或稍后再试。");
@@ -61,8 +108,10 @@ export default function CreditsQuery() {
   return (
     <div className="mx-auto max-w-2xl">
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h1 className="text-lg font-black text-slate-900">积分查询</h1>
-        <p className="mt-1 text-sm text-slate-500">输入玩家句柄 (Handle) 查询积分与指令</p>
+        <h1 className="text-center text-lg font-black text-slate-900">积分查询</h1>
+        <p className="mt-1 text-center text-sm text-slate-500">
+          输入玩家句柄 (Handle) 查询积分与指令
+        </p>
 
         <div className="mt-4 flex gap-2">
           <input
@@ -71,18 +120,41 @@ export default function CreditsQuery() {
             value={handle}
             onChange={(e) => setHandle(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") fetchCredits();
+              if (e.key === "Enter") runQuery(handle);
             }}
             autoComplete="off"
           />
           <button
             className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-black text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-70"
-            onClick={fetchCredits}
+            onClick={() => runQuery(handle)}
             disabled={loading}
           >
             {loading ? "查询中..." : "查询"}
           </button>
         </div>
+
+        {!loading && !result && !error && recent.length ? (
+          <div className="mt-3">
+            <div className="text-xs font-bold text-slate-500">最近查询</div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {recent.map((item) => (
+                <button
+                  key={item.handle}
+                  type="button"
+                  className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100"
+                  onClick={() => {
+                    setHandle(item.handle);
+                    runQuery(item.handle);
+                  }}
+                  disabled={loading}
+                  title={`上次查询：${formatTimeCN(item.lastUsed)}`}
+                >
+                  {item.handle}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
 
         {loading ? (
           <div className="mt-4 flex justify-center">

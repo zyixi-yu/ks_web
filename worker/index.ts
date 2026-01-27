@@ -57,16 +57,14 @@ export default {
 
     // API: 钻石议会投票数据（同域代理）
     if (url.pathname === "/api/proposal_votes_cn.json") {
-      const upstream = "https://data.194823.xyz/proposal_votes_cn.json";
-      const resp = await fetch(upstream, {
-        headers: { Accept: "application/json" },
-        cf: { cacheTtl: 60, cacheEverything: true },
-      });
+      const key = "proposal_votes_cn.json";
+      const body = await env.KS_KV.get(key, "text");
+      if (!body) return jsonError(404, `KV key not found: ${key}`);
 
-      const headers = new Headers(resp.headers);
-      headers.set("Cache-Control", "public, max-age=60");
+      const headers = new Headers();
       headers.set("Content-Type", "application/json; charset=utf-8");
-      return withCors(new Response(resp.body, { status: resp.status, headers }));
+      headers.set("Cache-Control", "public, max-age=0, s-maxage=60, stale-while-revalidate=60");
+      return withCors(new Response(body, { status: 200, headers }));
     }
 
     // SPA 路由回退：非 /api 且不像文件路径（无扩展名）时，回退到 index.html

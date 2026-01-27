@@ -167,8 +167,8 @@ export default function Proposals() {
                   className="flex min-h-[260px] flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
                   key={p.proposal_id}
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="text-sm font-black leading-5 text-slate-900">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-h-[40px] flex-1 text-sm font-black leading-5 text-slate-900 line-clamp-2">
                       #{p.proposal_id} · {title}
                     </div>
                     <div

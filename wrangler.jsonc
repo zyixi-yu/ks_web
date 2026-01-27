@@ -6,6 +6,12 @@
   "assets": {
     "directory": "./dist"
   },
+  "kv_namespaces": [
+    {
+      "binding": "KS_KV",
+      "id": "d3c562ecc2f04c1eb4f920ae9bda71a2"
+    }
+  ],
   "env": {
     "preview": {
       "name": "ks-web-preview"
