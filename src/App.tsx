@@ -9,7 +9,15 @@ export default function App() {
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700" />
+            <div className="inline-flex h-9 overflow-hidden rounded-xl">
+              <img
+                src="/ksicon.png"
+                alt="凯瑞甘生存"
+                className="h-full w-auto object-contain"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
             <div>
               <div className="text-sm font-black leading-4 text-slate-900">凯瑞甘生存</div>
               <div className="text-xs text-slate-500">积分助手 · 钻石议会</div>
