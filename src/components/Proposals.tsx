@@ -91,34 +91,44 @@ export default function Proposals() {
   const generatedAt = payload?.generated_at ? formatTimeCN(payload.generated_at) : "--";
 
   return (
-    <div className="card card-pad">
-      <div className="section-title">
-        <h2 className="h2">钻石议会 · 提案投票</h2>
-        <div className="small">数据更新：{generatedAt}</div>
-      </div>
-
-      <div className="rules">
-        <div>
-          <strong>投票资格</strong>：钻石/大师（双阵营），总有效对局 &gt; 200，近30天有效对局 ≥ 10。
+    <div className="mx-auto max-w-5xl">
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <h1 className="text-lg font-black text-slate-900">钻石议会</h1>
+            <p className="mt-1 text-sm text-slate-500">提案投票与日志（按创建时间排序）</p>
+          </div>
+          <div className="text-xs font-bold text-slate-500">数据更新：{generatedAt}</div>
         </div>
-        <div>
-          <strong>权重</strong>：钻石=1，大师=2；<strong>规则</strong>：创建后{PROPOSAL_RULES.decisionAfterDays}
-          天且≥{PROPOSAL_RULES.quorumVotes}票进入裁决，赞同率 &gt;{" "}
-          {Math.round(PROPOSAL_RULES.passThreshold * 100)}% 视为通过（待实施）；创建后{PROPOSAL_RULES.quorumDeadlineDays}
-          天仍不足{PROPOSAL_RULES.quorumVotes}票则过期。
-        </div>
-        <div>
-          <strong>投票方式</strong>：在游戏内输入 <strong>-vote 提案编号_1</strong>（赞同）或{" "}
-          <strong>-vote 提案编号_0</strong>（反对）。
-        </div>
-      </div>
 
-      {loading ? <div className="loader" /> : null}
-      {error ? <div className="error">{error}</div> : null}
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+          <div>
+            <span className="font-black text-slate-900">投票资格</span>：钻石/大师（双阵营），总有效对局 &gt;
+            200，近30天有效对局 ≥ 10。
+          </div>
+          <div className="mt-1">
+            <span className="font-black text-slate-900">权重</span>：钻石=1，大师=2；<span className="font-black text-slate-900">规则</span>：创建后
+            {PROPOSAL_RULES.decisionAfterDays}天且≥{PROPOSAL_RULES.quorumVotes}票进入裁决，赞同率 &gt;{" "}
+            {Math.round(PROPOSAL_RULES.passThreshold * 100)}% 视为通过（待实施）；创建后{PROPOSAL_RULES.quorumDeadlineDays}
+            天仍不足{PROPOSAL_RULES.quorumVotes}票则过期。
+          </div>
+          <div className="mt-1">
+            <span className="font-black text-slate-900">投票方式</span>：在游戏内输入{" "}
+            <span className="font-black text-slate-900">-vote 提案编号_1</span>（赞同）或{" "}
+            <span className="font-black text-slate-900">-vote 提案编号_0</span>（反对）。
+          </div>
+        </div>
 
-      {!loading && !error ? (
-        proposals.length ? (
-          <div className="proposal-grid">
+        {loading ? (
+          <div className="mt-4 flex justify-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-blue-600" />
+          </div>
+        ) : null}
+        {error ? <div className="mt-3 text-sm leading-6 text-red-600">{error}</div> : null}
+
+        {!loading && !error ? (
+          proposals.length ? (
+            <div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
             {proposals.map((p) => {
               const voteStats = computeVoteStats(p.votes);
               const status = computeProposalStatus({
@@ -148,71 +158,102 @@ export default function Proposals() {
               const quorumDeadlineAt = p.created_at ? addDays(p.created_at, PROPOSAL_RULES.quorumDeadlineDays) : null;
 
               return (
-                <div className="proposal-card" key={p.proposal_id}>
-                  <div className="proposal-topline">
-                    <div className="proposal-title">
+                <div
+                  className="flex min-h-[260px] flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                  key={p.proposal_id}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-sm font-black leading-5 text-slate-900">
                       #{p.proposal_id} · {title}
                     </div>
-                    <div className={`badge ${pres.cls}`}>{`${pres.emoji} ${pres.zh}`}</div>
+                    <div
+                      className={[
+                        "shrink-0 rounded-full border px-2.5 py-1 text-xs font-black",
+                        pres.cls === "active" && "border-blue-200 bg-blue-50 text-blue-700",
+                        pres.cls === "expired" && "border-slate-200 bg-slate-50 text-slate-600",
+                        pres.cls === "rejected" && "border-red-200 bg-red-50 text-red-700",
+                        pres.cls === "closed" && "border-slate-200 bg-slate-100 text-slate-900",
+                        pres.cls === "passed" && "border-violet-200 bg-violet-50 text-violet-700",
+                        pres.cls === "implemented" && "border-emerald-200 bg-emerald-50 text-emerald-700",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                    >
+                      {pres.emoji} {pres.zh}
+                    </div>
                   </div>
 
-                  <div className="proposal-meta">{proposalMetaText(p)}</div>
-                  {desc ? <div className="proposal-desc">{desc}</div> : null}
+                  <div className="mt-2 text-xs leading-5 text-slate-500">{proposalMetaText(p)}</div>
+                  {desc ? <div className="mt-3 whitespace-pre-line text-sm leading-6 text-slate-800">{desc}</div> : null}
 
-                  <div className="progress" aria-label="投票进度">
-                    <div className="progress-yes" style={{ width: `${Math.max(0, Math.min(100, yesPct))}%` }} />
-                    <div className="progress-no" style={{ width: `${Math.max(0, Math.min(100, noPct))}%` }} />
+                  <div className="mt-3 overflow-hidden rounded-full border border-slate-200 bg-slate-100">
+                    <div className="flex h-2">
+                      <div className="bg-emerald-500" style={{ width: `${Math.max(0, Math.min(100, yesPct))}%` }} />
+                      <div className="bg-red-500" style={{ width: `${Math.max(0, Math.min(100, noPct))}%` }} />
+                    </div>
                   </div>
 
-                  <div className="pill-row">
-                    <span className="pill">
-                      进度：<strong>{voteStats.voteCount}</strong>/{PROPOSAL_RULES.quorumVotes}
+                  <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-600">
+                    <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
+                      进度：<span className="font-black text-slate-900">{voteStats.voteCount}</span>/{PROPOSAL_RULES.quorumVotes}
                     </span>
-                    <span className="pill">
-                      赞同率：<strong>{voteStats.approvalPct}%</strong>
+                    <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
+                      赞同率：<span className="font-black text-slate-900">{voteStats.approvalPct}%</span>
                     </span>
-                    <span className="pill">
-                      ✅ 赞同权重：<strong>{voteStats.yesWeight}</strong>
+                    <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
+                      ✅ 赞同权重：<span className="font-black text-slate-900">{voteStats.yesWeight}</span>
                     </span>
-                    <span className="pill">
-                      ⛔ 反对权重：<strong>{voteStats.noWeight}</strong>
+                    <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
+                      ⛔ 反对权重：<span className="font-black text-slate-900">{voteStats.noWeight}</span>
                     </span>
                   </div>
 
-                  {extraParts.length ? <div className="proposal-meta">{extraParts.join(" · ")}</div> : null}
+                  {extraParts.length ? (
+                    <div className="mt-2 text-xs leading-5 text-slate-500">{extraParts.join(" · ")}</div>
+                  ) : null}
 
                   {isActive ? (
-                    <div className="actions">
-                      <button className="btn btn-yes" onClick={() => setVoteModal({ proposalId: p.proposal_id, voteValue: 1 })}>
+                    <div className="mt-3 flex gap-2">
+                      <button
+                        className="flex-1 rounded-xl bg-emerald-600 px-3 py-2.5 text-sm font-black text-white hover:bg-emerald-700"
+                        onClick={() => setVoteModal({ proposalId: p.proposal_id, voteValue: 1 })}
+                      >
                         赞同
                       </button>
-                      <button className="btn btn-no" onClick={() => setVoteModal({ proposalId: p.proposal_id, voteValue: 0 })}>
+                      <button
+                        className="flex-1 rounded-xl bg-red-600 px-3 py-2.5 text-sm font-black text-white hover:bg-red-700"
+                        onClick={() => setVoteModal({ proposalId: p.proposal_id, voteValue: 0 })}
+                      >
                         反对
                       </button>
                     </div>
                   ) : null}
 
-                  <details className="details">
-                    <summary>投票日志（{voteStats.voteCount}）</summary>
-                    <div className="preview">
+                  <details className="mt-auto pt-3">
+                    <summary className="cursor-pointer select-none text-sm font-black text-blue-700 hover:text-blue-800">
+                      投票日志（{voteStats.voteCount}）
+                    </summary>
+                    <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3 font-mono text-xs leading-6 text-slate-800">
                       {voteStats.latestVotes.length ? (
                         <>
                           {voteStats.latestVotes.slice(0, 6).map((row) => (
                             <div key={row.voter}>
-                              <span className={row.vote === 1 ? "plus" : "minus"}>{row.vote === 1 ? "+" : "-"}</span>{" "}
+                              <span className={row.vote === 1 ? "text-emerald-600" : "text-red-600"}>
+                                {row.vote === 1 ? "+" : "-"}
+                              </span>{" "}
                               {row.voter}({row.rank}) 权重{row.weight} · {row.vote === 1 ? "赞同" : "反对"} ·{" "}
                               {row.createdAt ? formatTimeCN(row.createdAt) : "--"}
                             </div>
                           ))}
-                          {voteStats.latestVotes.length > 6 ? <div className="muted">...</div> : null}
+                          {voteStats.latestVotes.length > 6 ? <div className="text-slate-400">...</div> : null}
                         </>
                       ) : (
-                        <div className="muted">暂无投票记录</div>
+                        <div className="text-slate-400">暂无投票记录</div>
                       )}
                     </div>
 
                     <a
-                      className="link"
+                      className="mt-2 inline-block text-sm font-black text-blue-700 underline hover:text-blue-800"
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
@@ -228,7 +269,7 @@ export default function Proposals() {
                       在弹窗查看全部
                     </a>
 
-                    <div className="proposal-meta" style={{ marginTop: 8 }}>
+                    <div className="mt-2 text-xs leading-5 text-slate-500">
                       结束节点：裁决 {decisionAt ? formatTimeCN(decisionAt) : "--"} · 满票截止{" "}
                       {quorumDeadlineAt ? formatTimeCN(quorumDeadlineAt) : "--"}
                     </div>
@@ -236,13 +277,13 @@ export default function Proposals() {
                 </div>
               );
             })}
-          </div>
-        ) : (
-          <div className="muted" style={{ marginTop: 14 }}>
-            暂无提案数据
-          </div>
-        )
-      ) : null}
+            </div>
+          ) : (
+            <div className="mt-5 rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
+              暂无提案数据
+            </div>
+          )
+        ) : null}
 
       <Modal
         open={!!voteModal}
@@ -253,30 +294,34 @@ export default function Proposals() {
       >
         {voteModal ? (
           <>
-            <p style={{ marginTop: 0, lineHeight: 1.6 }}>
+            <p className="mt-0 text-sm leading-6 text-slate-800">
               你选择了<strong>{voteModal.voteValue === 1 ? "赞同" : "反对"}</strong>提案{" "}
               <strong>#{voteModal.proposalId}</strong>。请在游戏聊天栏输入下面指令完成投票：
             </p>
-            <div className="code" style={{ background: "#111827", borderColor: "#111827", color: "#f9fafb" }}>
+            <div className="mt-3 rounded-xl border border-slate-900 bg-slate-900 p-3 font-mono text-sm text-slate-50 break-all">
               -vote {voteModal.proposalId}_{voteModal.voteValue}
             </div>
-            <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+            <div className="mt-3 flex gap-2">
               <button
-                className="btn btn-copy"
+                className="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-900 hover:bg-slate-50"
                 onClick={async () => {
                   await copyToClipboard(`-vote ${voteModal.proposalId}_${voteModal.voteValue}`);
                 }}
-                style={{ flex: 1, border: `1px solid var(--border)` }}
               >
                 点击复制指令
               </button>
-              <button className="btn" onClick={() => setVoteModal(null)} style={{ flex: 1, border: `1px solid var(--border)` }}>
+              <button
+                className="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-900 hover:bg-slate-50"
+                onClick={() => setVoteModal(null)}
+              >
                 我知道了
               </button>
             </div>
-            <p style={{ marginTop: 12, color: "var(--text-sub)", fontSize: 13, lineHeight: 1.6 }}>
-              格式：<strong>-vote 提案编号_1</strong>（赞同） 或 <strong>-vote 提案编号_0</strong>（反对）。<br />
-              说明：<strong>1</strong> 表示赞同，<strong>0</strong> 表示反对，<strong>_</strong> 是英文下划线。
+            <p className="mt-3 text-sm leading-6 text-slate-500">
+              格式：<strong className="text-slate-900">-vote 提案编号_1</strong>（赞同） 或{" "}
+              <strong className="text-slate-900">-vote 提案编号_0</strong>（反对）。<br />
+              说明：<strong className="text-slate-900">1</strong> 表示赞同，<strong className="text-slate-900">0</strong>{" "}
+              表示反对，<strong className="text-slate-900">_</strong> 是英文下划线。
             </p>
           </>
         ) : null}
@@ -289,32 +334,36 @@ export default function Proposals() {
       >
         {logModal ? (
           <>
-            <div style={{ color: "var(--text-sub)", fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+            <div className="whitespace-pre-line text-sm leading-6 text-slate-600">
               {`标题：${safeText(logModal.proposal.title, "(无标题)")}\n状态：${logModal.statusZh}（${logModal.status}） · 创建：${
                 logModal.proposal.created_at ? formatTimeCN(logModal.proposal.created_at) : "--"
               }\n说明：此处展示的是每位玩家的最新投票（如有人改票，以最后一次为准）。`}
             </div>
 
-            <div className="logbox" style={{ marginTop: 12 }}>
+            <div className="mt-3 max-h-[55vh] overflow-auto rounded-2xl border border-slate-800 bg-slate-950 p-3 font-mono text-xs leading-6 text-slate-100">
               {logModal.latestVotes.length ? (
                 logModal.latestVotes.map((row) => (
-                  <div key={row.voter} className={row.vote === 1 ? "plus" : "minus"}>
+                  <div key={row.voter} className={row.vote === 1 ? "text-emerald-300" : "text-red-300"}>
                     {voteLine(row)}
                   </div>
                 ))
               ) : (
-                <div className="muted">暂无投票记录</div>
+                <div className="text-slate-400">暂无投票记录</div>
               )}
             </div>
 
-            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 12 }}>
-              <button className="btn" style={{ border: `1px solid var(--border)` }} onClick={() => setLogModal(null)}>
+            <div className="mt-3 flex justify-end">
+              <button
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-900 hover:bg-slate-50"
+                onClick={() => setLogModal(null)}
+              >
                 关闭
               </button>
             </div>
           </>
         ) : null}
       </Modal>
+      </div>
     </div>
   );
 }

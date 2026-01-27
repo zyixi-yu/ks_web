@@ -69,6 +69,15 @@ export default {
       return withCors(new Response(resp.body, { status: resp.status, headers }));
     }
 
+    // SPA 路由回退：非 /api 且不像文件路径（无扩展名）时，回退到 index.html
+    const accept = request.headers.get("Accept") || "";
+    const looksLikeFile = url.pathname.includes(".") || url.pathname.startsWith("/assets/");
+    const isApi = url.pathname.startsWith("/api/");
+    if (!isApi && !looksLikeFile && accept.includes("text/html")) {
+      const indexUrl = new URL("/index.html", url);
+      return env.ASSETS.fetch(new Request(indexUrl.toString(), request));
+    }
+
     // 静态资源：交给 Wrangler assets
     return env.ASSETS.fetch(request);
   },
