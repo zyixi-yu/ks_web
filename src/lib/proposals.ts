@@ -167,14 +167,9 @@ export function statusPresentation(status: ProposalStatus) {
 
 export function proposalMetaText(proposal: Proposal) {
   const created = proposal.created_at ? formatTimeCN(proposal.created_at) : "--";
-  const decisionAt = proposal.created_at ? addDays(proposal.created_at, PROPOSAL_RULES.decisionAfterDays) : null;
-  const quorumDeadlineAt = proposal.created_at ? addDays(proposal.created_at, PROPOSAL_RULES.quorumDeadlineDays) : null;
   const parts = [
     `发起人：${proposal.proposer_name || "未知"}`,
     `创建：${created}`,
-    decisionAt ? `裁决：${formatTimeCN(decisionAt)}` : null,
-    quorumDeadlineAt ? `满票截止：${formatTimeCN(quorumDeadlineAt)}` : null,
   ].filter(Boolean);
   return parts.join(" · ");
 }
-

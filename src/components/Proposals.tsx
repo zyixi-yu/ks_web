@@ -4,7 +4,6 @@ import { copyToClipboard } from "../lib/clipboard";
 import { formatTimeCN } from "../lib/time";
 import {
   PROPOSAL_RULES,
-  addDays,
   computeProposalStatus,
   computeVoteStats,
   proposalMetaText,
@@ -154,8 +153,14 @@ export default function Proposals() {
               if (status === "Implemented" && p.implemented_version)
                 extraParts.push(`实施版本：${safeText(p.implemented_version, "")}`);
 
-              const decisionAt = p.created_at ? addDays(p.created_at, PROPOSAL_RULES.decisionAfterDays) : null;
-              const quorumDeadlineAt = p.created_at ? addDays(p.created_at, PROPOSAL_RULES.quorumDeadlineDays) : null;
+              const openLog = () => {
+                setLogModal({
+                  proposal: p,
+                  status,
+                  statusZh: pres.zh,
+                  latestVotes: voteStats.latestVotes,
+                });
+              };
 
               return (
                 <div
@@ -183,8 +188,12 @@ export default function Proposals() {
                     </div>
                   </div>
 
-                  <div className="mt-2 text-xs leading-5 text-slate-500">{proposalMetaText(p)}</div>
-                  {desc ? <div className="mt-3 whitespace-pre-line text-sm leading-6 text-slate-800">{desc}</div> : null}
+                  <div className="mt-2 min-h-[40px] text-xs leading-5 text-slate-500 line-clamp-2">
+                    {proposalMetaText(p)}
+                  </div>
+                  <div className="mt-2 min-h-[96px] whitespace-pre-line text-sm leading-6 text-slate-800 line-clamp-4">
+                    {desc || <span className="text-slate-400">（无描述）</span>}
+                  </div>
 
                   <div className="mt-3 overflow-hidden rounded-full border border-slate-200 bg-slate-100">
                     <div className="flex h-2">
@@ -212,68 +221,33 @@ export default function Proposals() {
                     <div className="mt-2 text-xs leading-5 text-slate-500">{extraParts.join(" · ")}</div>
                   ) : null}
 
-                  {isActive ? (
-                    <div className="mt-3 flex gap-2">
+                  <div className="mt-auto pt-3">
+                    <div className="flex flex-col gap-2">
+                      {isActive ? (
+                        <div className="flex gap-2">
+                          <button
+                            className="flex-1 rounded-xl bg-emerald-600 px-3 py-2.5 text-sm font-black text-white hover:bg-emerald-700"
+                            onClick={() => setVoteModal({ proposalId: p.proposal_id, voteValue: 1 })}
+                          >
+                            赞同
+                          </button>
+                          <button
+                            className="flex-1 rounded-xl bg-red-600 px-3 py-2.5 text-sm font-black text-white hover:bg-red-700"
+                            onClick={() => setVoteModal({ proposalId: p.proposal_id, voteValue: 0 })}
+                          >
+                            反对
+                          </button>
+                        </div>
+                      ) : null}
+
                       <button
-                        className="flex-1 rounded-xl bg-emerald-600 px-3 py-2.5 text-sm font-black text-white hover:bg-emerald-700"
-                        onClick={() => setVoteModal({ proposalId: p.proposal_id, voteValue: 1 })}
+                        className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-black text-slate-900 hover:bg-slate-50"
+                        onClick={openLog}
                       >
-                        赞同
-                      </button>
-                      <button
-                        className="flex-1 rounded-xl bg-red-600 px-3 py-2.5 text-sm font-black text-white hover:bg-red-700"
-                        onClick={() => setVoteModal({ proposalId: p.proposal_id, voteValue: 0 })}
-                      >
-                        反对
+                        查看投票日志（{voteStats.voteCount}）
                       </button>
                     </div>
-                  ) : null}
-
-                  <details className="mt-auto pt-3">
-                    <summary className="cursor-pointer select-none text-sm font-black text-blue-700 hover:text-blue-800">
-                      投票日志（{voteStats.voteCount}）
-                    </summary>
-                    <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3 font-mono text-xs leading-6 text-slate-800">
-                      {voteStats.latestVotes.length ? (
-                        <>
-                          {voteStats.latestVotes.slice(0, 6).map((row) => (
-                            <div key={row.voter}>
-                              <span className={row.vote === 1 ? "text-emerald-600" : "text-red-600"}>
-                                {row.vote === 1 ? "+" : "-"}
-                              </span>{" "}
-                              {row.voter}({row.rank}) 权重{row.weight} · {row.vote === 1 ? "赞同" : "反对"} ·{" "}
-                              {row.createdAt ? formatTimeCN(row.createdAt) : "--"}
-                            </div>
-                          ))}
-                          {voteStats.latestVotes.length > 6 ? <div className="text-slate-400">...</div> : null}
-                        </>
-                      ) : (
-                        <div className="text-slate-400">暂无投票记录</div>
-                      )}
-                    </div>
-
-                    <a
-                      className="mt-2 inline-block text-sm font-black text-blue-700 underline hover:text-blue-800"
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setLogModal({
-                          proposal: p,
-                          status,
-                          statusZh: pres.zh,
-                          latestVotes: voteStats.latestVotes,
-                        });
-                      }}
-                    >
-                      在弹窗查看全部
-                    </a>
-
-                    <div className="mt-2 text-xs leading-5 text-slate-500">
-                      结束节点：裁决 {decisionAt ? formatTimeCN(decisionAt) : "--"} · 满票截止{" "}
-                      {quorumDeadlineAt ? formatTimeCN(quorumDeadlineAt) : "--"}
-                    </div>
-                  </details>
+                  </div>
                 </div>
               );
             })}
