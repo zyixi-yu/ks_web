@@ -75,6 +75,61 @@ export default function CreditsQuery() {
     return computeCreditBreakdown(result.data, result.decoded);
   }, [result]);
 
+  async function fetchWithTimeout(url: string, timeoutMs = 8000): Promise<Response> {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), timeoutMs);
+    try {
+      return await fetch(url, { signal: ctrl.signal });
+    } finally {
+      clearTimeout(t);
+    }
+  }
+
+  async function fetchCreditsViaProxies(playerHandle: string): Promise<CreditsResponse> {
+    const targetUrl = `https://credits.replayanalyzer.com/?player_handle=${encodeURIComponent(playerHandle)}`;
+
+    const proxies: Array<{
+      name: string;
+      buildUrl: (url: string) => string;
+      parse: (res: Response) => Promise<CreditsResponse>;
+    }> = [
+      {
+        name: "allorigins",
+        buildUrl: (url) => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+        parse: async (res) => {
+          const json = (await res.json()) as any;
+          return JSON.parse(String(json?.contents || "{}")) as CreditsResponse;
+        },
+      },
+      {
+        name: "thingproxy",
+        buildUrl: (url) => `https://thingproxy.freeboard.io/fetch/${url}`,
+        parse: async (res) => (await res.json()) as CreditsResponse,
+      },
+      {
+        name: "cors.eu.org",
+        buildUrl: (url) => `https://cors.eu.org/${url}`,
+        parse: async (res) => (await res.json()) as CreditsResponse,
+      },
+    ];
+
+    let lastErr: unknown = null;
+    for (const proxy of proxies) {
+      try {
+        const res = await fetchWithTimeout(proxy.buildUrl(targetUrl), 8000);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await proxy.parse(res);
+        if (!isNonEmptyString((data as any)?.code)) throw new Error("bad payload");
+        return data;
+      } catch (e) {
+        lastErr = e;
+        console.warn(`credits proxy failed: ${proxy.name}`, e);
+      }
+    }
+
+    throw lastErr instanceof Error ? lastErr : new Error("all proxies failed");
+  }
+
   async function runQuery(rawHandle: string) {
     const val = rawHandle.trim();
     if (!val) {
@@ -87,11 +142,7 @@ export default function CreditsQuery() {
     setError(null);
     setCopied(false);
     try {
-      const res = await fetch(`/api/credits?player_handle=${encodeURIComponent(val)}`, {
-        headers: { Accept: "application/json" },
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = (await res.json()) as CreditsResponse;
+      const data = await fetchCreditsViaProxies(val);
       if (!isNonEmptyString(data?.code)) throw new Error("返回数据格式错误或玩家不存在");
       const decoded = decodeCreditCode(data.code);
       setResult({ data, decoded });
