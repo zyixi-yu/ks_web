@@ -265,7 +265,7 @@ export default {
         const knownRoutes = new Set<string>(["/", "/council", "/leaderboard"]);
         if (knownRoutes.has(normalized)) {
           const indexUrl = new URL(request.url);
-          indexUrl.pathname = "/index.html";
+          indexUrl.pathname = "/";
           try {
             return await env.ASSETS.fetch(new Request(indexUrl.toString(), request));
           } catch (e) {
