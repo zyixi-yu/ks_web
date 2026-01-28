@@ -165,6 +165,7 @@ function computeLeaderboard(rawJson: unknown): {
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+    const pathname = url.pathname;
 
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
@@ -175,7 +176,7 @@ export default {
     }
 
     // API: 积分查询（同域代理）
-    if (url.pathname === "/api/credits") {
+    if (pathname === "/api/credits") {
       const handle = (url.searchParams.get("player_handle") || "").trim();
       if (!handle) return jsonError(400, "Missing player_handle");
       if (handle.length > 64) return jsonError(400, "player_handle too long");
@@ -194,7 +195,7 @@ export default {
     }
 
     // API: 排行榜数据（从 KV 读取 bridge_cn.json，并裁剪重组）
-    if (url.pathname === "/api/leaderboard") {
+    if (pathname === "/api/leaderboard") {
       if (!env.KS_KV || typeof (env.KS_KV as any).get !== "function") {
         return jsonError(500, "KV binding missing: KS_KV");
       }
@@ -230,7 +231,7 @@ export default {
     }
 
     // API: 钻石议会投票数据（从 KV 读取）
-    if (url.pathname === "/api/proposal_votes_cn.json") {
+    if (pathname === "/api/proposal_votes_cn.json") {
       if (!env.KS_KV || typeof (env.KS_KV as any).get !== "function") {
         return jsonError(500, "KV binding missing: KS_KV");
       }
@@ -245,13 +246,25 @@ export default {
       return withCors(new Response(body, { status: 200, headers }));
     }
 
-    // SPA 路由回退：对 HTML 导航请求，非文件路径直接回退 index.html
     const accept = request.headers.get("Accept") || "";
     const isHtml = accept.includes("text/html");
-    const looksLikeFile = url.pathname.includes(".") || url.pathname.startsWith("/assets/");
-    if (isHtml && !looksLikeFile) {
-      const indexUrl = new URL("/index.html", url);
-      return env.ASSETS.fetch(new Request(indexUrl.toString(), { method: "GET" }));
+    const secFetchMode = request.headers.get("Sec-Fetch-Mode") || "";
+    const secFetchDest = request.headers.get("Sec-Fetch-Dest") || "";
+    const isNavigate = secFetchMode === "navigate" || secFetchDest === "document";
+    const looksLikeFile = pathname.includes(".") || pathname.startsWith("/assets/");
+
+    // SPA 路由回退 + 未知路由重定向
+    // - 已知路由：直接回退 index.html（支持直接输入 URL 访问）
+    // - 未知路由：重定向到首页
+    if ((isHtml || isNavigate) && !looksLikeFile && !pathname.startsWith("/api/")) {
+      const normalized = pathname !== "/" && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
+      const knownRoutes = new Set<string>(["/", "/council", "/leaderboard"]);
+      if (knownRoutes.has(normalized)) {
+        const indexUrl = new URL("/index.html", url);
+        return env.ASSETS.fetch(new Request(indexUrl.toString(), { method: "GET" }));
+      }
+
+      return Response.redirect(new URL("/", url).toString(), 302);
     }
 
     // 静态资源：交给 Wrangler assets

@@ -18,9 +18,15 @@ export default function Modal(props: {
   useEffect(() => {
     if (!props.open) return;
     const prev = document.body.style.overflow;
+    const prevPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.body.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
     return () => {
       document.body.style.overflow = prev;
+      document.body.style.paddingRight = prevPaddingRight;
     };
   }, [props.open]);
 
