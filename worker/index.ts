@@ -162,6 +162,119 @@ function computeLeaderboard(rawJson: unknown): {
   };
 }
 
+type PlayerRoleRow = {
+  role_id: number;
+  role_name: string;
+  team_name: "幸存者" | "凯瑞甘";
+  core_mmr: number;
+  class_mmr: number;
+  mmr: number;
+  wins: number;
+  plays: number;
+  win_rate: number | null;
+};
+
+function computePlayerRoles(rawJson: unknown, playerHandle: string): {
+  generated_at: string;
+  player_handle: string;
+  cores: { survivor: number; kerrigan: number };
+  roles_survivor: PlayerRoleRow[];
+  roles_kerrigan: PlayerRoleRow[];
+} | null {
+  if (!rawJson || typeof rawJson !== "object") throw new Error("bridge_cn.json format error");
+  const obj = rawJson as Record<string, unknown>;
+
+  const generatedAt = obj["generated_at"];
+  if (typeof generatedAt !== "string" || !generatedAt.trim()) throw new Error("bridge_cn.json missing generated_at");
+
+  const mmrInject = obj["mmr_inject"];
+  if (!mmrInject || typeof mmrInject !== "object") throw new Error("bridge_cn.json missing mmr_inject");
+
+  const playerRec = (mmrInject as Record<string, unknown>)[playerHandle];
+  if (!playerRec) return null;
+  if (typeof playerRec !== "object" || Array.isArray(playerRec)) throw new Error("mmr_inject record format error");
+  const pr = playerRec as Record<string, unknown>;
+
+  const coresMap = pr["cores"];
+  const coreSurvivor = toNumber(readIndexValue(coresMap, "0"));
+  const coreKerrigan = toNumber(readIndexValue(coresMap, "1"));
+  if (coreSurvivor == null || coreKerrigan == null) throw new Error("mmr_inject record missing cores");
+
+  const rolesMap = pr["roles"];
+  const winsMap = pr["wins"];
+  const playsMap = pr["plays"];
+
+  const roleIdToName = obj["role_id_to_name"];
+  const roleIdToTeam = obj["role_id_to_team"];
+  if (!roleIdToName || typeof roleIdToName !== "object") throw new Error("bridge_cn.json missing role_id_to_name");
+  if (!roleIdToTeam || typeof roleIdToTeam !== "object") throw new Error("bridge_cn.json missing role_id_to_team");
+
+  const ids = Array.from(
+    new Set([
+      ...Object.keys(roleIdToName as Record<string, unknown>),
+      ...Object.keys((rolesMap && typeof rolesMap === "object" ? (rolesMap as any) : {}) as Record<string, unknown>),
+      ...Object.keys((playsMap && typeof playsMap === "object" ? (playsMap as any) : {}) as Record<string, unknown>),
+    ]),
+  )
+    .map((x) => x.trim())
+    .filter(Boolean);
+
+  const rolesSurvivor: PlayerRoleRow[] = [];
+  const rolesKerrigan: PlayerRoleRow[] = [];
+
+  for (const roleIdStr of ids) {
+    const roleId = toNumber(roleIdStr);
+    if (roleId == null) continue;
+
+    const roleName = toStringSafe(readIndexValue(roleIdToName, roleIdStr)).trim();
+    if (!roleName) continue;
+
+    const teamVal = toNumber(readIndexValue(roleIdToTeam, roleIdStr));
+    if (teamVal == null) continue;
+    const isSurvivor = teamVal === 0;
+    const teamName: PlayerRoleRow["team_name"] = isSurvivor ? "幸存者" : "凯瑞甘";
+    const coreMmr = isSurvivor ? coreSurvivor : coreKerrigan;
+
+    const classMmr = toNumber(readIndexValue(rolesMap, roleIdStr)) ?? 0;
+    const wins = toNumber(readIndexValue(winsMap, roleIdStr)) ?? 0;
+    const plays = toNumber(readIndexValue(playsMap, roleIdStr)) ?? 0;
+
+    if (!(plays > 0 || classMmr !== 0)) continue;
+
+    const mmr = coreMmr + classMmr;
+    const winRate = plays > 0 ? wins / plays : null;
+    const row: PlayerRoleRow = {
+      role_id: roleId,
+      role_name: roleName,
+      team_name: teamName,
+      core_mmr: coreMmr,
+      class_mmr: classMmr,
+      mmr,
+      wins,
+      plays,
+      win_rate: winRate,
+    };
+
+    (isSurvivor ? rolesSurvivor : rolesKerrigan).push(row);
+  }
+
+  function sortRows(a: PlayerRoleRow, b: PlayerRoleRow) {
+    if (b.mmr !== a.mmr) return b.mmr - a.mmr;
+    return a.role_name.localeCompare(b.role_name, "en");
+  }
+
+  rolesSurvivor.sort(sortRows);
+  rolesKerrigan.sort(sortRows);
+
+  return {
+    generated_at: generatedAt,
+    player_handle: playerHandle,
+    cores: { survivor: coreSurvivor, kerrigan: coreKerrigan },
+    roles_survivor: rolesSurvivor,
+    roles_kerrigan: rolesKerrigan,
+  };
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     try {
@@ -174,6 +287,51 @@ export default {
 
       if (request.method !== "GET") {
         return jsonError(405, "Method Not Allowed");
+      }
+
+      // API: 玩家角色数据（从 KV 读取 bridge_cn.json，并裁剪重组）
+      if (pathname === "/api/player") {
+        const handle = (url.searchParams.get("player_handle") || "").trim();
+        if (!handle) return jsonError(400, "Missing player_handle");
+        if (handle.length > 64) return jsonError(400, "player_handle too long");
+
+        if (!env.KS_KV || typeof (env.KS_KV as any).get !== "function") {
+          return jsonError(500, "KV binding missing: KS_KV");
+        }
+
+        const cacheKey = new Request(url.toString(), { method: "GET" });
+        const cached = await defaultCache().match(cacheKey);
+        if (cached) return cached;
+
+        const key = "bridge_cn.json";
+        const body = await env.KS_KV.get(key, "text");
+        if (!body) return jsonError(404, `KV key not found: ${key}`);
+
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(body);
+        } catch {
+          return jsonError(500, `KV key JSON parse error: ${key}`);
+        }
+
+        let payload: unknown;
+        try {
+          const computed = computePlayerRoles(parsed, handle);
+          if (!computed) return jsonError(404, `Player not found: ${handle}`);
+          payload = computed;
+        } catch (e) {
+          return jsonError(
+            500,
+            (e instanceof Error ? e.message : "bridge_cn.json format error") || "bridge_cn.json format error",
+          );
+        }
+
+        const headers = new Headers();
+        headers.set("Content-Type", "application/json; charset=utf-8");
+        headers.set("Cache-Control", "public, max-age=30");
+        const resp = withCors(new Response(JSON.stringify(payload), { status: 200, headers }));
+        ctx.waitUntil(defaultCache().put(cacheKey, resp.clone()));
+        return resp;
       }
 
       // API: 积分查询（同域代理）
@@ -256,16 +414,21 @@ export default {
       const secFetchDest = request.headers.get("Sec-Fetch-Dest") || "";
       const isNavigate = secFetchMode === "navigate" || secFetchDest === "document";
       const looksLikeFile = pathname.includes(".") || pathname.startsWith("/assets/");
+      const normalized = pathname !== "/" && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
+      const isKnownSpaRoute =
+        normalized === "/" ||
+        normalized === "/council" ||
+        normalized === "/leaderboard" ||
+        normalized === "/player" ||
+        normalized.startsWith("/player/");
 
       // SPA 路由回退 + 未知路由重定向
       // - 已知路由：直接回退 index.html（支持直接输入 URL 访问）
       // - 未知路由：重定向到首页
-      if ((isHtml || isNavigate) && !looksLikeFile && !pathname.startsWith("/api/")) {
-        const normalized = pathname !== "/" && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
-        const knownRoutes = new Set<string>(["/", "/council", "/leaderboard"]);
-        if (knownRoutes.has(normalized)) {
+      if (!looksLikeFile && !pathname.startsWith("/api/")) {
+        if (isKnownSpaRoute) {
           const indexUrl = new URL(request.url);
-          indexUrl.pathname = "/";
+          indexUrl.pathname = "/index.html";
           try {
             return await env.ASSETS.fetch(new Request(indexUrl.toString(), request));
           } catch (e) {
@@ -274,7 +437,9 @@ export default {
           }
         }
 
-        return Response.redirect(new URL("/", url).toString(), 302);
+        if (isHtml || isNavigate) {
+          return Response.redirect(new URL("/", url).toString(), 302);
+        }
       }
 
       // 静态资源：交给 Wrangler assets
