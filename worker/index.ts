@@ -164,110 +164,124 @@ function computeLeaderboard(rawJson: unknown): {
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-    const url = new URL(request.url);
-    const pathname = url.pathname;
+    try {
+      const url = new URL(request.url);
+      const pathname = url.pathname;
 
-    if (request.method === "OPTIONS") {
-      return new Response(null, { status: 204, headers: CORS_HEADERS });
-    }
-
-    if (request.method !== "GET") {
-      return jsonError(405, "Method Not Allowed");
-    }
-
-    // API: 积分查询（同域代理）
-    if (pathname === "/api/credits") {
-      const handle = (url.searchParams.get("player_handle") || "").trim();
-      if (!handle) return jsonError(400, "Missing player_handle");
-      if (handle.length > 64) return jsonError(400, "player_handle too long");
-
-      const upstream = new URL("https://credits.replayanalyzer.com/");
-      upstream.searchParams.set("player_handle", handle);
-
-      const resp = await fetch(upstream.toString(), {
-        headers: { Accept: "application/json" },
-        cf: { cacheTtl: 30, cacheEverything: true },
-      });
-
-      const headers = new Headers(resp.headers);
-      headers.set("Cache-Control", "public, max-age=30");
-      return withCors(new Response(resp.body, { status: resp.status, headers }));
-    }
-
-    // API: 排行榜数据（从 KV 读取 bridge_cn.json，并裁剪重组）
-    if (pathname === "/api/leaderboard") {
-      if (!env.KS_KV || typeof (env.KS_KV as any).get !== "function") {
-        return jsonError(500, "KV binding missing: KS_KV");
+      if (request.method === "OPTIONS") {
+        return new Response(null, { status: 204, headers: CORS_HEADERS });
       }
 
-      const cacheKey = new Request(url.toString(), { method: "GET" });
-      const cached = await defaultCache().match(cacheKey);
-      if (cached) return cached;
-
-      const key = "bridge_cn.json";
-      const body = await env.KS_KV.get(key, "text");
-      if (!body) return jsonError(404, `KV key not found: ${key}`);
-
-      let parsed: unknown;
-      try {
-        parsed = JSON.parse(body);
-      } catch {
-        return jsonError(500, `KV key JSON parse error: ${key}`);
+      if (request.method !== "GET") {
+        return jsonError(405, "Method Not Allowed");
       }
 
-      let payload: unknown;
-      try {
-        payload = computeLeaderboard(parsed);
-      } catch (e) {
-        return jsonError(500, (e instanceof Error ? e.message : "bridge_cn.json format error") || "bridge_cn.json format error");
+      // API: 积分查询（同域代理）
+      if (pathname === "/api/credits") {
+        const handle = (url.searchParams.get("player_handle") || "").trim();
+        if (!handle) return jsonError(400, "Missing player_handle");
+        if (handle.length > 64) return jsonError(400, "player_handle too long");
+
+        const upstream = new URL("https://credits.replayanalyzer.com/");
+        upstream.searchParams.set("player_handle", handle);
+
+        const resp = await fetch(upstream.toString(), {
+          headers: { Accept: "application/json" },
+          cf: { cacheTtl: 30, cacheEverything: true },
+        });
+
+        const headers = new Headers(resp.headers);
+        headers.set("Cache-Control", "public, max-age=30");
+        return withCors(new Response(resp.body, { status: resp.status, headers }));
       }
 
-      const headers = new Headers();
-      headers.set("Content-Type", "application/json; charset=utf-8");
-      headers.set("Cache-Control", "public, max-age=30");
-      const resp = withCors(new Response(JSON.stringify(payload), { status: 200, headers }));
-      ctx.waitUntil(defaultCache().put(cacheKey, resp.clone()));
-      return resp;
+      // API: 排行榜数据（从 KV 读取 bridge_cn.json，并裁剪重组）
+      if (pathname === "/api/leaderboard") {
+        if (!env.KS_KV || typeof (env.KS_KV as any).get !== "function") {
+          return jsonError(500, "KV binding missing: KS_KV");
+        }
+
+        const cacheKey = new Request(url.toString(), { method: "GET" });
+        const cached = await defaultCache().match(cacheKey);
+        if (cached) return cached;
+
+        const key = "bridge_cn.json";
+        const body = await env.KS_KV.get(key, "text");
+        if (!body) return jsonError(404, `KV key not found: ${key}`);
+
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(body);
+        } catch {
+          return jsonError(500, `KV key JSON parse error: ${key}`);
+        }
+
+        let payload: unknown;
+        try {
+          payload = computeLeaderboard(parsed);
+        } catch (e) {
+          return jsonError(
+            500,
+            (e instanceof Error ? e.message : "bridge_cn.json format error") || "bridge_cn.json format error",
+          );
+        }
+
+        const headers = new Headers();
+        headers.set("Content-Type", "application/json; charset=utf-8");
+        headers.set("Cache-Control", "public, max-age=30");
+        const resp = withCors(new Response(JSON.stringify(payload), { status: 200, headers }));
+        ctx.waitUntil(defaultCache().put(cacheKey, resp.clone()));
+        return resp;
+      }
+
+      // API: 钻石议会投票数据（从 KV 读取）
+      if (pathname === "/api/proposal_votes_cn.json") {
+        if (!env.KS_KV || typeof (env.KS_KV as any).get !== "function") {
+          return jsonError(500, "KV binding missing: KS_KV");
+        }
+
+        const key = "proposal_votes_cn.json";
+        const body = await env.KS_KV.get(key, "text");
+        if (!body) return jsonError(404, `KV key not found: ${key}`);
+
+        const headers = new Headers();
+        headers.set("Content-Type", "application/json; charset=utf-8");
+        headers.set("Cache-Control", "public, max-age=0, s-maxage=60, stale-while-revalidate=60");
+        return withCors(new Response(body, { status: 200, headers }));
+      }
+
+      const accept = request.headers.get("Accept") || "";
+      const isHtml = accept.includes("text/html");
+      const secFetchMode = request.headers.get("Sec-Fetch-Mode") || "";
+      const secFetchDest = request.headers.get("Sec-Fetch-Dest") || "";
+      const isNavigate = secFetchMode === "navigate" || secFetchDest === "document";
+      const looksLikeFile = pathname.includes(".") || pathname.startsWith("/assets/");
+
+      // SPA 路由回退 + 未知路由重定向
+      // - 已知路由：直接回退 index.html（支持直接输入 URL 访问）
+      // - 未知路由：重定向到首页
+      if ((isHtml || isNavigate) && !looksLikeFile && !pathname.startsWith("/api/")) {
+        const normalized = pathname !== "/" && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
+        const knownRoutes = new Set<string>(["/", "/council", "/leaderboard"]);
+        if (knownRoutes.has(normalized)) {
+          const indexUrl = new URL(request.url);
+          indexUrl.pathname = "/index.html";
+          try {
+            return await env.ASSETS.fetch(new Request(indexUrl.toString(), request));
+          } catch (e) {
+            console.warn("ASSETS fetch failed", e);
+            return Response.redirect(new URL("/", url).toString(), 302);
+          }
+        }
+
+        return Response.redirect(new URL("/", url).toString(), 302);
+      }
+
+      // 静态资源：交给 Wrangler assets
+      return await env.ASSETS.fetch(request);
+    } catch (e) {
+      console.error("Unhandled worker error", e);
+      return new Response("Worker Error", { status: 500 });
     }
-
-    // API: 钻石议会投票数据（从 KV 读取）
-    if (pathname === "/api/proposal_votes_cn.json") {
-      if (!env.KS_KV || typeof (env.KS_KV as any).get !== "function") {
-        return jsonError(500, "KV binding missing: KS_KV");
-      }
-
-      const key = "proposal_votes_cn.json";
-      const body = await env.KS_KV.get(key, "text");
-      if (!body) return jsonError(404, `KV key not found: ${key}`);
-
-      const headers = new Headers();
-      headers.set("Content-Type", "application/json; charset=utf-8");
-      headers.set("Cache-Control", "public, max-age=0, s-maxage=60, stale-while-revalidate=60");
-      return withCors(new Response(body, { status: 200, headers }));
-    }
-
-    const accept = request.headers.get("Accept") || "";
-    const isHtml = accept.includes("text/html");
-    const secFetchMode = request.headers.get("Sec-Fetch-Mode") || "";
-    const secFetchDest = request.headers.get("Sec-Fetch-Dest") || "";
-    const isNavigate = secFetchMode === "navigate" || secFetchDest === "document";
-    const looksLikeFile = pathname.includes(".") || pathname.startsWith("/assets/");
-
-    // SPA 路由回退 + 未知路由重定向
-    // - 已知路由：直接回退 index.html（支持直接输入 URL 访问）
-    // - 未知路由：重定向到首页
-    if ((isHtml || isNavigate) && !looksLikeFile && !pathname.startsWith("/api/")) {
-      const normalized = pathname !== "/" && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
-      const knownRoutes = new Set<string>(["/", "/council", "/leaderboard"]);
-      if (knownRoutes.has(normalized)) {
-        const indexUrl = new URL("/index.html", url);
-        return env.ASSETS.fetch(new Request(indexUrl.toString(), { method: "GET" }));
-      }
-
-      return Response.redirect(new URL("/", url).toString(), 302);
-    }
-
-    // 静态资源：交给 Wrangler assets
-    return env.ASSETS.fetch(request);
   },
 };
