@@ -24,8 +24,126 @@ function jsonError(status: number, message: string): Response {
   );
 }
 
+type LeaderboardEntry = {
+  display_name: string;
+  handles: string[];
+  mmr: number;
+  team_key: "kerrigan" | "survivor";
+  team_name: "凯瑞甘" | "幸存者";
+  tie: string;
+};
+
+function readIndexValue(map: unknown, idx: string): unknown {
+  if (Array.isArray(map)) return map[Number(idx)];
+  if (map && typeof map === "object") return (map as Record<string, unknown>)[idx];
+  return undefined;
+}
+
+function toNumber(x: unknown): number | null {
+  const n = typeof x === "number" ? x : Number(x);
+  return Number.isFinite(n) ? n : null;
+}
+
+function toStringSafe(x: unknown): string {
+  if (typeof x === "string") return x;
+  if (x == null) return "";
+  return String(x);
+}
+
+function toStringArray(x: unknown): string[] {
+  if (Array.isArray(x)) return x.map(toStringSafe).filter((s) => s.length > 0);
+  const s = typeof x === "string" ? x.trim() : "";
+  return s ? [s] : [];
+}
+
+function defaultCache(): Cache {
+  return (caches as unknown as { default: Cache }).default;
+}
+
+function computeLeaderboard(rawJson: unknown): {
+  generated_at: string;
+  boards: { kerrigan: Array<{ rank: number; display_name: string; handles: string[]; mmr: number; team_name: "凯瑞甘" }>; survivor: Array<{ rank: number; display_name: string; handles: string[]; mmr: number; team_name: "幸存者" }> };
+} {
+  if (!rawJson || typeof rawJson !== "object") throw new Error("bridge_cn.json format error");
+  const obj = rawJson as Record<string, unknown>;
+  const generatedAt = obj["generated_at"];
+  if (typeof generatedAt !== "string" || !generatedAt.trim()) throw new Error("bridge_cn.json missing generated_at");
+
+  const leaderboard = obj["leaderboard"];
+  if (!leaderboard || typeof leaderboard !== "object") throw new Error("bridge_cn.json missing leaderboard");
+
+  const lb = leaderboard as Record<string, unknown>;
+  const mmrMap = lb["mmr"];
+  const displayNameMap = lb["display_name"] ?? lb["identity"];
+  const identityMap = lb["identity"];
+  const handlesMap = lb["handles"];
+  const teamMap = lb["team_str"];
+
+  const indices = Array.from(
+    new Set([
+      ...Object.keys((mmrMap && typeof mmrMap === "object" ? (mmrMap as any) : {}) as Record<string, unknown>),
+      ...Object.keys((displayNameMap && typeof displayNameMap === "object" ? (displayNameMap as any) : {}) as Record<string, unknown>),
+    ]),
+  ).filter((k) => k.trim().length > 0);
+
+  const entries: LeaderboardEntry[] = [];
+  for (const idx of indices) {
+    const mmr = toNumber(readIndexValue(mmrMap, idx));
+    if (mmr == null) continue;
+
+    const displayName = toStringSafe(readIndexValue(displayNameMap, idx)).trim();
+    if (!displayName) continue;
+
+    const handles = toStringArray(readIndexValue(handlesMap, idx));
+    const teamVal = toNumber(readIndexValue(teamMap, idx)) ?? 0;
+    const isKerrigan = teamVal === 1;
+    const team_key: LeaderboardEntry["team_key"] = isKerrigan ? "kerrigan" : "survivor";
+    const team_name: LeaderboardEntry["team_name"] = isKerrigan ? "凯瑞甘" : "幸存者";
+    const identity = toStringSafe(readIndexValue(identityMap, idx)).trim();
+
+    entries.push({
+      display_name: displayName,
+      handles,
+      mmr,
+      team_key,
+      team_name,
+      tie: identity || displayName,
+    });
+  }
+
+  function sortBoard(list: LeaderboardEntry[]) {
+    return list.sort((a, b) => {
+      if (b.mmr !== a.mmr) return b.mmr - a.mmr;
+      return a.tie.localeCompare(b.tie, "zh-CN");
+    });
+  }
+
+  const kerrigan = sortBoard(entries.filter((e) => e.team_key === "kerrigan")).slice(0, 50);
+  const survivor = sortBoard(entries.filter((e) => e.team_key === "survivor")).slice(0, 50);
+
+  return {
+    generated_at: generatedAt,
+    boards: {
+      kerrigan: kerrigan.map((e, i) => ({
+        rank: i + 1,
+        display_name: e.display_name,
+        handles: e.handles,
+        mmr: e.mmr,
+        team_name: "凯瑞甘",
+      })),
+      survivor: survivor.map((e, i) => ({
+        rank: i + 1,
+        display_name: e.display_name,
+        handles: e.handles,
+        mmr: e.mmr,
+        team_name: "幸存者",
+      })),
+    },
+  };
+}
+
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
     if (request.method === "OPTIONS") {
@@ -53,6 +171,42 @@ export default {
       const headers = new Headers(resp.headers);
       headers.set("Cache-Control", "public, max-age=30");
       return withCors(new Response(resp.body, { status: resp.status, headers }));
+    }
+
+    // API: 排行榜数据（从 KV 读取 bridge_cn.json，并裁剪重组）
+    if (url.pathname === "/api/leaderboard") {
+      if (!env.KS_KV || typeof (env.KS_KV as any).get !== "function") {
+        return jsonError(500, "KV binding missing: KS_KV");
+      }
+
+      const cacheKey = new Request(url.toString(), { method: "GET" });
+      const cached = await defaultCache().match(cacheKey);
+      if (cached) return cached;
+
+      const key = "bridge_cn.json";
+      const body = await env.KS_KV.get(key, "text");
+      if (!body) return jsonError(404, `KV key not found: ${key}`);
+
+      let parsed: unknown;
+      try {
+        parsed = JSON.parse(body);
+      } catch {
+        return jsonError(500, `KV key JSON parse error: ${key}`);
+      }
+
+      let payload: unknown;
+      try {
+        payload = computeLeaderboard(parsed);
+      } catch (e) {
+        return jsonError(500, (e instanceof Error ? e.message : "bridge_cn.json format error") || "bridge_cn.json format error");
+      }
+
+      const headers = new Headers();
+      headers.set("Content-Type", "application/json; charset=utf-8");
+      headers.set("Cache-Control", "public, max-age=30");
+      const resp = withCors(new Response(JSON.stringify(payload), { status: 200, headers }));
+      ctx.waitUntil(defaultCache().put(cacheKey, resp.clone()));
+      return resp;
     }
 
     // API: 钻石议会投票数据（从 KV 读取）

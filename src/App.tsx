@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
 import CreditsQuery from "./components/CreditsQuery";
+import Leaderboard from "./components/Leaderboard";
 import Proposals from "./components/Proposals";
 
 export default function App() {
@@ -20,7 +21,7 @@ export default function App() {
             </div>
             <div>
               <div className="text-sm font-black leading-4 text-slate-900">凯瑞甘生存</div>
-              <div className="text-xs text-slate-500">积分助手 · 钻石议会</div>
+              <div className="text-xs text-slate-500">积分助手 · 钻石议会 · 排行榜</div>
             </div>
           </div>
 
@@ -48,6 +49,17 @@ export default function App() {
             >
               钻石议会
             </NavLink>
+            <NavLink
+              to="/leaderboard"
+              className={({ isActive }) =>
+                [
+                  "rounded-lg px-3 py-2 text-sm font-bold transition",
+                  isActive ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100",
+                ].join(" ")
+              }
+            >
+              排行榜
+            </NavLink>
           </nav>
         </div>
       </header>
@@ -56,6 +68,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<CreditsQuery />} />
           <Route path="/council" element={<Proposals />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="*" element={<CreditsQuery />} />
         </Routes>
       </main>
