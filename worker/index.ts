@@ -30,6 +30,7 @@ type LeaderboardEntry = {
   mmr: number;
   team_key: "kerrigan" | "survivor";
   team_name: "凯瑞甘" | "幸存者";
+  identity: string;
   tie: string;
 };
 
@@ -62,7 +63,24 @@ function defaultCache(): Cache {
 
 function computeLeaderboard(rawJson: unknown): {
   generated_at: string;
-  boards: { kerrigan: Array<{ rank: number; display_name: string; handles: string[]; mmr: number; team_name: "凯瑞甘" }>; survivor: Array<{ rank: number; display_name: string; handles: string[]; mmr: number; team_name: "幸存者" }> };
+  boards: {
+    kerrigan: Array<{
+      rank: number;
+      display_name: string;
+      identity: string;
+      handles: string[];
+      mmr: number;
+      team_name: "凯瑞甘";
+    }>;
+    survivor: Array<{
+      rank: number;
+      display_name: string;
+      identity: string;
+      handles: string[];
+      mmr: number;
+      team_name: "幸存者";
+    }>;
+  };
 } {
   if (!rawJson || typeof rawJson !== "object") throw new Error("bridge_cn.json format error");
   const obj = rawJson as Record<string, unknown>;
@@ -100,13 +118,13 @@ function computeLeaderboard(rawJson: unknown): {
     const team_key: LeaderboardEntry["team_key"] = isKerrigan ? "kerrigan" : "survivor";
     const team_name: LeaderboardEntry["team_name"] = isKerrigan ? "凯瑞甘" : "幸存者";
     const identity = toStringSafe(readIndexValue(identityMap, idx)).trim();
-
     entries.push({
       display_name: displayName,
       handles,
       mmr,
       team_key,
       team_name,
+      identity,
       tie: identity || displayName,
     });
   }
@@ -127,6 +145,7 @@ function computeLeaderboard(rawJson: unknown): {
       kerrigan: kerrigan.map((e, i) => ({
         rank: i + 1,
         display_name: e.display_name,
+        identity: e.identity,
         handles: e.handles,
         mmr: e.mmr,
         team_name: "凯瑞甘",
@@ -134,6 +153,7 @@ function computeLeaderboard(rawJson: unknown): {
       survivor: survivor.map((e, i) => ({
         rank: i + 1,
         display_name: e.display_name,
+        identity: e.identity,
         handles: e.handles,
         mmr: e.mmr,
         team_name: "幸存者",

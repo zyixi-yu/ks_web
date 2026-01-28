@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
+import Modal from "./Modal";
 import { formatTimeBeijingYYYYMMDDHHmm } from "../lib/time";
 
 type LeaderboardEntry = {
   rank: number;
   display_name: string;
+  identity: string;
   handles: string[];
   mmr: number;
   team_name: "凯瑞甘" | "幸存者";
@@ -31,12 +33,12 @@ function parseLeaderboardResponse(x: unknown): LeaderboardResponse | null {
   return x as LeaderboardResponse;
 }
 
-function formatHandles(handles: string[]): string {
-  const uniq = Array.from(new Set(handles.map((h) => String(h || "").trim()).filter(Boolean)));
-  return uniq.join(", ");
-}
-
-function BoardTable({ title, items }: { title: "凯瑞甘" | "幸存者"; items: LeaderboardEntry[] }) {
+function BoardTable(props: {
+  title: "凯瑞甘" | "幸存者";
+  items: LeaderboardEntry[];
+  onSelect: (row: LeaderboardEntry) => void;
+}) {
+  const { title, items, onSelect } = props;
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex items-center justify-between gap-3">
@@ -45,36 +47,31 @@ function BoardTable({ title, items }: { title: "凯瑞甘" | "幸存者"; items:
       </div>
 
       <div className="mt-3 overflow-hidden rounded-xl border border-slate-200">
-        <div className="grid grid-cols-[56px_1fr_160px_80px] gap-0 bg-slate-50 text-xs font-black text-slate-600">
+        <div className="grid grid-cols-[56px_1fr_80px] gap-0 bg-slate-50 text-xs font-black text-slate-600">
           <div className="px-3 py-2">名次</div>
           <div className="px-3 py-2">玩家</div>
-          <div className="hidden px-3 py-2 md:block">句柄</div>
           <div className="px-3 py-2 text-right">MMR</div>
         </div>
 
         <div className="divide-y divide-slate-200">
           {items.map((row) => (
-            <div
+            <button
+              type="button"
               key={`${row.team_name}-${row.rank}-${row.display_name}`}
-              className="grid grid-cols-[56px_1fr_160px_80px] items-start gap-0 text-sm text-slate-900"
+              className="grid w-full grid-cols-[56px_1fr_80px] items-start gap-0 text-left text-sm text-slate-900 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-600/30"
+              onClick={() => onSelect(row)}
             >
               <div className="px-3 py-2 font-black text-slate-700">#{row.rank}</div>
 
               <div className="px-3 py-2">
                 <div className="font-black leading-5 text-slate-900 line-clamp-2">{row.display_name}</div>
-                <div className="mt-0.5 text-xs text-slate-500 md:hidden line-clamp-2">
-                  {formatHandles(row.handles) || "--"}
-                </div>
-              </div>
-
-              <div className="hidden px-3 py-2 text-xs text-slate-600 md:block">
-                <div className="leading-5 line-clamp-2">{formatHandles(row.handles) || "--"}</div>
+                <div className="mt-0.5 text-xs text-slate-500">点击查看详情</div>
               </div>
 
               <div className="px-3 py-2 text-right font-black text-slate-900 tabular-nums">
                 {row.mmr}
               </div>
-            </div>
+            </button>
           ))}
           {!items.length ? (
             <div className="px-3 py-6 text-center text-sm text-slate-500">暂无数据</div>
@@ -89,6 +86,7 @@ export default function Leaderboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<LeaderboardResponse | null>(null);
+  const [selected, setSelected] = useState<LeaderboardEntry | null>(null);
 
   useEffect(() => {
     let canceled = false;
@@ -149,11 +147,55 @@ export default function Leaderboard() {
         </div>
       ) : (
         <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <BoardTable title="凯瑞甘" items={data.boards.kerrigan} />
-          <BoardTable title="幸存者" items={data.boards.survivor} />
+          <BoardTable title="幸存者" items={data.boards.survivor} onSelect={setSelected} />
+          <BoardTable title="凯瑞甘" items={data.boards.kerrigan} onSelect={setSelected} />
         </div>
       )}
+
+      <Modal
+        open={!!selected}
+        title={selected ? `#${selected.rank} · ${selected.display_name}` : "玩家信息"}
+        onClose={() => setSelected(null)}
+      >
+        {selected ? (
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-2 text-sm">
+              <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-black text-slate-700">
+                {selected.team_name}榜
+              </span>
+              <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-black text-slate-700">
+                MMR：<span className="text-slate-900">{selected.mmr}</span>
+              </span>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-3">
+              <div className="text-xs font-bold text-slate-500">玩家战网标识</div>
+              <div className="mt-1 break-words text-sm font-black text-slate-900">
+                {selected.identity || "--"}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-3">
+              <div className="text-xs font-bold text-slate-500">句柄</div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {selected.handles?.length ? (
+                  selected.handles.map((h) => (
+                    <span
+                      key={h}
+                      className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 font-mono text-xs text-slate-800"
+                    >
+                      {h}
+                    </span>
+                  ))
+                ) : (
+                  <div className="text-sm text-slate-500">--</div>
+                )}
+              </div>
+              <div className="mt-2 text-xs text-slate-400">（点击榜单条目查看句柄与更多信息）</div>
+            </div>
+          </div>
+        ) : null}
+      </Modal>
     </div>
   );
 }
-
