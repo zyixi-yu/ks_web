@@ -8,20 +8,23 @@
     "build": "vite build",
     "preview": "vite preview",
     "dev:worker": "wrangler dev",
+    "gen:mock-kv": "node scripts/gen-mock-kv.mjs",
+    "dev:worker:mock": "pnpm gen:mock-kv && wrangler dev --local worker/index.mock.ts",
     "deploy": "pnpm build && wrangler deploy",
     "deploy:ci": "node scripts/deploy-ci.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "hono": "^4.11.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.2"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260124.0",
+    "@types/node": "^20.17.14",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@types/node": "^20.17.14",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",

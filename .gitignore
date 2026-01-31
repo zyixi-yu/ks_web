@@ -25,3 +25,6 @@ dist/
 .env.*
 .codex
 bridge_cn.json
+scripts/mock-data/*
+worker/mock-data/*
+worker/mock-data.generated.ts

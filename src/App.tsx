@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, Navigate, Route, Routes } from "react-router-dom";
 import CreditsQuery from "./components/CreditsQuery";
 import Leaderboard from "./components/Leaderboard";
 import PlayerRoleQuery from "./components/PlayerRoleQuery";
@@ -83,7 +83,7 @@ export default function App() {
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/player" element={<PlayerRoleQuery />} />
           <Route path="/player/:handle" element={<PlayerRoleQuery />} />
-          <Route path="*" element={<CreditsQuery />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
     </div>
