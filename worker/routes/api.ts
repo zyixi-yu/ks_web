@@ -3,6 +3,7 @@ import { defaultCache } from "../utils/cache";
 import { jsonError, jsonOk } from "../utils/http";
 import { kvGetJson, kvGetText } from "../services/kv";
 import { computeLeaderboard, computePlayerRoles } from "../services/bridge";
+import verifyCodeRoutes from "./verify-code";
 
 type HonoEnv = { Bindings: Env };
 
@@ -11,6 +12,8 @@ const api = new Hono<HonoEnv>();
 function apiCacheControl(): string {
   return (globalThis as any).__KS_NO_CACHE ? "no-store" : "public, max-age=30";
 }
+
+api.route("/verify-code", verifyCodeRoutes);
 
 api.get("/player", async (c) => {
   c.header("X-KS-Mock-KV", (globalThis as any).__KS_NO_CACHE ? "1" : "0");
