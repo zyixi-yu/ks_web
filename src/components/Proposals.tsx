@@ -107,9 +107,9 @@ export default function Proposals() {
           </div>
           <div className="mt-1">
             <span className="font-black text-slate-900">权重</span>：钻石=1，大师=2；<span className="font-black text-slate-900">规则</span>：创建后
-            {PROPOSAL_RULES.decisionAfterDays}天且≥{PROPOSAL_RULES.quorumVotes}票进入裁决，赞同率 &gt;{" "}
+            {PROPOSAL_RULES.decisionAfterDays}天且≥{PROPOSAL_RULES.quorumVotes}人投票进入裁决，赞同率 &gt;{" "}
             {Math.round(PROPOSAL_RULES.passThreshold * 100)}% 视为通过（待实施）；创建后{PROPOSAL_RULES.quorumDeadlineDays}
-            天仍不足{PROPOSAL_RULES.quorumVotes}票则过期。
+            天仍不足{PROPOSAL_RULES.quorumVotes}人投票则过期。
           </div>
           <div className="mt-1">
             <span className="font-black text-slate-900">投票方式</span>：在游戏内输入{" "}
@@ -220,7 +220,7 @@ export default function Proposals() {
 
                   <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-600">
                     <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
-                      进度：<span className="font-black text-slate-900">{voteStats.voteCount}</span>/{PROPOSAL_RULES.quorumVotes}
+                      进度：<span className="font-black text-slate-900">{voteStats.voteCount}</span>/{PROPOSAL_RULES.quorumVotes}人
                     </span>
                     <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
                       赞同率：<span className="font-black text-slate-900">{voteStats.approvalPct}%</span>
