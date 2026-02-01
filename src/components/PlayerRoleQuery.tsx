@@ -24,6 +24,10 @@ type PlayerApiResponse = {
     survivor: { percentile: number; tier: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" };
     kerrigan: { percentile: number; tier: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" };
   };
+  leaderboard_ranks?: {
+    survivor?: { rank: number; mmr: number; identity: string; display_name: string };
+    kerrigan?: { rank: number; mmr: number; identity: string; display_name: string };
+  };
   leaderboard_match?: {
     team_name: "幸存者" | "凯瑞甘";
     rank: number;
@@ -224,6 +228,10 @@ export default function PlayerRoleQuery() {
   }, [data?.generated_at]);
 
   const uploaderCount = data?.top_uploader?.num_uploads;
+  const primaryLb =
+    data?.leaderboard_match ??
+    (data?.leaderboard_ranks?.kerrigan ? { team_name: "凯瑞甘" as const, ...data.leaderboard_ranks.kerrigan } : null) ??
+    (data?.leaderboard_ranks?.survivor ? { team_name: "幸存者" as const, ...data.leaderboard_ranks.survivor } : null);
 
   const navigateOrQuery = useCallback(
     (raw: string) => {
@@ -337,13 +345,13 @@ export default function PlayerRoleQuery() {
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                {data.leaderboard_match ? (
+                {primaryLb ? (
                   <div className="text-sm text-slate-500">
                     <span className="font-bold text-slate-600">昵称：</span>
-                    <span className="font-black text-slate-900">{data.leaderboard_match.display_name}</span>
+                    <span className="font-black text-slate-900">{primaryLb.display_name}</span>
                     <span className="mx-2 text-slate-300">|</span>
                     <span className="font-bold text-slate-600">战网：</span>
-                    <span className="font-bold text-slate-700">{data.leaderboard_match.identity}</span>
+                    <span className="font-bold text-slate-700">{primaryLb.identity}</span>
                     {typeof uploaderCount === "number" ? (
                       <button
                         type="button"
@@ -382,13 +390,19 @@ export default function PlayerRoleQuery() {
                   team="幸存者"
                   mmr={data.cores.survivor}
                   tier={data.ranks?.survivor.tier}
-                  leaderboardRank={data.leaderboard_match?.team_name === "幸存者" ? data.leaderboard_match.rank : undefined}
+                  leaderboardRank={
+                    data.leaderboard_ranks?.survivor?.rank ??
+                    (data.leaderboard_match?.team_name === "幸存者" ? data.leaderboard_match.rank : undefined)
+                  }
                 />
                 <TeamMmrCard
                   team="凯瑞甘"
                   mmr={data.cores.kerrigan}
                   tier={data.ranks?.kerrigan.tier}
-                  leaderboardRank={data.leaderboard_match?.team_name === "凯瑞甘" ? data.leaderboard_match.rank : undefined}
+                  leaderboardRank={
+                    data.leaderboard_ranks?.kerrigan?.rank ??
+                    (data.leaderboard_match?.team_name === "凯瑞甘" ? data.leaderboard_match.rank : undefined)
+                  }
                 />
               </div>
             </div>

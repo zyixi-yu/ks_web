@@ -157,6 +157,10 @@ export function computePlayerRoles(
     survivor: { percentile: number; tier: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" };
     kerrigan: { percentile: number; tier: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" };
   };
+  leaderboard_ranks?: {
+    survivor?: { rank: number; mmr: number; identity: string; display_name: string };
+    kerrigan?: { rank: number; mmr: number; identity: string; display_name: string };
+  };
   leaderboard_match?: {
     team_name: "幸存者" | "凯瑞甘";
     rank: number;
@@ -300,6 +304,13 @@ export function computePlayerRoles(
   }
 
   // NOTE: 对齐 /api/leaderboard：复用 computeLeaderboard 的 Top50 结果，不自己单独排序/排名。
+  let leaderboardRanks:
+    | {
+        survivor?: { rank: number; mmr: number; identity: string; display_name: string };
+        kerrigan?: { rank: number; mmr: number; identity: string; display_name: string };
+      }
+    | undefined;
+
   let leaderboardMatch:
     | {
         team_name: "幸存者" | "凯瑞甘";
@@ -311,31 +322,34 @@ export function computePlayerRoles(
     | undefined;
   try {
     const lb = computeLeaderboard(rawJson);
+    let surv: { rank: number; mmr: number; identity: string; display_name: string } | undefined;
+    let kerri: { rank: number; mmr: number; identity: string; display_name: string } | undefined;
+
     for (const row of lb.boards.survivor) {
-      if (row.handles.includes(playerHandle)) {
-        leaderboardMatch = {
-          team_name: "幸存者",
-          rank: row.rank,
-          mmr: row.mmr,
-          identity: row.identity,
-          display_name: row.display_name,
-        };
-        break;
-      }
+      if (!row.handles.includes(playerHandle)) continue;
+      surv = { rank: row.rank, mmr: row.mmr, identity: row.identity, display_name: row.display_name };
+      break;
     }
-    if (!leaderboardMatch) {
-      for (const row of lb.boards.kerrigan) {
-        if (row.handles.includes(playerHandle)) {
-          leaderboardMatch = {
-            team_name: "凯瑞甘",
-            rank: row.rank,
-            mmr: row.mmr,
-            identity: row.identity,
-            display_name: row.display_name,
-          };
-          break;
-        }
-      }
+    for (const row of lb.boards.kerrigan) {
+      if (!row.handles.includes(playerHandle)) continue;
+      kerri = { rank: row.rank, mmr: row.mmr, identity: row.identity, display_name: row.display_name };
+      break;
+    }
+
+    if (surv || kerri) {
+      leaderboardRanks = { ...(surv ? { survivor: surv } : {}), ...(kerri ? { kerrigan: kerri } : {}) };
+    }
+
+    // Provide a single "primary" match for header UI. If both exist, prefer the better (smaller) rank.
+    if (surv && kerri) {
+      leaderboardMatch =
+        kerri.rank <= surv.rank
+          ? { team_name: "凯瑞甘", ...kerri }
+          : { team_name: "幸存者", ...surv };
+    } else if (kerri) {
+      leaderboardMatch = { team_name: "凯瑞甘", ...kerri };
+    } else if (surv) {
+      leaderboardMatch = { team_name: "幸存者", ...surv };
     }
   } catch {
     // ignore: leaderboard mismatch shouldn't break /player
@@ -373,6 +387,7 @@ export function computePlayerRoles(
     player_handle: playerHandle,
     cores: { survivor: coreSurvivor, kerrigan: coreKerrigan },
     ...(ranks ? { ranks } : {}),
+    ...(leaderboardRanks ? { leaderboard_ranks: leaderboardRanks } : {}),
     ...(leaderboardMatch ? { leaderboard_match: leaderboardMatch } : {}),
     ...(topUploader ? { top_uploader: topUploader } : {}),
     roles_survivor: rolesSurvivor,

@@ -32,6 +32,17 @@ export default function Proposals() {
   const [payload, setPayload] = useState<ProposalVotesPayload | null>(null);
 
   const [voteModal, setVoteModal] = useState<null | { proposalId: number; voteValue: 0 | 1 }>(null);
+  const [voteCopied, setVoteCopied] = useState(false);
+  const [eligHandle, setEligHandle] = useState("");
+  const [eligLoading, setEligLoading] = useState(false);
+  const [eligResult, setEligResult] = useState<
+    | null
+    | {
+        ok: boolean;
+        title: string;
+        details: string[];
+      }
+  >(null);
   const [logModal, setLogModal] = useState<
     null | {
       proposal: Proposal;
@@ -40,6 +51,14 @@ export default function Proposals() {
       latestVotes: LatestVoteRow[];
     }
   >(null);
+
+  useEffect(() => {
+    if (!voteModal) return;
+    setVoteCopied(false);
+    setEligHandle("");
+    setEligLoading(false);
+    setEligResult(null);
+  }, [voteModal]);
 
   useEffect(() => {
     let cancelled = false;
@@ -88,6 +107,73 @@ export default function Proposals() {
   }, [payload]);
 
   const generatedAt = payload?.generated_at ? formatTimeCN(payload.generated_at) : "--";
+
+  function computeEligibility(player: any): { ok: boolean; details: string[] } {
+    const details: string[] = [];
+    const ranks = player?.ranks;
+    const survTier = typeof ranks?.survivor?.tier === "string" ? ranks.survivor.tier : null;
+    const kerriTier = typeof ranks?.kerrigan?.tier === "string" ? ranks.kerrigan.tier : null;
+
+    const diamondOrMaster = (tier: string | null) => tier === "钻石" || tier === "大师";
+    const tiersOk = diamondOrMaster(survTier) && diamondOrMaster(kerriTier);
+    details.push(`段位：幸存者 ${survTier || "未知"}，凯瑞甘 ${kerriTier || "未知"}`);
+
+    const rolesSurv = Array.isArray(player?.roles_survivor) ? player.roles_survivor : [];
+    const rolesKerri = Array.isArray(player?.roles_kerrigan) ? player.roles_kerrigan : [];
+    const sumPlays = (arr: any[]) =>
+      arr.reduce((acc, r) => acc + (typeof r?.plays === "number" && Number.isFinite(r.plays) ? r.plays : 0), 0);
+    const totalPlays = sumPlays(rolesSurv) + sumPlays(rolesKerri);
+    const playsOk = totalPlays > 200;
+    details.push(`总有效对局：${totalPlays}`);
+
+    if (!tiersOk) details.push("未满足：双阵营需要达到 钻石/大师");
+    if (!playsOk) details.push("未满足：总有效对局需要 > 200");
+
+    return { ok: tiersOk && playsOk, details };
+  }
+
+  async function verifyEligibility() {
+    const val = eligHandle.trim();
+    if (!val) {
+      setEligResult({ ok: false, title: "请输入玩家句柄", details: [] });
+      return;
+    }
+    if (val.length > 64) {
+      setEligResult({ ok: false, title: "玩家句柄过长", details: [] });
+      return;
+    }
+
+    setEligLoading(true);
+    setEligResult(null);
+    try {
+      const res = await fetch(`/api/player?player_handle=${encodeURIComponent(val)}`, {
+        headers: { Accept: "application/json" },
+      });
+      if (!res.ok) {
+        if (res.status === 404) {
+          setEligResult({
+            ok: false,
+            title: "未找到玩家数据（可能不活跃或暂未收录）",
+            details: ["这里只支持活跃玩家。"],
+          });
+          return;
+        }
+        throw new Error(`HTTP ${res.status}`);
+      }
+      const json = await res.json();
+      const r = computeEligibility(json);
+      setEligResult({
+        ok: r.ok,
+        title: r.ok ? "通过资格校验" : "未通过资格校验",
+        details: r.details,
+      });
+    } catch (e) {
+      console.warn(e);
+      setEligResult({ ok: false, title: "校验失败，请稍后再试", details: [] });
+    } finally {
+      setEligLoading(false);
+    }
+  }
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -284,35 +370,88 @@ export default function Proposals() {
       >
         {voteModal ? (
           <>
-            <p className="mt-0 text-sm leading-6 text-slate-800">
-              你选择了<strong>{voteModal.voteValue === 1 ? "赞同" : "反对"}</strong>提案{" "}
-              <strong>#{voteModal.proposalId}</strong>。请在游戏聊天栏输入下面指令完成投票：
-            </p>
-            <div className="mt-3 rounded-xl border border-slate-900 bg-slate-900 p-3 font-mono text-sm text-slate-50 break-all">
-              -vote {voteModal.proposalId}_{voteModal.voteValue}
+            <div className="text-sm leading-6 text-slate-800">
+              你选择了<strong>{voteModal.voteValue === 1 ? "赞同" : "反对"}</strong>提案 <strong>#{voteModal.proposalId}</strong>。
             </div>
-            <div className="mt-3 flex gap-2">
+
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div className="text-sm font-black text-slate-900">投票步骤（共 3 步）</div>
+              <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm leading-6 text-slate-700">
+                <li>
+                  复制指令：
+                  <div className="mt-2 rounded-xl border border-slate-900 bg-slate-900 p-3 font-mono text-sm text-slate-50 break-all">
+                    -vote {voteModal.proposalId}_{voteModal.voteValue}
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <button
+                      className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-black text-slate-900 hover:bg-slate-50"
+                      onClick={async () => {
+                        const ok = await copyToClipboard(`-vote ${voteModal.proposalId}_${voteModal.voteValue}`);
+                        setVoteCopied(ok);
+                        if (ok) setTimeout(() => setVoteCopied(false), 1500);
+                      }}
+                    >
+                      {voteCopied ? "已复制" : "点击复制指令"}
+                    </button>
+                  </div>
+                </li>
+                <li>在游戏内「比赛模式」的聊天中输入该指令并发送。</li>
+                <li>
+                  上传这局录像（录像时长至少 <span className="font-black text-slate-900">5 分钟</span>）。
+                </li>
+              </ol>
+            </div>
+
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-4">
+              <div className="text-sm font-black text-slate-900">验证投票资格（可选）</div>
+              <div className="mt-2 text-xs leading-5 text-slate-500">输入玩家句柄 (Handle)，用于快速校验是否满足投票门槛。</div>
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                <input
+                  className="w-full flex-1 rounded-xl border-2 border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-blue-600"
+                  placeholder="例: 5-S2-1-10252842"
+                  value={eligHandle}
+                  onChange={(e) => setEligHandle(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") verifyEligibility();
+                  }}
+                  autoComplete="off"
+                />
+                <button
+                  className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-black text-white hover:bg-slate-800 disabled:opacity-70"
+                  onClick={verifyEligibility}
+                  disabled={eligLoading}
+                >
+                  {eligLoading ? "校验中..." : "校验资格"}
+                </button>
+              </div>
+
+              {eligResult ? (
+                <div
+                  className={[
+                    "mt-3 rounded-xl border p-3 text-sm",
+                    eligResult.ok ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-slate-200 bg-slate-50 text-slate-700",
+                  ].join(" ")}
+                >
+                  <div className="font-black">{eligResult.title}</div>
+                  {eligResult.details.length ? (
+                    <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-5">
+                      {eligResult.details.map((d, i) => (
+                        <li key={i}>{d}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+
+            <div className="mt-3 flex justify-end">
               <button
-                className="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-900 hover:bg-slate-50"
-                onClick={async () => {
-                  await copyToClipboard(`-vote ${voteModal.proposalId}_${voteModal.voteValue}`);
-                }}
-              >
-                点击复制指令
-              </button>
-              <button
-                className="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-900 hover:bg-slate-50"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-900 hover:bg-slate-50"
                 onClick={() => setVoteModal(null)}
               >
-                我知道了
+                关闭
               </button>
             </div>
-            <p className="mt-3 text-sm leading-6 text-slate-500">
-              格式：<strong className="text-slate-900">-vote 提案编号_1</strong>（赞同） 或{" "}
-              <strong className="text-slate-900">-vote 提案编号_0</strong>（反对）。<br />
-              说明：<strong className="text-slate-900">1</strong> 表示赞同，<strong className="text-slate-900">0</strong>{" "}
-              表示反对，<strong className="text-slate-900">_</strong> 是英文下划线。
-            </p>
           </>
         ) : null}
       </Modal>
