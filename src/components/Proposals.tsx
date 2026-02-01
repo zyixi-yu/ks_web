@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Modal from "./Modal";
 import { copyToClipboard } from "../lib/clipboard";
 import { formatTimeCN } from "../lib/time";
+import { deleteRecentHandle, loadRecentHandles, saveRecentHandle, type RecentHandle } from "../lib/recentHandles";
 import {
   PROPOSAL_RULES,
   computeProposalStatus,
@@ -35,6 +36,7 @@ export default function Proposals() {
   const [voteCopied, setVoteCopied] = useState(false);
   const [eligHandle, setEligHandle] = useState("");
   const [eligLoading, setEligLoading] = useState(false);
+  const [eligRecent, setEligRecent] = useState<RecentHandle[]>([]);
   const [eligResult, setEligResult] = useState<
     | null
     | {
@@ -58,6 +60,7 @@ export default function Proposals() {
     setEligHandle("");
     setEligLoading(false);
     setEligResult(null);
+    setEligRecent(loadRecentHandles());
   }, [voteModal]);
 
   useEffect(() => {
@@ -132,8 +135,8 @@ export default function Proposals() {
     return { ok: tiersOk && playsOk, details };
   }
 
-  async function verifyEligibility() {
-    const val = eligHandle.trim();
+  async function verifyEligibility(rawHandle?: string) {
+    const val = (rawHandle ?? eligHandle).trim();
     if (!val) {
       setEligResult({ ok: false, title: "请输入玩家句柄", details: [] });
       return;
@@ -167,6 +170,7 @@ export default function Proposals() {
         title: r.ok ? "通过资格校验" : "未通过资格校验",
         details: r.details,
       });
+      setEligRecent(saveRecentHandle(val));
     } catch (e) {
       console.warn(e);
       setEligResult({ ok: false, title: "校验失败，请稍后再试", details: [] });
@@ -379,19 +383,19 @@ export default function Proposals() {
               <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm leading-6 text-slate-700">
                 <li>
                   复制指令：
-                  <div className="mt-2 rounded-xl border border-slate-900 bg-slate-900 p-3 font-mono text-sm text-slate-50 break-all">
-                    -vote {voteModal.proposalId}_{voteModal.voteValue}
-                  </div>
-                  <div className="mt-2 flex flex-wrap gap-2">
+                  <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-stretch">
+                    <div className="flex-1 rounded-xl border border-slate-900 bg-slate-900 px-3 py-2.5 font-mono text-sm text-slate-50 break-all">
+                      -vote {voteModal.proposalId}_{voteModal.voteValue}
+                    </div>
                     <button
-                      className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-black text-slate-900 hover:bg-slate-50"
+                      className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-black text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.99]"
                       onClick={async () => {
                         const ok = await copyToClipboard(`-vote ${voteModal.proposalId}_${voteModal.voteValue}`);
                         setVoteCopied(ok);
                         if (ok) setTimeout(() => setVoteCopied(false), 1500);
                       }}
                     >
-                      {voteCopied ? "已复制" : "点击复制指令"}
+                      {voteCopied ? "已复制" : "复制"}
                     </button>
                   </div>
                 </li>
@@ -418,12 +422,50 @@ export default function Proposals() {
                 />
                 <button
                   className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-black text-white hover:bg-slate-800 disabled:opacity-70"
-                  onClick={verifyEligibility}
+                  onClick={() => verifyEligibility()}
                   disabled={eligLoading}
                 >
                   {eligLoading ? "校验中..." : "校验资格"}
                 </button>
               </div>
+
+                {!eligLoading && !eligResult && eligRecent.length ? (
+                  <div className="mt-3">
+                    <div className="text-xs font-bold text-slate-500">最近查询</div>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {eligRecent.map((item) => (
+                      <div
+                        key={item.handle}
+                        className="inline-flex items-center overflow-hidden rounded-full border border-slate-200 bg-white"
+                        title={`上次查询：${formatTimeCN(item.lastUsed)}`}
+                      >
+                        <button
+                          type="button"
+                          className="px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50"
+                          onClick={() => {
+                            setEligHandle(item.handle);
+                            verifyEligibility(item.handle);
+                          }}
+                        >
+                          {item.handle}
+                        </button>
+                        <button
+                          type="button"
+                          className="px-2 py-1.5 text-xs font-black text-slate-400 hover:bg-slate-50 hover:text-slate-700"
+                          aria-label="删除该条记录"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setEligRecent(deleteRecentHandle(item.handle));
+                          }}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
 
               {eligResult ? (
                 <div

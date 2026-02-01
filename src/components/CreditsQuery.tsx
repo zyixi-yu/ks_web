@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { copyToClipboard } from "../lib/clipboard";
 import { computeCreditBreakdown, decodeCreditCode, type CreditsResponse } from "../lib/credits";
-import { loadRecentHandles, saveRecentHandle, type RecentHandle } from "../lib/recentHandles";
+import { deleteRecentHandle, loadRecentHandles, saveRecentHandle, type RecentHandle } from "../lib/recentHandles";
 import { formatTimeCN } from "../lib/time";
 
 type CreditsResult = {
@@ -149,19 +149,36 @@ export default function CreditsQuery() {
             <div className="text-xs font-bold text-slate-500">最近查询</div>
             <div className="mt-2 flex flex-wrap gap-2">
               {recent.map((item) => (
-                <button
+                <div
                   key={item.handle}
-                  type="button"
-                  className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100"
-                  onClick={() => {
-                    setHandle(item.handle);
-                    runQuery(item.handle);
-                  }}
-                  disabled={loading}
+                  className="inline-flex items-center overflow-hidden rounded-full border border-slate-200 bg-slate-50"
                   title={`上次查询：${formatTimeCN(item.lastUsed)}`}
                 >
-                  {item.handle}
-                </button>
+                  <button
+                    type="button"
+                    className="px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100"
+                    onClick={() => {
+                      setHandle(item.handle);
+                      runQuery(item.handle);
+                    }}
+                    disabled={loading}
+                  >
+                    {item.handle}
+                  </button>
+                  <button
+                    type="button"
+                    className="px-2 py-1.5 text-xs font-black text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                    aria-label="删除该条记录"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setRecent(deleteRecentHandle(item.handle));
+                    }}
+                    disabled={loading}
+                  >
+                    ×
+                  </button>
+                </div>
               ))}
             </div>
           </div>

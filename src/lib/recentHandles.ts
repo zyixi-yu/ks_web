@@ -39,3 +39,14 @@ export function saveRecentHandle(nextHandle: string): RecentHandle[] {
   return next;
 }
 
+export function deleteRecentHandle(handle: string): RecentHandle[] {
+  const h = handle.trim();
+  if (!h) return loadRecentHandles();
+  const next = loadRecentHandles().filter((x) => x.handle.toUpperCase() !== h.toUpperCase());
+  try {
+    localStorage.setItem(RECENT_STORAGE_KEY, JSON.stringify(next));
+  } catch {
+    // ignore
+  }
+  return next;
+}

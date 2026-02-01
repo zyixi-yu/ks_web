@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { loadRecentHandles, saveRecentHandle, type RecentHandle } from "../lib/recentHandles";
+import { deleteRecentHandle, loadRecentHandles, saveRecentHandle, type RecentHandle } from "../lib/recentHandles";
 import { formatTimeBeijingYYYYMMDDHHmm } from "../lib/time";
 import Modal from "./Modal";
 
@@ -165,6 +165,7 @@ export default function PlayerRoleQuery() {
   const [data, setData] = useState<PlayerApiResponse | null>(null);
   const [recent, setRecent] = useState<RecentHandle[]>([]);
   const [uploaderOpen, setUploaderOpen] = useState(false);
+  const [recordNextHandle, setRecordNextHandle] = useState<string | null>(null);
   const routeHandle = useMemo(
     () => (typeof params.handle === "string" ? decodeURIComponent(params.handle).trim() : ""),
     [params.handle],
@@ -175,7 +176,7 @@ export default function PlayerRoleQuery() {
   }, []);
 
   const runQuery = useCallback(
-    async (rawHandle: string) => {
+    async (rawHandle: string, opts?: { record?: boolean }) => {
       const val = rawHandle.trim();
       if (!val) {
         setError("请输入玩家句柄");
@@ -198,7 +199,7 @@ export default function PlayerRoleQuery() {
         const parsed = parsePlayerApiResponse(json);
         if (!parsed) throw new Error("bad payload");
         setData(parsed);
-        setRecent(saveRecentHandle(val));
+        if (opts?.record) setRecent(saveRecentHandle(val));
       } catch (e) {
         console.warn(e);
         setData(null);
@@ -211,6 +212,7 @@ export default function PlayerRoleQuery() {
         }
       } finally {
         setLoading(false);
+        if (opts?.record) setRecordNextHandle(null);
       }
     },
     [],
@@ -219,8 +221,10 @@ export default function PlayerRoleQuery() {
   useEffect(() => {
     if (!routeHandle) return;
     setHandle(routeHandle);
-    runQuery(routeHandle);
-  }, [routeHandle, runQuery]);
+    const shouldRecord =
+      !!recordNextHandle && recordNextHandle.toUpperCase() === routeHandle.toUpperCase();
+    runQuery(routeHandle, { record: shouldRecord });
+  }, [recordNextHandle, routeHandle, runQuery]);
 
   const updatedAtText = useMemo(() => {
     if (!data?.generated_at) return "--";
@@ -244,7 +248,7 @@ export default function PlayerRoleQuery() {
       }
 
       if (routeHandle && routeHandle.toUpperCase() === val.toUpperCase()) {
-        runQuery(val);
+        runQuery(val, { record: true });
         return;
       }
 
@@ -252,7 +256,7 @@ export default function PlayerRoleQuery() {
       setData(null);
       setError(null);
       setErrorKind(null);
-      setLoading(true);
+      setRecordNextHandle(val);
       nav(`/player/${encodeURIComponent(val)}`, { replace: true });
     },
     [nav, routeHandle, runQuery],
@@ -288,21 +292,38 @@ export default function PlayerRoleQuery() {
           <div className="mt-3">
             <div className="text-xs font-bold text-slate-500">最近查询</div>
             <div className="mt-2 flex flex-wrap gap-2">
-              {recent.map((r) => (
-                <button
-                  key={r.handle}
-                  className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50"
-                  onClick={() => {
-                    setHandle(r.handle);
-                    navigateOrQuery(r.handle);
-                  }}
-                >
-                  {r.handle}
-                </button>
-              ))}
-            </div>
-          </div>
-        ) : null}
+	              {recent.map((r) => (
+	                <div
+	                  key={r.handle}
+	                  className="inline-flex items-center overflow-hidden rounded-full border border-slate-200 bg-white"
+	                >
+	                  <button
+	                    type="button"
+	                    className="px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50"
+	                    onClick={() => {
+	                      setHandle(r.handle);
+	                      navigateOrQuery(r.handle);
+	                    }}
+	                  >
+	                    {r.handle}
+	                  </button>
+	                  <button
+	                    type="button"
+	                    className="px-2 py-1.5 text-xs font-black text-slate-400 hover:bg-slate-50 hover:text-slate-700"
+	                    aria-label="删除该条记录"
+	                    onClick={(e) => {
+	                      e.preventDefault();
+	                      e.stopPropagation();
+	                      setRecent(deleteRecentHandle(r.handle));
+	                    }}
+	                  >
+	                    ×
+	                  </button>
+	                </div>
+	              ))}
+	            </div>
+	          </div>
+	        ) : null}
       </div>
 
       {error ? (
