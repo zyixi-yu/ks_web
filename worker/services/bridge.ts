@@ -153,6 +153,21 @@ export function computePlayerRoles(
   generated_at: string;
   player_handle: string;
   cores: { survivor: number; kerrigan: number };
+  ranks?: {
+    survivor: { percentile: number; tier: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" };
+    kerrigan: { percentile: number; tier: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" };
+  };
+  leaderboard_match?: {
+    team_name: "幸存者" | "凯瑞甘";
+    rank: number;
+    mmr: number;
+    identity: string;
+    display_name: string;
+  };
+  top_uploader?: {
+    name: string;
+    num_uploads: number;
+  };
   roles_survivor: PlayerRoleRow[];
   roles_kerrigan: PlayerRoleRow[];
 } | null {
@@ -241,12 +256,126 @@ export function computePlayerRoles(
   rolesSurvivor.sort(sortRows);
   rolesKerrigan.sort(sortRows);
 
+  function percentileForMmr(mmr: number, thresholds: number[]): number {
+    // thresholds: length 101, increasing; return the highest p where mmr >= thresholds[p]
+    let best = 0;
+    for (let p = 0; p < thresholds.length; p++) {
+      const t = thresholds[p];
+      if (typeof t !== "number" || !Number.isFinite(t)) continue;
+      if (mmr >= t) best = p;
+    }
+    return Math.max(0, Math.min(100, best));
+  }
+
+  function tierForPercentile(p: number): "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" {
+    // 口径：>= 下界进入更高段位
+    // Bronze [0,25), Silver [25,50), Gold [50,75), Platinum [75,95), Diamond [95,99), Master [99,100]
+    if (p >= 99) return "大师";
+    if (p >= 95) return "钻石";
+    if (p >= 75) return "白金";
+    if (p >= 50) return "黄金";
+    if (p >= 25) return "白银";
+    return "青铜";
+  }
+
+  let ranks:
+    | {
+        survivor: { percentile: number; tier: ReturnType<typeof tierForPercentile> };
+        kerrigan: { percentile: number; tier: ReturnType<typeof tierForPercentile> };
+      }
+    | undefined;
+  const mmrPercentile = obj["mmr_percentile"];
+  if (mmrPercentile && typeof mmrPercentile === "object") {
+    const mp = mmrPercentile as Record<string, unknown>;
+    const surv = mp["Survivor"];
+    const kerri = mp["Kerrigan"];
+    if (Array.isArray(surv) && Array.isArray(kerri) && surv.length >= 101 && kerri.length >= 101) {
+      const pSurv = percentileForMmr(coreSurvivor, surv as number[]);
+      const pKerri = percentileForMmr(coreKerrigan, kerri as number[]);
+      ranks = {
+        survivor: { percentile: pSurv, tier: tierForPercentile(pSurv) },
+        kerrigan: { percentile: pKerri, tier: tierForPercentile(pKerri) },
+      };
+    }
+  }
+
+  // NOTE: 对齐 /api/leaderboard：复用 computeLeaderboard 的 Top50 结果，不自己单独排序/排名。
+  let leaderboardMatch:
+    | {
+        team_name: "幸存者" | "凯瑞甘";
+        rank: number;
+        mmr: number;
+        identity: string;
+        display_name: string;
+      }
+    | undefined;
+  try {
+    const lb = computeLeaderboard(rawJson);
+    for (const row of lb.boards.survivor) {
+      if (row.handles.includes(playerHandle)) {
+        leaderboardMatch = {
+          team_name: "幸存者",
+          rank: row.rank,
+          mmr: row.mmr,
+          identity: row.identity,
+          display_name: row.display_name,
+        };
+        break;
+      }
+    }
+    if (!leaderboardMatch) {
+      for (const row of lb.boards.kerrigan) {
+        if (row.handles.includes(playerHandle)) {
+          leaderboardMatch = {
+            team_name: "凯瑞甘",
+            rank: row.rank,
+            mmr: row.mmr,
+            identity: row.identity,
+            display_name: row.display_name,
+          };
+          break;
+        }
+      }
+    }
+  } catch {
+    // ignore: leaderboard mismatch shouldn't break /player
+  }
+
+  let topUploader:
+    | {
+        name: string;
+        num_uploads: number;
+      }
+    | undefined;
+  const topUploaders = obj["top_uploaders"];
+  if (topUploaders && typeof topUploaders === "object") {
+    const tu = topUploaders as Record<string, unknown>;
+    const nameMap = tu["name"];
+    const handleMap = tu["player_handle"];
+    const numMap = tu["num_uploads"];
+    if (nameMap && handleMap && numMap) {
+      const indices = Object.keys((handleMap && typeof handleMap === "object" ? (handleMap as any) : {}) as Record<string, unknown>);
+      for (const idx of indices) {
+        const handles = toStringArray(readIndexValue(handleMap, idx));
+        if (!handles.includes(playerHandle)) continue;
+        const name = toStringSafe(readIndexValue(nameMap, idx)).trim();
+        const numUploads = toNumber(readIndexValue(numMap, idx)) ?? 0;
+        if (name) {
+          topUploader = { name, num_uploads: numUploads };
+          break;
+        }
+      }
+    }
+  }
+
   return {
     generated_at: generatedAt,
     player_handle: playerHandle,
     cores: { survivor: coreSurvivor, kerrigan: coreKerrigan },
+    ...(ranks ? { ranks } : {}),
+    ...(leaderboardMatch ? { leaderboard_match: leaderboardMatch } : {}),
+    ...(topUploader ? { top_uploader: topUploader } : {}),
     roles_survivor: rolesSurvivor,
     roles_kerrigan: rolesKerrigan,
   };
 }
-
