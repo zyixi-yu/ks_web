@@ -2,11 +2,17 @@ export function parseBearerToken(authorizationHeader: string | null): string | n
   if (!authorizationHeader) return null;
   const v = authorizationHeader.trim();
   if (!v) return null;
-  const [scheme, rest] = v.split(/\s+/, 2);
-  if (!scheme || !rest) return null;
-  if (scheme.toLowerCase() !== "bearer") return null;
-  const token = rest.trim();
-  return token ? token : null;
+
+  // Accept either:
+  // - "Bearer <token>" (standard)
+  // - "<token>" (simplified client)
+  const [maybeScheme, rest] = v.split(/\s+/, 2);
+  if (maybeScheme && rest && maybeScheme.toLowerCase() === "bearer") {
+    const token = rest.trim();
+    return token ? token : null;
+  }
+
+  return v;
 }
 
 export function constantTimeEqual(a: string, b: string): boolean {
@@ -15,4 +21,3 @@ export function constantTimeEqual(a: string, b: string): boolean {
   for (let i = 0; i < a.length; i++) out |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return out === 0;
 }
-

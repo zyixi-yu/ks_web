@@ -2,6 +2,8 @@ import type { Context } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
 export function jsonError(c: Context, status: ContentfulStatusCode, message: string): Response {
+  // Make 5xx causes visible in Workers Logs without requiring the client to capture the response body.
+  if (status >= 500) console.error(`[api] ${status} ${message}`);
   c.header("Content-Type", "application/json; charset=utf-8");
   return c.json({ error: message }, status);
 }
