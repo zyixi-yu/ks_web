@@ -8,7 +8,7 @@ declare global {
     // 存储钻石议会投票数据（proposal_votes_cn.json）
     KS_KV: KVNamespace;
 
-    // 短信验证码读写鉴权 token（Authorization: Bearer <token>）
+    // 短信验证码读写鉴权 token（Authorization: <token> 或 Authorization: Bearer <token>）
     VERIFY_CODE_TOKEN?: string;
   }
 }
