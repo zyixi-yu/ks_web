@@ -122,27 +122,31 @@ function RoleTable({ title, items }: { title: "幸存者" | "凯瑞甘"; items: 
       </div>
 
       <div className="mt-3 overflow-hidden rounded-xl border border-slate-200">
-        <div className="grid grid-cols-[1fr_88px_92px_72px] bg-slate-50 text-xs font-black text-slate-600">
-          <div className="px-3 py-2">角色</div>
-          <div className="px-3 py-2 text-right">MMR</div>
-          <div className="px-3 py-2 text-right">胜/场</div>
-          <div className="px-3 py-2 text-right">胜率</div>
+        <div className="grid grid-cols-[minmax(0,1fr)_72px_64px_56px] bg-slate-50 text-xs font-black text-slate-600 sm:grid-cols-[minmax(0,1fr)_88px_92px_72px]">
+          <div className="px-2 py-2 sm:px-3">角色</div>
+          <div className="px-2 py-2 text-right sm:px-3">MMR</div>
+          <div className="px-2 py-2 text-right sm:px-3">胜/场</div>
+          <div className="px-2 py-2 text-right sm:px-3">胜率</div>
         </div>
 
         <div className="divide-y divide-slate-200">
           {items.map((r) => (
             <div
               key={`${title}-${r.role_id}-${r.role_name}`}
-              className="grid grid-cols-[1fr_88px_92px_72px] items-start text-sm"
+              className="grid grid-cols-[minmax(0,1fr)_72px_64px_56px] items-center text-sm sm:grid-cols-[minmax(0,1fr)_88px_92px_72px]"
             >
-              <div className="px-3 py-2">
-                <div className="font-black leading-5 text-slate-900 line-clamp-2">{r.role_name}</div>
+              <div className="min-w-0 px-2 py-2 sm:px-3">
+                <div className="truncate font-black leading-5 text-slate-900">{r.role_name}</div>
               </div>
-              <div className="px-3 py-2 text-right font-black text-slate-900 tabular-nums">{r.mmr}</div>
-              <div className="px-3 py-2 text-right font-bold text-slate-700 tabular-nums">
+              <div className="px-2 py-2 text-right font-black text-slate-900 tabular-nums whitespace-nowrap sm:px-3">
+                {r.mmr}
+              </div>
+              <div className="px-2 py-2 text-right font-bold text-slate-700 tabular-nums whitespace-nowrap sm:px-3">
                 {r.wins}/{r.plays}
               </div>
-              <div className="px-3 py-2 text-right font-bold text-slate-700 tabular-nums">{pct(r.win_rate)}</div>
+              <div className="px-2 py-2 text-right font-bold text-slate-700 tabular-nums whitespace-nowrap sm:px-3">
+                {pct(r.win_rate)}
+              </div>
             </div>
           ))}
           {!items.length ? (
