@@ -229,7 +229,7 @@ export default function NavDrawer(props: {
 
         <div className="px-4 pb-4 pt-2">
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs leading-5 text-slate-600">
-            常用查询与数据展示（数据来自 Worker / KV）
+            常用查询与数据展示
           </div>
         </div>
       </div>

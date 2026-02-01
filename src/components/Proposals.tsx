@@ -201,11 +201,6 @@ export default function Proposals() {
             {Math.round(PROPOSAL_RULES.passThreshold * 100)}% 视为通过（待实施）；创建后{PROPOSAL_RULES.quorumDeadlineDays}
             天仍不足{PROPOSAL_RULES.quorumVotes}人投票则过期。
           </div>
-          <div className="mt-1">
-            <span className="font-black text-slate-900">投票方式</span>：在游戏内输入{" "}
-            <span className="font-black text-slate-900">-vote 提案编号_1</span>（赞同）或{" "}
-            <span className="font-black text-slate-900">-vote 提案编号_0</span>（反对）。
-          </div>
         </div>
 
         {loading ? (
