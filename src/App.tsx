@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
 import CreditsQuery from "./components/CreditsQuery";
 import Leaderboard from "./components/Leaderboard";
+import I18nSearch from "./components/I18nSearch";
 import PlayerRoleQuery from "./components/PlayerRoleQuery";
 import Proposals from "./components/Proposals";
 
@@ -62,6 +63,17 @@ export default function App() {
               排行榜
             </NavLink>
             <NavLink
+              to="/i18n"
+              className={({ isActive }) =>
+                [
+                  "rounded-lg px-3 py-2 text-sm font-bold transition",
+                  isActive ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100",
+                ].join(" ")
+              }
+            >
+              翻译搜索
+            </NavLink>
+            <NavLink
               to="/player"
               className={({ isActive }) =>
                 [
@@ -81,6 +93,7 @@ export default function App() {
           <Route path="/" element={<CreditsQuery />} />
           <Route path="/council" element={<Proposals />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/i18n" element={<I18nSearch />} />
           <Route path="/player" element={<PlayerRoleQuery />} />
           <Route path="/player/:handle" element={<PlayerRoleQuery />} />
           <Route path="*" element={<Navigate to="/" replace />} />
