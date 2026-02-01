@@ -131,7 +131,6 @@ export default function I18nSearch() {
             <h1 className="text-lg font-black text-slate-900">玩家搜索翻译</h1>
             <div className="mt-1 text-sm text-slate-500">{pageText}</div>
           </div>
-          <div className="text-xs text-slate-400">数据来源：KV（ks_gs_new_cn / ks_gs_new_en）</div>
         </div>
 
         <form
@@ -223,4 +222,3 @@ export default function I18nSearch() {
     </div>
   );
 }
-

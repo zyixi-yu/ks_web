@@ -1,18 +1,41 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
 import CreditsQuery from "./components/CreditsQuery";
 import Leaderboard from "./components/Leaderboard";
 import I18nSearch from "./components/I18nSearch";
 import PlayerRoleQuery from "./components/PlayerRoleQuery";
 import Proposals from "./components/Proposals";
+import NavDrawer, { IconCoin, IconCrown, IconMenu, IconSearch, IconTrophy, IconUser } from "./components/NavDrawer";
 
 export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const navItems = useMemo(
+    () => [
+      { to: "/", label: "积分", icon: <IconCoin className="h-5 w-5" />, end: true },
+      { to: "/council", label: "议会", icon: <IconCrown className="h-5 w-5" /> },
+      { to: "/leaderboard", label: "排行", icon: <IconTrophy className="h-5 w-5" /> },
+      { to: "/player", label: "角色", icon: <IconUser className="h-5 w-5" /> },
+      { to: "/i18n", label: "翻译", icon: <IconSearch className="h-5 w-5" /> },
+    ],
+    [],
+  );
+
   return (
     <div className="min-h-full">
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-3">
-            <div className="inline-flex h-9 overflow-hidden rounded-xl">
+          <div className="flex min-w-0 items-center gap-3">
+            <button
+              type="button"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-cyan-600/10 md:hidden"
+              onClick={() => setMenuOpen(true)}
+              aria-label="打开菜单"
+            >
+              <IconMenu className="h-6 w-6" />
+            </button>
+
+            <div className="inline-flex h-9 overflow-hidden rounded-xl border border-slate-200 bg-white">
               <img
                 src="/ksicon.png"
                 alt="凯瑞甘生存"
@@ -21,69 +44,32 @@ export default function App() {
                 decoding="async"
               />
             </div>
-            <div>
-              <div className="text-sm font-black leading-4 text-slate-900">凯瑞甘生存</div>
-              <div className="text-xs text-slate-500">积分助手 · 钻石议会 · 排行榜 · 角色数据</div>
+
+            <div className="min-w-0">
+              <div className="truncate text-sm font-black leading-4 text-slate-900">凯瑞甘生存·工具箱</div>
+              <div className="hidden truncate text-xs text-slate-500 sm:block">常用查询与数据展示</div>
             </div>
           </div>
 
-          <nav className="flex items-center gap-1">
-            <NavLink
-              to="/"
-              end
-              className={({ isActive }) =>
-                [
-                  "rounded-lg px-3 py-2 text-sm font-bold transition",
-                  isActive ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100",
-                ].join(" ")
-              }
-            >
-              积分查询
-            </NavLink>
-            <NavLink
-              to="/council"
-              className={({ isActive }) =>
-                [
-                  "rounded-lg px-3 py-2 text-sm font-bold transition",
-                  isActive ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100",
-                ].join(" ")
-              }
-            >
-              钻石议会
-            </NavLink>
-            <NavLink
-              to="/leaderboard"
-              className={({ isActive }) =>
-                [
-                  "rounded-lg px-3 py-2 text-sm font-bold transition",
-                  isActive ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100",
-                ].join(" ")
-              }
-            >
-              排行榜
-            </NavLink>
-            <NavLink
-              to="/i18n"
-              className={({ isActive }) =>
-                [
-                  "rounded-lg px-3 py-2 text-sm font-bold transition",
-                  isActive ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100",
-                ].join(" ")
-              }
-            >
-              翻译搜索
-            </NavLink>
-            <NavLink
-              to="/player"
-              className={({ isActive }) =>
-                [
-                  "rounded-lg px-3 py-2 text-sm font-bold transition",
-                  isActive ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100",
-                ].join(" ")
-              }
-            >
-              角色数据
-            </NavLink>
+          <nav className="hidden items-center gap-1 md:flex">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) =>
+                  [
+                    "whitespace-nowrap rounded-xl border px-3 py-2 text-sm font-black transition",
+                    "focus:outline-none focus:ring-4 focus:ring-cyan-600/10",
+                    isActive
+                      ? "border-cyan-200 bg-cyan-50 text-cyan-800"
+                      : "border-transparent text-slate-700 hover:bg-slate-50",
+                  ].join(" ")
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
           </nav>
         </div>
       </header>
@@ -99,6 +85,14 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
+
+      <NavDrawer
+        open={menuOpen}
+        title="KS 工具箱"
+        subtitle="选择一个功能页"
+        items={navItems}
+        onClose={() => setMenuOpen(false)}
+      />
     </div>
   );
 }

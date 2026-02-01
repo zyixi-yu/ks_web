@@ -5,6 +5,8 @@
 @layer base {
   html {
     @apply h-full;
+    /* Prevent layout shift when vertical scrollbar appears/disappears (route changes, modal open/close). */
+    scrollbar-gutter: stable;
   }
   body {
     @apply h-full bg-slate-50 text-slate-900 antialiased;
