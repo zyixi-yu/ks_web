@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { loadRecentHandles, saveRecentHandle, type RecentHandle } from "../lib/recentHandles";
 import { formatTimeBeijingYYYYMMDDHHmm } from "../lib/time";
+import Modal from "./Modal";
 
 type PlayerRole = {
   role_id: number;
@@ -159,6 +160,7 @@ export default function PlayerRoleQuery() {
   const [errorKind, setErrorKind] = useState<"not_found" | "failed" | null>(null);
   const [data, setData] = useState<PlayerApiResponse | null>(null);
   const [recent, setRecent] = useState<RecentHandle[]>([]);
+  const [uploaderOpen, setUploaderOpen] = useState(false);
   const routeHandle = useMemo(
     () => (typeof params.handle === "string" ? decodeURIComponent(params.handle).trim() : ""),
     [params.handle],
@@ -220,6 +222,8 @@ export default function PlayerRoleQuery() {
     if (!data?.generated_at) return "--";
     return `${formatTimeBeijingYYYYMMDDHHmm(data.generated_at)}（北京时间）`;
   }, [data?.generated_at]);
+
+  const uploaderCount = data?.top_uploader?.num_uploads;
 
   const navigateOrQuery = useCallback(
     (raw: string) => {
@@ -340,11 +344,31 @@ export default function PlayerRoleQuery() {
                     <span className="mx-2 text-slate-300">|</span>
                     <span className="font-bold text-slate-600">战网：</span>
                     <span className="font-bold text-slate-700">{data.leaderboard_match.identity}</span>
+                    {typeof uploaderCount === "number" ? (
+                      <button
+                        type="button"
+                        className="ml-2 inline-flex cursor-pointer items-center rounded-full border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-black text-rose-800 transition hover:bg-rose-100"
+                        title={`上传录像：${uploaderCount}`}
+                        onClick={() => setUploaderOpen(true)}
+                      >
+                        顶级上传者
+                      </button>
+                    ) : null}
                   </div>
                 ) : data.top_uploader ? (
                   <div className="text-sm text-slate-500">
                     <span className="font-bold text-slate-600">战网：</span>
                     <span className="font-black text-slate-900">{data.top_uploader.name}</span>
+                    {typeof uploaderCount === "number" ? (
+                      <button
+                        type="button"
+                        className="ml-2 inline-flex cursor-pointer items-center rounded-full border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-black text-rose-800 transition hover:bg-rose-100"
+                        title={`上传录像：${uploaderCount}`}
+                        onClick={() => setUploaderOpen(true)}
+                      >
+                        顶级上传者
+                      </button>
+                    ) : null}
                   </div>
                 ) : null}
 
@@ -368,17 +392,6 @@ export default function PlayerRoleQuery() {
                 />
               </div>
             </div>
-
-            {data.top_uploader ? (
-              <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                <span
-                  className="rounded-full border border-rose-200 bg-rose-50 px-2.5 py-1 font-black text-rose-800"
-                  title={`${data.top_uploader.name}：上传录像 ${data.top_uploader.num_uploads} 个`}
-                >
-                  顶级录像上传者
-                </span>
-              </div>
-            ) : null}
           </div>
 
           <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -387,6 +400,12 @@ export default function PlayerRoleQuery() {
           </div>
         </div>
       ) : null}
+
+      <Modal open={uploaderOpen} title="顶级上传者" onClose={() => setUploaderOpen(false)}>
+        <div className="text-sm text-slate-700">
+          上传录像：<span className="font-black tabular-nums">{typeof uploaderCount === "number" ? uploaderCount : "--"}</span>
+        </div>
+      </Modal>
     </div>
   );
 }
