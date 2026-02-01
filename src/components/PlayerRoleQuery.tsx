@@ -75,16 +75,25 @@ function TeamMmrCard({
   team,
   mmr,
   tier,
+  leaderboardRank,
 }: {
   team: "幸存者" | "凯瑞甘";
   mmr: number;
   tier?: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师";
+  leaderboardRank?: number;
 }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
       <div className="flex items-center justify-between gap-3">
         <div className="text-sm font-black text-slate-900">{team}</div>
-        {tier ? <TierPill tier={tier} /> : <span className="text-xs font-bold text-slate-400">--</span>}
+        <div className="flex items-center gap-2">
+          {typeof leaderboardRank === "number" ? (
+            <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-black text-slate-700">
+              榜单 第{leaderboardRank}名
+            </span>
+          ) : null}
+          {tier ? <TierPill tier={tier} /> : <span className="text-xs font-bold text-slate-400">--</span>}
+        </div>
       </div>
       <div className="mt-2 flex items-end justify-between gap-3">
         <div className="text-3xl font-black text-slate-900 tabular-nums">{mmr}</div>
@@ -92,12 +101,6 @@ function TeamMmrCard({
       </div>
     </div>
   );
-}
-
-function fmtSigned(n: number): string {
-  if (!Number.isFinite(n)) return "--";
-  if (n > 0) return `+${n}`;
-  return String(n);
 }
 
 function pct(x: number | null): string {
@@ -114,10 +117,9 @@ function RoleTable({ title, items }: { title: "幸存者" | "凯瑞甘"; items: 
       </div>
 
       <div className="mt-3 overflow-hidden rounded-xl border border-slate-200">
-        <div className="grid grid-cols-[1fr_88px_88px_92px_72px] bg-slate-50 text-xs font-black text-slate-600">
+        <div className="grid grid-cols-[1fr_88px_92px_72px] bg-slate-50 text-xs font-black text-slate-600">
           <div className="px-3 py-2">角色</div>
           <div className="px-3 py-2 text-right">MMR</div>
-          <div className="px-3 py-2 text-right">修正</div>
           <div className="px-3 py-2 text-right">胜/场</div>
           <div className="px-3 py-2 text-right">胜率</div>
         </div>
@@ -126,25 +128,12 @@ function RoleTable({ title, items }: { title: "幸存者" | "凯瑞甘"; items: 
           {items.map((r) => (
             <div
               key={`${title}-${r.role_id}-${r.role_name}`}
-              className="grid grid-cols-[1fr_88px_88px_92px_72px] items-start text-sm"
+              className="grid grid-cols-[1fr_88px_92px_72px] items-start text-sm"
             >
               <div className="px-3 py-2">
                 <div className="font-black leading-5 text-slate-900 line-clamp-2">{r.role_name}</div>
-                <div className="mt-0.5 text-xs text-slate-400">core {r.core_mmr}</div>
               </div>
               <div className="px-3 py-2 text-right font-black text-slate-900 tabular-nums">{r.mmr}</div>
-              <div
-                className={[
-                  "px-3 py-2 text-right font-black tabular-nums",
-                  r.class_mmr > 0 && "text-emerald-700",
-                  r.class_mmr < 0 && "text-red-700",
-                  r.class_mmr === 0 && "text-slate-700",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-              >
-                {fmtSigned(r.class_mmr)}
-              </div>
               <div className="px-3 py-2 text-right font-bold text-slate-700 tabular-nums">
                 {r.wins}/{r.plays}
               </div>
@@ -170,14 +159,17 @@ export default function PlayerRoleQuery() {
   const [errorKind, setErrorKind] = useState<"not_found" | "failed" | null>(null);
   const [data, setData] = useState<PlayerApiResponse | null>(null);
   const [recent, setRecent] = useState<RecentHandle[]>([]);
-  const [lastLoadedHandle, setLastLoadedHandle] = useState<string | null>(null);
+  const routeHandle = useMemo(
+    () => (typeof params.handle === "string" ? decodeURIComponent(params.handle).trim() : ""),
+    [params.handle],
+  );
 
   useEffect(() => {
     setRecent(loadRecentHandles());
   }, []);
 
   const runQuery = useCallback(
-    async (rawHandle: string, opts?: { pushUrl?: boolean }) => {
+    async (rawHandle: string) => {
       const val = rawHandle.trim();
       if (!val) {
         setError("请输入玩家句柄");
@@ -201,14 +193,9 @@ export default function PlayerRoleQuery() {
         if (!parsed) throw new Error("bad payload");
         setData(parsed);
         setRecent(saveRecentHandle(val));
-        setLastLoadedHandle(val);
-        if (opts?.pushUrl) {
-          nav(`/player/${encodeURIComponent(val)}`, { replace: true });
-        }
       } catch (e) {
         console.warn(e);
         setData(null);
-        setLastLoadedHandle(null);
         if (e instanceof Error && e.message === "not found") {
           setErrorKind("not_found");
           setError("未找到该玩家的数据（可能不活跃或暂未收录）。");
@@ -220,21 +207,44 @@ export default function PlayerRoleQuery() {
         setLoading(false);
       }
     },
-    [nav],
+    [],
   );
 
   useEffect(() => {
-    const p = typeof params.handle === "string" ? decodeURIComponent(params.handle) : "";
-    if (!p) return;
-    if (lastLoadedHandle && lastLoadedHandle.toUpperCase() === p.toUpperCase()) return;
-    setHandle(p);
-    runQuery(p, { pushUrl: false });
-  }, [lastLoadedHandle, params.handle, runQuery]);
+    if (!routeHandle) return;
+    setHandle(routeHandle);
+    runQuery(routeHandle);
+  }, [routeHandle, runQuery]);
 
   const updatedAtText = useMemo(() => {
     if (!data?.generated_at) return "--";
     return `${formatTimeBeijingYYYYMMDDHHmm(data.generated_at)}（北京时间）`;
   }, [data?.generated_at]);
+
+  const navigateOrQuery = useCallback(
+    (raw: string) => {
+      const val = raw.trim();
+      if (!val) {
+        setErrorKind(null);
+        setError("请输入玩家句柄");
+        setData(null);
+        return;
+      }
+
+      if (routeHandle && routeHandle.toUpperCase() === val.toUpperCase()) {
+        runQuery(val);
+        return;
+      }
+
+      // 先更新 URL：就算查不到，也能落到 /player/:handle 并展示兜底页。
+      setData(null);
+      setError(null);
+      setErrorKind(null);
+      setLoading(true);
+      nav(`/player/${encodeURIComponent(val)}`, { replace: true });
+    },
+    [nav, routeHandle, runQuery],
+  );
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -249,13 +259,13 @@ export default function PlayerRoleQuery() {
             value={handle}
             onChange={(e) => setHandle(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") runQuery(handle, { pushUrl: true });
+              if (e.key === "Enter") navigateOrQuery(handle);
             }}
             autoComplete="off"
           />
           <button
             className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-black text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-70"
-            onClick={() => runQuery(handle, { pushUrl: true })}
+            onClick={() => navigateOrQuery(handle)}
             disabled={loading}
           >
             {loading ? "查询中..." : "查询"}
@@ -272,7 +282,7 @@ export default function PlayerRoleQuery() {
                   className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50"
                   onClick={() => {
                     setHandle(r.handle);
-                    runQuery(r.handle, { pushUrl: true });
+                    navigateOrQuery(r.handle);
                   }}
                 >
                   {r.handle}
@@ -301,7 +311,7 @@ export default function PlayerRoleQuery() {
               <div className="mt-3 flex flex-wrap gap-2">
                 <button
                   className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-black text-slate-700 hover:bg-slate-50"
-                  onClick={() => runQuery(handle, { pushUrl: true })}
+                  onClick={() => navigateOrQuery(handle)}
                   disabled={loading}
                 >
                   重新查询
@@ -321,31 +331,41 @@ export default function PlayerRoleQuery() {
       {data ? (
         <div className="mt-4">
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <div className="text-sm font-black text-slate-900">{data.player_handle}</div>
+                {data.leaderboard_match ? (
+                  <div className="text-sm text-slate-500">
+                    <span className="font-bold text-slate-600">昵称：</span>
+                    <span className="font-black text-slate-900">{data.leaderboard_match.display_name}</span>
+                    <span className="mx-2 text-slate-300">|</span>
+                    <span className="font-bold text-slate-600">战网：</span>
+                    <span className="font-bold text-slate-700">{data.leaderboard_match.identity}</span>
+                  </div>
+                ) : data.top_uploader ? (
+                  <div className="text-sm text-slate-500">
+                    <span className="font-bold text-slate-600">战网：</span>
+                    <span className="font-black text-slate-900">{data.top_uploader.name}</span>
+                  </div>
+                ) : null}
+
+                <div className="mt-1 text-sm font-black text-slate-900">{data.player_handle}</div>
                 <div className="mt-1 text-sm text-slate-500">
                   更新时间：<span className="font-bold text-slate-700">{updatedAtText}</span>
                 </div>
-                {!data.leaderboard_match && data.top_uploader ? (
-                  <div className="mt-2 text-sm text-slate-500">
-                    战网标识：<span className="font-black text-slate-900">{data.top_uploader.name}</span>
-                  </div>
-                ) : null}
-                {data.leaderboard_match ? (
-                  <div className="mt-2 text-sm text-slate-500">
-                    榜单：<span className="font-black text-slate-900">{data.leaderboard_match.team_name}</span>{" "}
-                    <span className="font-black text-slate-900">#{data.leaderboard_match.rank}</span>
-                    <span className="mx-2 text-slate-300">·</span>
-                    <span className="font-black text-slate-900">{data.leaderboard_match.display_name}</span>
-                    <span className="mx-2 text-slate-300">·</span>
-                    <span className="font-bold text-slate-700">{data.leaderboard_match.identity}</span>
-                  </div>
-                ) : null}
               </div>
               <div className="grid w-full grid-cols-1 gap-3 sm:w-auto sm:min-w-[340px] sm:grid-cols-2">
-                <TeamMmrCard team="幸存者" mmr={data.cores.survivor} tier={data.ranks?.survivor.tier} />
-                <TeamMmrCard team="凯瑞甘" mmr={data.cores.kerrigan} tier={data.ranks?.kerrigan.tier} />
+                <TeamMmrCard
+                  team="幸存者"
+                  mmr={data.cores.survivor}
+                  tier={data.ranks?.survivor.tier}
+                  leaderboardRank={data.leaderboard_match?.team_name === "幸存者" ? data.leaderboard_match.rank : undefined}
+                />
+                <TeamMmrCard
+                  team="凯瑞甘"
+                  mmr={data.cores.kerrigan}
+                  tier={data.ranks?.kerrigan.tier}
+                  leaderboardRank={data.leaderboard_match?.team_name === "凯瑞甘" ? data.leaderboard_match.rank : undefined}
+                />
               </div>
             </div>
 
