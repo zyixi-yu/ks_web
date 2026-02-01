@@ -133,6 +133,19 @@ export default function I18nSearch() {
           </div>
         </div>
 
+        <div className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm leading-6 text-cyan-900">
+          反馈翻译问题，见{" "}
+          <a
+            href="https://acnhqowv5wij.feishu.cn/wiki/F0JkwauTribPKGkhcEVcCFxgnSg"
+            target="_blank"
+            rel="noreferrer"
+            className="font-black text-blue-700 hover:text-blue-800 hover:underline"
+          >
+            KS知识库
+          </a>
+          。
+        </div>
+
         <form
           className="mt-4 flex flex-col gap-2 sm:flex-row"
           onSubmit={(e) => {

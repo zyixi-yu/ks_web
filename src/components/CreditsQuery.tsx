@@ -121,7 +121,15 @@ export default function CreditsQuery() {
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <h1 className="text-center text-lg font-black text-slate-900">积分查询</h1>
         <p className="mt-1 text-center text-sm text-slate-500">
-          输入玩家句柄 (Handle) 查询积分与指令
+          输入玩家句柄 (Handle) 查询积分与指令 ·{" "}
+          <a
+            href="https://acnhqowv5wij.feishu.cn/wiki/PeU2ww3cuihWQgkCe5zcvOh1nCd"
+            target="_blank"
+            rel="noreferrer"
+            className="font-black text-blue-700 hover:text-blue-800 hover:underline"
+          >
+            帮助文档
+          </a>
         </p>
 
         <div className="mt-4 flex gap-2">
