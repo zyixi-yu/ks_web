@@ -129,7 +129,11 @@ function lockBodyScroll(open: boolean) {
   if (!open) return () => {};
   const prevOverflow = document.body.style.overflow;
   const prevPaddingRight = document.body.style.paddingRight;
-  const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+  const supportsStableGutter =
+    typeof CSS !== "undefined" && typeof (CSS as any).supports === "function"
+      ? (CSS as any).supports("scrollbar-gutter: stable")
+      : false;
+  const scrollbarWidth = supportsStableGutter ? 0 : window.innerWidth - document.documentElement.clientWidth;
   document.body.style.overflow = "hidden";
   if (scrollbarWidth > 0) {
     document.body.style.paddingRight = `${scrollbarWidth}px`;

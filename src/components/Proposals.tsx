@@ -141,6 +141,7 @@ export default function Proposals() {
               const isActive = status === "Active";
               const title = safeText(p.title, "(无标题)");
               const desc = safeText(p.description, "");
+              const showFullLink = desc.trim().length > 120 || desc.includes("\n");
 
               const totalW = voteStats.totalWeight || 0;
               const yesPct = totalW > 0 ? (voteStats.yesWeight / totalW) * 100 : 0;
@@ -194,6 +195,21 @@ export default function Proposals() {
                   <div className="mt-2 min-h-[96px] whitespace-pre-line text-sm leading-6 text-slate-800 line-clamp-4">
                     {desc || <span className="text-slate-400">（无描述）</span>}
                   </div>
+                  <div className="mt-1 flex h-5 items-center justify-end">
+                    <button
+                      type="button"
+                      className={[
+                        "text-xs font-black text-cyan-700 hover:text-cyan-800 hover:underline",
+                        !showFullLink && "pointer-events-none opacity-0",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      onClick={openLog}
+                      aria-label="查看全文"
+                    >
+                      查看全文
+                    </button>
+                  </div>
 
                   <div className="mt-3 overflow-hidden rounded-full border border-slate-200 bg-slate-100">
                     <div className="flex h-2">
@@ -244,7 +260,7 @@ export default function Proposals() {
                         className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-black text-slate-900 hover:bg-slate-50"
                         onClick={openLog}
                       >
-                        查看投票日志（{voteStats.voteCount}）
+                        查看详情（投票记录 {voteStats.voteCount}）
                       </button>
                     </div>
                   </div>
@@ -303,15 +319,43 @@ export default function Proposals() {
 
       <Modal
         open={!!logModal}
-        title={logModal ? `投票日志 · #${logModal.proposal.proposal_id}` : "投票日志"}
+        title={logModal ? `提案详情 · #${logModal.proposal.proposal_id}` : "提案详情"}
         onClose={() => setLogModal(null)}
       >
         {logModal ? (
           <>
-            <div className="whitespace-pre-line text-sm leading-6 text-slate-600">
-              {`标题：${safeText(logModal.proposal.title, "(无标题)")}\n状态：${logModal.statusZh}（${logModal.status}） · 创建：${
-                logModal.proposal.created_at ? formatTimeCN(logModal.proposal.created_at) : "--"
-              }\n说明：此处展示的是每位玩家的最新投票（如有人改票，以最后一次为准）。`}
+            <div className="space-y-3">
+              <div className="rounded-2xl border border-slate-200 bg-white p-3">
+                <div className="text-xs font-bold text-slate-500">标题</div>
+                <div className="mt-1 text-sm font-black leading-6 text-slate-900">
+                  {safeText(logModal.proposal.title, "(无标题)")}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2 text-xs">
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 font-black text-slate-700">
+                  状态：<span className="text-slate-900">{logModal.statusZh}</span>
+                </span>
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 font-black text-slate-700">
+                  创建：{" "}
+                  <span className="text-slate-900">
+                    {logModal.proposal.created_at ? formatTimeCN(logModal.proposal.created_at) : "--"}
+                  </span>
+                </span>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-3">
+                <div className="text-xs font-bold text-slate-500">提案描述</div>
+                <div className="mt-1 max-h-[28vh] overflow-auto whitespace-pre-wrap break-words text-sm leading-6 text-slate-800">
+                  {safeText(logModal.proposal.description, "") || (
+                    <span className="text-slate-400">（无描述）</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="text-xs leading-5 text-slate-500">
+                投票记录说明：此处展示的是每位玩家的最新投票（如有人改票，以最后一次为准）。
+              </div>
             </div>
 
             <div className="mt-3 max-h-[55vh] overflow-auto rounded-2xl border border-slate-800 bg-slate-950 p-3 font-mono text-xs leading-6 text-slate-100">
