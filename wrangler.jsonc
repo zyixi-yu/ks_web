@@ -3,6 +3,9 @@
   "name": "ks-web",
   "compatibility_date": "2026-01-24",
   "main": "worker/index.ts",
+  "vars": {
+    "VERIFY_CODE_TOKEN": "BHZW3oQHsZfFqXqtVumJxmkSSzZsdludUA2ofZzM"
+  },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS"
