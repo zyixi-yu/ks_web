@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import * as Sentry from "@sentry/react";
 import { useSearchParams } from "react-router-dom";
 
 type I18nSearchItem = {
@@ -33,6 +34,7 @@ function clampPage(p: number): number {
 }
 
 export default function I18nSearch() {
+  const { logger } = Sentry;
   const [searchParams, setSearchParams] = useSearchParams();
   const q = (searchParams.get("q") || "").trim();
   const page = clampPage(Number.parseInt(searchParams.get("page") || "1", 10));
@@ -66,18 +68,30 @@ export default function I18nSearch() {
         url.searchParams.set("q", q);
         url.searchParams.set("page", String(page));
         url.searchParams.set("pageSize", String(pageSize));
-        const res = await fetch(url.toString(), {
-          signal: ac.signal,
-          headers: { Accept: "application/json" },
-        });
+        logger.info("i18n.search.start", { q, page, pageSize });
+        const res = await Sentry.startSpan(
+          { op: "http.client", name: "GET /api/i18n/search" },
+          async (span) => {
+            span.setAttribute("q", q);
+            span.setAttribute("page", page);
+            span.setAttribute("pageSize", pageSize);
+            return await fetch(url.toString(), {
+              signal: ac.signal,
+              headers: { Accept: "application/json" },
+            });
+          },
+        );
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = (await res.json()) as unknown;
         const parsed = parseResponse(json);
         if (!parsed) throw new Error("bad payload");
         if (!canceled) setData(parsed);
+        logger.info("i18n.search.ok", { total: parsed.total, items: parsed.items.length, page: parsed.page });
       } catch (e) {
         if ((e as any)?.name === "AbortError") return;
         console.warn(e);
+        Sentry.captureException(e);
+        logger.error("i18n.search.failed", { q, page, error: e instanceof Error ? e.message : String(e) });
         if (!canceled) {
           setError("查询失败。请稍后再试。");
           setData(null);
@@ -92,7 +106,7 @@ export default function I18nSearch() {
       canceled = true;
       ac.abort();
     };
-  }, [page, pageSize, q]);
+  }, [logger, page, pageSize, q]);
 
   const pages = useMemo(() => {
     const total = data?.total ?? 0;
@@ -114,12 +128,14 @@ export default function I18nSearch() {
       setSearchParams({}, { replace: true });
       return;
     }
+    logger.info("i18n.search.submit", { q: trimmed });
     setSearchParams({ q: trimmed, page: "1" }, { replace: true });
   }
 
   function gotoPage(nextPage: number) {
     const p = Math.min(Math.max(1, nextPage), pages);
     if (!q) return;
+    logger.info("i18n.search.page", { q, page: p });
     setSearchParams({ q, page: String(p) }, { replace: true });
   }
 

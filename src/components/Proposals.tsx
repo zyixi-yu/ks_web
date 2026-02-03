@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import * as Sentry from "@sentry/react";
 import Modal from "./Modal";
 import { copyToClipboard } from "../lib/clipboard";
 import { formatTimeCN } from "../lib/time";
@@ -28,6 +29,7 @@ function voteLine(row: LatestVoteRow): string {
 }
 
 export default function Proposals() {
+  const { logger } = Sentry;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [payload, setPayload] = useState<ProposalVotesPayload | null>(null);
@@ -70,27 +72,43 @@ export default function Proposals() {
       setError(null);
       try {
         try {
-          const res = await fetch("/api/proposal_votes_cn.json", {
-            headers: { Accept: "application/json" },
-          });
+          logger.info("council.load.start", { source: "api" });
+          const res = await Sentry.startSpan(
+            { op: "http.client", name: "GET /api/proposal_votes_cn.json" },
+            async () =>
+              await fetch("/api/proposal_votes_cn.json", {
+                headers: { Accept: "application/json" },
+              }),
+          );
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           const data = (await res.json()) as ProposalVotesPayload;
           if (cancelled) return;
           setPayload(data);
+          logger.info("council.load.ok", { source: "api", proposals: (data as any)?.proposals?.length ?? null });
           return;
         } catch (e) {
           console.warn(e);
+          Sentry.captureException(e);
+          logger.warn("council.load.fallback", { error: e instanceof Error ? e.message : String(e) });
         }
 
-        const res = await fetch("/proposal_votes_cn.json", {
-          headers: { Accept: "application/json" },
-        });
+        logger.info("council.load.start", { source: "asset" });
+        const res = await Sentry.startSpan(
+          { op: "http.client", name: "GET /proposal_votes_cn.json" },
+          async () =>
+            await fetch("/proposal_votes_cn.json", {
+              headers: { Accept: "application/json" },
+            }),
+        );
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = (await res.json()) as ProposalVotesPayload;
         if (cancelled) return;
         setPayload(data);
+        logger.info("council.load.ok", { source: "asset", proposals: (data as any)?.proposals?.length ?? null });
       } catch (e) {
         console.warn(e);
+        Sentry.captureException(e);
+        logger.error("council.load.failed", { error: e instanceof Error ? e.message : String(e) });
         if (cancelled) return;
         setError("提案数据加载失败，请稍后刷新重试");
       } finally {
@@ -101,7 +119,7 @@ export default function Proposals() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [logger]);
 
   const proposals = useMemo(() => {
     const list = Array.isArray(payload?.proposals) ? payload!.proposals!.slice() : [];
@@ -149,9 +167,16 @@ export default function Proposals() {
     setEligLoading(true);
     setEligResult(null);
     try {
-      const res = await fetch(`/api/player?player_handle=${encodeURIComponent(val)}`, {
-        headers: { Accept: "application/json" },
-      });
+      logger.info("council.eligibility.start", { player_handle: val });
+      const res = await Sentry.startSpan(
+        { op: "http.client", name: "GET /api/player (eligibility)" },
+        async (span) => {
+          span.setAttribute("player_handle", val);
+          return await fetch(`/api/player?player_handle=${encodeURIComponent(val)}`, {
+            headers: { Accept: "application/json" },
+          });
+        },
+      );
       if (!res.ok) {
         if (res.status === 404) {
           setEligResult({
@@ -159,6 +184,7 @@ export default function Proposals() {
             title: "未找到玩家数据（可能不活跃或暂未收录）",
             details: ["这里只支持活跃玩家。"],
           });
+          logger.info("council.eligibility.not_found", { player_handle: val });
           return;
         }
         throw new Error(`HTTP ${res.status}`);
@@ -171,8 +197,14 @@ export default function Proposals() {
         details: r.details,
       });
       setEligRecent(saveRecentHandle(val));
+      logger.info("council.eligibility.ok", { ok: r.ok });
     } catch (e) {
       console.warn(e);
+      Sentry.captureException(e);
+      logger.error("council.eligibility.failed", {
+        player_handle: val,
+        error: e instanceof Error ? e.message : String(e),
+      });
       setEligResult({ ok: false, title: "校验失败，请稍后再试", details: [] });
     } finally {
       setEligLoading(false);
@@ -240,6 +272,7 @@ export default function Proposals() {
                 extraParts.push(`实施版本：${safeText(p.implemented_version, "")}`);
 
               const openLog = () => {
+                logger.info("council.proposal.detail.open", { proposal_id: p.proposal_id });
                 setLogModal({
                   proposal: p,
                   status,
@@ -328,13 +361,19 @@ export default function Proposals() {
                         <div className="flex gap-2">
                           <button
                             className="flex-1 rounded-xl bg-emerald-600 px-3 py-2.5 text-sm font-black text-white hover:bg-emerald-700"
-                            onClick={() => setVoteModal({ proposalId: p.proposal_id, voteValue: 1 })}
+                            onClick={() => {
+                              logger.info("council.vote.open", { proposal_id: p.proposal_id, vote: 1 });
+                              setVoteModal({ proposalId: p.proposal_id, voteValue: 1 });
+                            }}
                           >
                             赞同
                           </button>
                           <button
                             className="flex-1 rounded-xl bg-red-600 px-3 py-2.5 text-sm font-black text-white hover:bg-red-700"
-                            onClick={() => setVoteModal({ proposalId: p.proposal_id, voteValue: 0 })}
+                            onClick={() => {
+                              logger.info("council.vote.open", { proposal_id: p.proposal_id, vote: 0 });
+                              setVoteModal({ proposalId: p.proposal_id, voteValue: 0 });
+                            }}
                           >
                             反对
                           </button>
@@ -364,6 +403,7 @@ export default function Proposals() {
         open={!!voteModal}
         title="投票方法"
         onClose={() => {
+          logger.info("council.vote.close");
           setVoteModal(null);
         }}
       >
@@ -388,6 +428,11 @@ export default function Proposals() {
                         const ok = await copyToClipboard(`-vote ${voteModal.proposalId}_${voteModal.voteValue}`);
                         setVoteCopied(ok);
                         if (ok) setTimeout(() => setVoteCopied(false), 1500);
+                        logger.info("council.vote.copy", {
+                          proposal_id: voteModal.proposalId,
+                          vote: voteModal.voteValue,
+                          ok,
+                        });
                       }}
                     >
                       {voteCopied ? "已复制" : "复制"}

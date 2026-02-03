@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import * as Sentry from "@sentry/react";
 import { formatTimeBeijingYYYYMMDDHHmm } from "../lib/time";
 import { IconChevronRight } from "./NavDrawer";
 import { useNavigate } from "react-router-dom";
@@ -90,6 +91,7 @@ function BoardTable(props: {
 }
 
 export default function Leaderboard() {
+  const { logger } = Sentry;
   const nav = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -101,14 +103,25 @@ export default function Leaderboard() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch("/api/leaderboard", { headers: { Accept: "application/json" } });
+        logger.info("leaderboard.load.start");
+        const res = await Sentry.startSpan(
+          { op: "http.client", name: "GET /api/leaderboard" },
+          async () => await fetch("/api/leaderboard", { headers: { Accept: "application/json" } }),
+        );
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = (await res.json()) as unknown;
         const parsed = parseLeaderboardResponse(json);
         if (!parsed) throw new Error("bad payload");
         if (!canceled) setData(parsed);
+        logger.info("leaderboard.load.ok", {
+          survivor: parsed.boards.survivor.length,
+          kerrigan: parsed.boards.kerrigan.length,
+          generated_at: parsed.generated_at,
+        });
       } catch (e) {
         console.warn(e);
+        Sentry.captureException(e);
+        logger.error("leaderboard.load.failed", { error: e instanceof Error ? e.message : String(e) });
         if (!canceled) {
           setError("加载失败。请稍后再试。");
           setData(null);
@@ -121,7 +134,7 @@ export default function Leaderboard() {
     return () => {
       canceled = true;
     };
-  }, []);
+  }, [logger]);
 
   const updatedAtText = useMemo(() => {
     if (!data?.generated_at) return "--";
@@ -141,6 +154,7 @@ export default function Leaderboard() {
       nav("/player", { replace: false });
       return;
     }
+    logger.info("leaderboard.row.click", { team_name: row.team_name, rank: row.rank, player_handle: handle });
     nav(`/player/${encodeURIComponent(handle)}`, { replace: false });
   }
 

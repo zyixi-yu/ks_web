@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import * as Sentry from "@sentry/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteRecentHandle, loadRecentHandles, saveRecentHandle, type RecentHandle } from "../lib/recentHandles";
 import { formatTimeBeijingYYYYMMDDHHmm } from "../lib/time";
@@ -159,6 +160,7 @@ function RoleTable({ title, items }: { title: "幸存者" | "凯瑞甘"; items: 
 }
 
 export default function PlayerRoleQuery() {
+  const { logger } = Sentry;
   const nav = useNavigate();
   const params = useParams<{ handle?: string }>();
 
@@ -192,9 +194,16 @@ export default function PlayerRoleQuery() {
       setError(null);
       setErrorKind(null);
       try {
-        const res = await fetch(`/api/player?player_handle=${encodeURIComponent(val)}`, {
-          headers: { Accept: "application/json" },
-        });
+        logger.info("player.query.start", { player_handle: val, record: !!opts?.record });
+        const res = await Sentry.startSpan(
+          { op: "http.client", name: "GET /api/player" },
+          async (span) => {
+            span.setAttribute("player_handle", val);
+            return await fetch(`/api/player?player_handle=${encodeURIComponent(val)}`, {
+              headers: { Accept: "application/json" },
+            });
+          },
+        );
         if (!res.ok) {
           if (res.status === 404) throw new Error("not found");
           throw new Error(`HTTP ${res.status}`);
@@ -204,22 +213,31 @@ export default function PlayerRoleQuery() {
         if (!parsed) throw new Error("bad payload");
         setData(parsed);
         if (opts?.record) setRecent(saveRecentHandle(val));
+        logger.info("player.query.ok", {
+          has_leaderboard_match: !!parsed.leaderboard_match,
+          has_top_uploader: !!parsed.top_uploader,
+          roles_survivor: parsed.roles_survivor.length,
+          roles_kerrigan: parsed.roles_kerrigan.length,
+        });
       } catch (e) {
         console.warn(e);
         setData(null);
         if (e instanceof Error && e.message === "not found") {
           setErrorKind("not_found");
           setError("未找到该玩家的数据（可能不活跃或暂未收录）。");
+          logger.info("player.query.not_found", { player_handle: val });
         } else {
           setErrorKind("failed");
           setError("加载失败。请稍后再试。");
+          Sentry.captureException(e);
+          logger.error("player.query.failed", { player_handle: val, error: e instanceof Error ? e.message : String(e) });
         }
       } finally {
         setLoading(false);
         if (opts?.record) setRecordNextHandle(null);
       }
     },
-    [],
+    [logger],
   );
 
   useEffect(() => {

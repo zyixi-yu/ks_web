@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import * as Sentry from "@sentry/react";
 import { copyToClipboard } from "../lib/clipboard";
 import { computeCreditBreakdown, decodeCreditCode, type CreditsResponse } from "../lib/credits";
 import { deleteRecentHandle, loadRecentHandles, saveRecentHandle, type RecentHandle } from "../lib/recentHandles";
@@ -14,6 +15,7 @@ function isNonEmptyString(x: unknown): x is string {
 }
 
 export default function CreditsQuery() {
+  const { logger } = Sentry;
   const [handle, setHandle] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -76,14 +78,17 @@ export default function CreditsQuery() {
     let lastErr: unknown = null;
     for (const proxy of proxies) {
       try {
+        logger.debug(logger.fmt`credits.proxy.try ${proxy.name} for ${playerHandle}`);
         const res = await fetchWithTimeout(proxy.buildUrl(targetUrl), 8000);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await proxy.parse(res);
         if (!isNonEmptyString((data as any)?.code)) throw new Error("bad payload");
+        logger.info("credits.proxy.ok", { proxy: proxy.name });
         return data;
       } catch (e) {
         lastErr = e;
         console.warn(`credits proxy failed: ${proxy.name}`, e);
+        logger.warn("credits.proxy.failed", { proxy: proxy.name, error: e instanceof Error ? e.message : String(e) });
       }
     }
 
@@ -102,13 +107,24 @@ export default function CreditsQuery() {
     setError(null);
     setCopied(false);
     try {
-      const data = await fetchCreditsViaProxies(val);
+      logger.info("credits.query.start", { player_handle: val });
+      const data = await Sentry.startSpan(
+        { op: "http.client", name: "GET credits via proxies" },
+        async () => await fetchCreditsViaProxies(val),
+      );
       if (!isNonEmptyString(data?.code)) throw new Error("返回数据格式错误或玩家不存在");
-      const decoded = decodeCreditCode(data.code);
+      const decoded = Sentry.startSpan({ op: "function", name: "decodeCreditCode" }, () => decodeCreditCode(data.code!));
       setResult({ data, decoded });
       setRecent(saveRecentHandle(val));
+      logger.info("credits.query.ok", {
+        replays: data.replays ?? 0,
+        penalty: data.penalty ?? 0,
+        updated: typeof data.updated === "number" ? data.updated : null,
+      });
     } catch (e) {
       console.warn(e);
+      Sentry.captureException(e);
+      logger.error("credits.query.failed", { player_handle: val, error: e instanceof Error ? e.message : String(e) });
       setError("查询失败。请检查句柄是否正确（如：5-S2-1-xxxxx），或稍后再试。");
       setResult(null);
     } finally {
