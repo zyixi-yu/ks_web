@@ -20,7 +20,6 @@ Use `pnpm` (see `package.json` scripts):
 - `pnpm typecheck`: TypeScript strict typecheck (`tsc --noEmit`).
 - `pnpm deploy`: Build + deploy Worker to Cloudflare.
 
-
 ## Coding Style & Naming Conventions
 
 - TypeScript strict mode is enabled (`tsconfig.json`); keep types explicit at module boundaries.
