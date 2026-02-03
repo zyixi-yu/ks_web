@@ -1,6 +1,6 @@
 {
   // 静态资源 + Worker：部署命令 `npx wrangler deploy`
-  "name": "ks-web",
+  "name": "ks",
   "compatibility_date": "2026-01-24",
   "main": "worker/index.ts",
   "assets": {
