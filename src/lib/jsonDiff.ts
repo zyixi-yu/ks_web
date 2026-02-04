@@ -16,6 +16,33 @@ function sameValue(a: unknown, b: unknown): boolean {
   return Object.is(a, b);
 }
 
+function deepEqual(a: unknown, b: unknown): boolean {
+  if (sameValue(a, b)) return true;
+
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) return false;
+    for (let i = 0; i < a.length; i++) {
+      if (!deepEqual(a[i], b[i])) return false;
+    }
+    return true;
+  }
+
+  if (isPlainObject(a) && isPlainObject(b)) {
+    const keysA = Object.keys(a).sort();
+    const keysB = Object.keys(b).sort();
+    if (keysA.length !== keysB.length) return false;
+    for (let i = 0; i < keysA.length; i++) {
+      if (keysA[i] !== keysB[i]) return false;
+    }
+    for (const k of keysA) {
+      if (!deepEqual(a[k], b[k])) return false;
+    }
+    return true;
+  }
+
+  return false;
+}
+
 function formatPath(path: Array<string | number>): string {
   if (!path.length) return "$";
   return (
@@ -36,8 +63,11 @@ export function diffJson(a: unknown, b: unknown): JsonDiffEntry[] {
     if (sameValue(before, after)) return;
 
     if (Array.isArray(before) && Array.isArray(after)) {
-      // Arrays are typically treated as replace for config blobs to avoid noisy diffs.
-      out.push({ kind: "change", path: formatPath(path), before, after });
+      // Arrays are treated as replace (single change entry), but should not produce
+      // false diffs when content is identical after parse/format.
+      if (!deepEqual(before, after)) {
+        out.push({ kind: "change", path: formatPath(path), before, after });
+      }
       return;
     }
 
@@ -65,4 +95,3 @@ export function diffJson(a: unknown, b: unknown): JsonDiffEntry[] {
   walk(a, b, []);
   return out;
 }
-
