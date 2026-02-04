@@ -5,6 +5,7 @@ import { kvGetJson, kvGetText } from "../services/kv";
 import { computeLeaderboard, computePlayerRoles } from "../services/bridge";
 import verifyCodeRoutes from "./verify-code";
 import i18nRoutes from "./i18n";
+import configRoutes from "./config";
 
 type HonoEnv = { Bindings: Env };
 
@@ -16,6 +17,7 @@ function apiCacheControl(): string {
 
 api.route("/verify-code", verifyCodeRoutes);
 api.route("/i18n", i18nRoutes);
+api.route("/config", configRoutes);
 
 api.get("/player", async (c) => {
   c.header("X-KS-Mock-KV", (globalThis as any).__KS_NO_CACHE ? "1" : "0");

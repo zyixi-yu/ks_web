@@ -10,5 +10,7 @@ declare global {
 
     // 短信验证码读写鉴权 token（Authorization: <token> 或 Authorization: Bearer <token>）
     VERIFY_CODE_TOKEN?: string;
+
+    // 配置读写鉴权 token：复用 VERIFY_CODE_TOKEN（Authorization: <token> 或 Authorization: Bearer <token>）
   }
 }
