@@ -50,6 +50,8 @@ verifyCode.post("/write", async (c) => {
   const payload = JSON.stringify({ code, created_at: Math.floor(Date.now() / 1000) });
   await c.env.KS_KV.put(key, payload, { expirationTtl: 180 });
 
+  // Do not log the code itself.
+  console.info("verify_code.write.ok", { key, sms_len: sms.length, ttl: 180 });
   return jsonOk(c, { ok: true, expires_in: 180 }, { cacheControl: "no-store" });
 });
 
@@ -78,8 +80,8 @@ verifyCode.get("/read", async (c) => {
   if (!code || !Number.isFinite(createdAt)) return jsonError(c, 500, "KV verify code format error");
 
   c.header("Cache-Control", "no-store");
+  console.info("verify_code.read.ok", { key, created_at: createdAt, ttl: 180 });
   return jsonOk(c, { code, created_at: createdAt, expires_in: 180 }, { cacheControl: "no-store" });
 });
 
 export default verifyCode;
-

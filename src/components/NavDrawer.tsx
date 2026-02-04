@@ -125,6 +125,24 @@ export function IconSearch(props: { className?: string }) {
   );
 }
 
+export function IconSettings(props: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={props.className} aria-hidden="true">
+      <path
+        d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <path
+        d="M19.4 15a7.96 7.96 0 0 0 .1-1 7.96 7.96 0 0 0-.1-1l2-1.5-2-3.5-2.3 1a8.36 8.36 0 0 0-1.7-1l-.3-2.5H11l-.3 2.5a8.36 8.36 0 0 0-1.7 1l-2.3-1-2 3.5 2 1.5a7.96 7.96 0 0 0-.1 1c0 .34.03.67.1 1l-2 1.5 2 3.5 2.3-1a8.36 8.36 0 0 0 1.7 1l.3 2.5h4l.3-2.5a8.36 8.36 0 0 0 1.7-1l2.3 1 2-3.5-2-1.5Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function lockBodyScroll(open: boolean) {
   if (!open) return () => {};
   const prevOverflow = document.body.style.overflow;
