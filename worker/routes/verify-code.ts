@@ -1,20 +1,11 @@
 import { Hono } from "hono";
-import { constantTimeEqual, parseBearerToken } from "../services/auth";
 import { kvGetJson } from "../services/kv";
+import { requireEnvToken } from "../services/tokenGuard";
 import { jsonError, jsonOk } from "../utils/http";
 
 type HonoEnv = { Bindings: Env };
 
 const verifyCode = new Hono<HonoEnv>();
-
-function requireVerifyToken(c: any): Response | null {
-  const configured = (c.env.VERIFY_CODE_TOKEN || "").trim();
-  if (!configured) return jsonError(c as any, 500, "VERIFY_CODE_TOKEN not configured");
-  const got = parseBearerToken((c.req.raw.headers.get("Authorization") || "").trim());
-  if (!got) return jsonError(c as any, 401, "Missing Authorization");
-  if (!constantTimeEqual(got, configured)) return jsonError(c as any, 401, "Invalid token");
-  return null;
-}
 
 type VerifyWriteBody = { sms?: unknown };
 
@@ -26,7 +17,7 @@ function extractLast6DigitCode(sms: string): string | null {
 
 verifyCode.post("/write", async (c) => {
   c.header("X-KS-Mock-KV", (globalThis as any).__KS_NO_CACHE ? "1" : "0");
-  const authErr = requireVerifyToken(c as any);
+  const authErr = requireEnvToken(c as any, "VERIFY_CODE_TOKEN");
   if (authErr) return authErr;
 
   if (!c.env.KS_KV || typeof (c.env.KS_KV as any).put !== "function") {
@@ -57,7 +48,7 @@ verifyCode.post("/write", async (c) => {
 
 verifyCode.get("/read", async (c) => {
   c.header("X-KS-Mock-KV", (globalThis as any).__KS_NO_CACHE ? "1" : "0");
-  const authErr = requireVerifyToken(c as any);
+  const authErr = requireEnvToken(c as any, "VERIFY_CODE_TOKEN");
   if (authErr) return authErr;
 
   if (!c.env.KS_KV || typeof (c.env.KS_KV as any).get !== "function") {
