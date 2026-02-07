@@ -38,7 +38,9 @@ export default async function assetsRoutes(c: Context): Promise<Response> {
 
   if (shouldServeIndex) {
     const indexUrl = new URL(req.url);
-    indexUrl.pathname = "/index.html";
+    // NOTE: On Cloudflare Assets, `/index.html` can be redirected to `/` (307).
+    // Use `/` to reliably fetch the SPA entry HTML.
+    indexUrl.pathname = "/";
     try {
       const resp = await c.env.ASSETS.fetch(new Request(indexUrl.toString(), req));
       return withHeader(resp, "X-KS-SPA-Fallback", "1");
