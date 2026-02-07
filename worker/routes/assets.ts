@@ -12,13 +12,20 @@ function isHtmlNavigation(req: Request): boolean {
   return mode === "navigate" || dest === "document";
 }
 
+function withHeader(resp: Response, key: string, value: string): Response {
+  const headers = new Headers(resp.headers);
+  headers.set(key, value);
+  return new Response(resp.body, { status: resp.status, statusText: resp.statusText, headers });
+}
+
 export default async function assetsRoutes(c: Context): Promise<Response> {
   const req = c.req.raw;
   const url = new URL(req.url);
   const pathname = url.pathname;
 
   if (looksLikeFile(pathname)) {
-    return c.env.ASSETS.fetch(req);
+    const resp = await c.env.ASSETS.fetch(req);
+    return withHeader(resp, "X-KS-SPA-Fallback", "0");
   }
 
   // SPA fallback:
@@ -33,12 +40,14 @@ export default async function assetsRoutes(c: Context): Promise<Response> {
     const indexUrl = new URL(req.url);
     indexUrl.pathname = "/index.html";
     try {
-      return await c.env.ASSETS.fetch(new Request(indexUrl.toString(), req));
+      const resp = await c.env.ASSETS.fetch(new Request(indexUrl.toString(), req));
+      return withHeader(resp, "X-KS-SPA-Fallback", "1");
     } catch (e) {
       console.warn("ASSETS fetch failed", e);
-      return new Response("Worker Error", { status: 500 });
+      return new Response("Worker Error", { status: 500, headers: { "X-KS-SPA-Fallback": "err" } });
     }
   }
 
-  return c.env.ASSETS.fetch(req);
+  const resp = await c.env.ASSETS.fetch(req);
+  return withHeader(resp, "X-KS-SPA-Fallback", "0");
 }
