@@ -45,12 +45,12 @@ export default function Modal(props: {
       }}
     >
       <div
-        className="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
+        className="flex w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl max-h-[calc(100dvh-2rem)]"
         role="dialog"
         aria-modal="true"
         aria-label={props.title}
       >
-        <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+        <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-4 py-3">
           <div className="text-base font-black text-slate-900">{props.title}</div>
           <button
             className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
@@ -60,7 +60,7 @@ export default function Modal(props: {
             ×
           </button>
         </div>
-        <div className="px-4 py-4">{props.children}</div>
+        <div className="overflow-y-auto px-4 py-4">{props.children}</div>
       </div>
     </div>
   );

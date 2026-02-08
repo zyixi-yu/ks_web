@@ -159,7 +159,7 @@ export function statusPresentation(status: ProposalStatus) {
     Expired: { zh: "已过期", cls: "expired", emoji: "⚪" },
     Rejected: { zh: "已否决", cls: "rejected", emoji: "🔴" },
     Closed: { zh: "已关闭", cls: "closed", emoji: "⚫" },
-    "Passed (Pending Implementation)": { zh: "已通过（待实施）", cls: "passed", emoji: "🟣" },
+    "Passed (Pending Implementation)": { zh: "已通过", cls: "passed", emoji: "🟣" },
     Implemented: { zh: "已实施", cls: "implemented", emoji: "✅" },
   };
   return map[status];
