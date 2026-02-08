@@ -136,6 +136,29 @@ api.get("/patchnotes", async (c) => {
   return resp;
 });
 
+api.post("/replay-upload", async (c) => {
+  const MAX = 3 * 1024 * 1024;
+  const cl = parseInt(c.req.header("content-length") || "0", 10);
+  if (cl > MAX) return jsonError(c, 413, "File too large (max 3 MB)");
+
+  try {
+    const upstream = await fetch("https://replay.kerrigansurvival.com/upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/octet-stream",
+        "User-Agent": "kerrigan-survival-uploader/web",
+      },
+      body: c.req.raw.body,
+    });
+    return new Response(upstream.body, {
+      status: upstream.status,
+      headers: { "Content-Type": upstream.headers.get("Content-Type") || "text/plain" },
+    });
+  } catch {
+    return jsonError(c, 502, "Upstream request failed");
+  }
+});
+
 api.get("/proposal_votes_cn.json", async (c) => {
   c.header("X-KS-Mock-KV", (globalThis as any).__KS_NO_CACHE ? "1" : "0");
   if (!c.env.KS_KV || typeof (c.env.KS_KV as any).get !== "function") {

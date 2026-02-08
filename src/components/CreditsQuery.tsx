@@ -4,6 +4,7 @@ import { copyToClipboard } from "../lib/clipboard";
 import { computeCreditBreakdown, decodeCreditCode, type CreditsResponse } from "../lib/credits";
 import { deleteRecentHandle, loadRecentHandles, saveRecentHandle, type RecentHandle } from "../lib/recentHandles";
 import { formatTimeCN } from "../lib/time";
+import { Link } from "react-router-dom";
 
 type CreditsResult = {
   data: CreditsResponse;
@@ -171,6 +172,12 @@ export default function CreditsQuery() {
           >
             帮助文档
           </a>
+        </p>
+        <p className="mt-1 text-center text-xs text-slate-400">
+          录像上传工具不可用？
+          <Link to="/upload" className="ml-1 font-bold text-blue-600 hover:text-blue-700 hover:underline">
+            试试手动上传 →
+          </Link>
         </p>
 
         <div className="mt-4 flex gap-2">

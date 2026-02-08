@@ -7,6 +7,7 @@ import PlayerRoleQuery from "./components/PlayerRoleQuery";
 import Proposals from "./components/Proposals";
 import PatchNotes from "./components/PatchNotes";
 import ConfigEditor from "./components/ConfigEditor";
+import ReplayUpload from "./components/ReplayUpload";
 import NavDrawer, {
   IconClipboardList,
   IconCoin,
@@ -142,6 +143,7 @@ export default function App() {
           <Route path="/patchnotes" element={<PatchNotes />} />
           <Route path="/player" element={<PlayerRoleQuery />} />
           <Route path="/player/:handle" element={<PlayerRoleQuery />} />
+          <Route path="/upload" element={<ReplayUpload />} />
           <Route
             path="/config"
             element={
