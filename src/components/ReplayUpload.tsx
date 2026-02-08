@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as Sentry from "@sentry/react";
 import { Link } from "react-router-dom";
 import { validateReplayFile, uploadReplayFile, type UploadFileEntry } from "../lib/replayUpload";
@@ -12,6 +12,7 @@ export default function ReplayUpload() {
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
+  const uploadingRef = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const updateEntry = (id: number, patch: Partial<Entry>) =>
@@ -42,11 +43,13 @@ export default function ReplayUpload() {
   );
 
   const startUpload = async () => {
+    if (uploadingRef.current) return;
+    uploadingRef.current = true;
     const ctrl = new AbortController();
     abortRef.current = ctrl;
     setUploading(true);
 
-    const pending = files.filter((f) => f.status === "pending" || f.status === "error");
+    const pending = files.filter((f) => f.status === "pending");
     logger.info("replay.upload.batch.start", { count: pending.length });
 
     for (const entry of pending) {
@@ -90,10 +93,26 @@ export default function ReplayUpload() {
 
     logger.info("replay.upload.batch.done");
     setUploading(false);
+    uploadingRef.current = false;
     abortRef.current = null;
   };
 
+  const startUploadRef = useRef(startUpload);
+  startUploadRef.current = startUpload;
+
+  useEffect(() => {
+    if (!uploadingRef.current && files.some((f) => f.status === "pending")) {
+      startUploadRef.current();
+    }
+  }, [uploading, files]);
+
   const cancelUpload = () => abortRef.current?.abort();
+
+  const retryFailed = () => {
+    setFiles((prev) =>
+      prev.map((f) => (f.status === "error" ? { ...f, status: "pending" as const, error: undefined, progress: 0 } : f)),
+    );
+  };
 
   const counts = files.reduce(
     (a, f) => {
@@ -102,8 +121,6 @@ export default function ReplayUpload() {
     },
     {} as Record<string, number>,
   );
-
-  const hasPendingOrError = (counts.pending || 0) + (counts.error || 0) > 0;
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -192,12 +209,12 @@ export default function ReplayUpload() {
         {/* actions */}
         {files.length > 0 && (
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            {!uploading && hasPendingOrError && (
+            {!uploading && (counts.error || 0) > 0 && (
               <button
                 className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-black text-white shadow-sm transition hover:bg-blue-700"
-                onClick={startUpload}
+                onClick={retryFailed}
               >
-                开始上传
+                重试失败
               </button>
             )}
             {uploading && (
