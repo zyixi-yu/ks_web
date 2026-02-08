@@ -5,8 +5,10 @@ import Leaderboard from "./components/Leaderboard";
 import I18nSearch from "./components/I18nSearch";
 import PlayerRoleQuery from "./components/PlayerRoleQuery";
 import Proposals from "./components/Proposals";
+import PatchNotes from "./components/PatchNotes";
 import ConfigEditor from "./components/ConfigEditor";
 import NavDrawer, {
+  IconClipboardList,
   IconCoin,
   IconCrown,
   IconMenu,
@@ -68,6 +70,7 @@ export default function App() {
         { to: "/leaderboard", label: "排行", icon: <IconTrophy className="h-5 w-5" /> },
         { to: "/player", label: "角色", icon: <IconUser className="h-5 w-5" /> },
         { to: "/i18n", label: "翻译", icon: <IconSearch className="h-5 w-5" /> },
+        { to: "/patchnotes", label: "更新", icon: <IconClipboardList className="h-5 w-5" /> },
       ];
       if (adminEnabled) {
         items.push({ to: "/config", label: "配置", icon: <IconSettings className="h-5 w-5" /> });
@@ -136,6 +139,7 @@ export default function App() {
           <Route path="/council" element={<Proposals />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/i18n" element={<I18nSearch />} />
+          <Route path="/patchnotes" element={<PatchNotes />} />
           <Route path="/player" element={<PlayerRoleQuery />} />
           <Route path="/player/:handle" element={<PlayerRoleQuery />} />
           <Route
