@@ -95,6 +95,31 @@ export default function CreditsQuery() {
     throw lastErr instanceof Error ? lastErr : new Error("all proxies failed");
   }
 
+  async function fetchCreditsViaApi(playerHandle: string): Promise<CreditsResponse> {
+    const url = new URL("/api/credits", window.location.origin);
+    url.searchParams.set("player_handle", playerHandle);
+
+    const res = await fetchWithTimeout(url.toString(), 8000);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = (await res.json()) as CreditsResponse;
+    if (!isNonEmptyString((data as any)?.code)) throw new Error("bad payload");
+    return data;
+  }
+
+  async function fetchCreditsPreferred(playerHandle: string): Promise<CreditsResponse> {
+    try {
+      logger.debug(logger.fmt`credits.api.try for ${playerHandle}`);
+      const data = await fetchCreditsViaApi(playerHandle);
+      logger.info("credits.api.ok");
+      return data;
+    } catch (e) {
+      console.warn("credits api failed, fallback to proxies", e);
+      logger.warn("credits.api.failed", { error: e instanceof Error ? e.message : String(e) });
+    }
+
+    return await fetchCreditsViaProxies(playerHandle);
+  }
+
   async function runQuery(rawHandle: string) {
     const val = rawHandle.trim();
     if (!val) {
@@ -109,8 +134,8 @@ export default function CreditsQuery() {
     try {
       logger.info("credits.query.start", { player_handle: val });
       const data = await Sentry.startSpan(
-        { op: "http.client", name: "GET credits via proxies" },
-        async () => await fetchCreditsViaProxies(val),
+        { op: "http.client", name: "GET credits (api -> proxies)" },
+        async () => await fetchCreditsPreferred(val),
       );
       if (!isNonEmptyString(data?.code)) throw new Error("返回数据格式错误或玩家不存在");
       const decoded = Sentry.startSpan({ op: "function", name: "decodeCreditCode" }, () => decodeCreditCode(data.code!));
