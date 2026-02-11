@@ -5,6 +5,7 @@ import { validateReplayFile, uploadReplayFile, type UploadFileEntry } from "../l
 
 let entryId = 0;
 type Entry = UploadFileEntry & { id: number };
+const MAX_UPLOAD_ATTEMPTS = 3;
 
 export default function ReplayUpload() {
   const { logger } = Sentry;
@@ -67,17 +68,47 @@ export default function ReplayUpload() {
       // upload
       updateEntry(entry.id, { status: "uploading", progress: 0 });
       try {
-        const res = await uploadReplayFile(
-          entry.file,
-          (loaded, total) => updateEntry(entry.id, { progress: total > 0 ? loaded / total : 0 }),
-          ctrl.signal,
-        );
-        if (res.ok) {
-          updateEntry(entry.id, { status: "success", progress: 1 });
-          logger.info("replay.upload.file.ok", { file: entry.file.name, size: entry.file.size });
-        } else {
-          updateEntry(entry.id, { status: "error", error: `服务器返回 ${res.status}` });
-          logger.warn("replay.upload.file.server_error", { file: entry.file.name, status: res.status, body: res.body.slice(0, 200) });
+        let uploaded = false;
+
+        for (let attempt = 1; attempt <= MAX_UPLOAD_ATTEMPTS; attempt++) {
+          const res = await uploadReplayFile(
+            entry.file,
+            (loaded, total) => updateEntry(entry.id, { progress: total > 0 ? loaded / total : 0 }),
+            ctrl.signal,
+          );
+
+          if (res.ok) {
+            updateEntry(entry.id, { status: "success", progress: 1 });
+            logger.info("replay.upload.file.ok", {
+              file: entry.file.name,
+              size: entry.file.size,
+              attempts: attempt,
+            });
+            uploaded = true;
+            break;
+          }
+
+          logger.warn("replay.upload.file.server_error", {
+            file: entry.file.name,
+            status: res.status,
+            body: res.body.slice(0, 200),
+            attempt,
+            maxAttempts: MAX_UPLOAD_ATTEMPTS,
+          });
+
+          if (attempt === MAX_UPLOAD_ATTEMPTS) {
+            updateEntry(entry.id, { status: "error", error: "服务繁忙，请稍后重试" });
+            logger.error("replay.upload.file.server_error.final", {
+              file: entry.file.name,
+              status: res.status,
+              body: res.body.slice(0, 200),
+              attempts: MAX_UPLOAD_ATTEMPTS,
+            });
+          }
+        }
+
+        if (!uploaded) {
+          continue;
         }
       } catch (e) {
         if (e instanceof DOMException && e.name === "AbortError") {
