@@ -264,10 +264,7 @@ export default function ReplayInspect() {
 
             {supported && (
               <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex items-end justify-between gap-3">
-                  <div className="text-sm font-black text-slate-700">玩家信息</div>
-                  <div className="text-[11px] text-slate-400">点击行：跳转回首页自动查询积分</div>
-                </div>
+                <div className="text-sm font-black text-slate-700">玩家信息</div>
 
                 {roleMapLoading ? <div className="mt-2 text-xs text-slate-400">加载角色名称映射中...</div> : null}
                 {roleMapError ? (
