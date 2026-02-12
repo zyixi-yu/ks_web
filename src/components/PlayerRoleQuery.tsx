@@ -114,6 +114,11 @@ function pct(x: number | null): string {
   return `${Math.round(x * 1000) / 10}%`;
 }
 
+function formatRoleName(name: string): string {
+  // Display-only: backend may use underscores for multi-word roles (e.g. Team_Nova).
+  return (name || "").replace(/_/g, " ");
+}
+
 function RoleTable({ title, items }: { title: "幸存者" | "凯瑞甘"; items: PlayerRole[] }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -137,7 +142,7 @@ function RoleTable({ title, items }: { title: "幸存者" | "凯瑞甘"; items: 
               className="grid grid-cols-[minmax(0,1fr)_72px_64px_56px] items-center text-sm sm:grid-cols-[minmax(0,1fr)_88px_92px_72px]"
             >
               <div className="min-w-0 px-2 py-2 sm:px-3">
-                <div className="truncate font-black leading-5 text-slate-900">{r.role_name}</div>
+                <div className="truncate font-black leading-5 text-slate-900">{formatRoleName(r.role_name)}</div>
               </div>
               <div className="px-2 py-2 text-right font-black text-slate-900 tabular-nums whitespace-nowrap sm:px-3">
                 {r.mmr}
