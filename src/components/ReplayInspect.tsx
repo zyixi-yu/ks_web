@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import * as Sentry from "@sentry/react";
 import { Link, useNavigate } from "react-router-dom";
 import { validateReplayFile } from "../lib/replayUpload";
 import { IconChevronRight } from "./NavDrawer";
@@ -45,6 +46,7 @@ function decodeInspectText(input: string): string {
 }
 
 export default function ReplayInspect() {
+  const { logger } = Sentry;
   const nav = useNavigate();
   const [status, setStatus] = useState<Status>("idle");
   const [fileName, setFileName] = useState<string | null>(null);
@@ -61,13 +63,16 @@ export default function ReplayInspect() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    logger.info("replay.inspect.page.open");
     const w = new Worker(new URL("../workers/replayInspect.worker.ts", import.meta.url), { type: "module" });
     workerRef.current = w;
+    logger.info("replay.inspect.worker.ready");
     return () => {
       workerRef.current?.terminate();
       workerRef.current = null;
+      logger.info("replay.inspect.page.close");
     };
-  }, []);
+  }, [logger]);
 
   const supported = result?.supported ?? false;
 
@@ -80,6 +85,7 @@ export default function ReplayInspect() {
       setRoleMap(roleMapCache);
       setRoleMapLoading(false);
       setRoleMapError(null);
+      logger.info("replay.inspect.role_map.cache_hit", { size: Object.keys(roleMapCache).length });
       return () => {
         alive = false;
       };
@@ -88,14 +94,17 @@ export default function ReplayInspect() {
     async function loadRoleMap() {
       setRoleMapLoading(true);
       setRoleMapError(null);
+      logger.info("replay.inspect.role_map.load.start");
       try {
         const map = await fetchRoleMap(8000);
         roleMapCache = map;
         if (!alive) return;
         setRoleMap(map);
+        logger.info("replay.inspect.role_map.load.ok", { size: Object.keys(map).length });
       } catch (e) {
         if (!alive) return;
         setRoleMapError(e instanceof Error ? e.message : String(e));
+        logger.error("replay.inspect.role_map.load.failed", { error: e instanceof Error ? e.message : String(e) });
       } finally {
         if (alive) setRoleMapLoading(false);
       }
@@ -105,7 +114,7 @@ export default function ReplayInspect() {
     return () => {
       alive = false;
     };
-  }, []);
+  }, [logger]);
 
   function formatRoleName(name: string): string {
     // Display-only: backend may use underscores for multi-word roles (e.g. Team_Nova).
@@ -119,6 +128,7 @@ export default function ReplayInspect() {
   }
 
   const parseFile = async (file: File) => {
+    logger.info("replay.inspect.parse.start", { file: file.name, size: file.size });
     setFileName(file.name);
     setError(null);
     setResult(null);
@@ -127,21 +137,33 @@ export default function ReplayInspect() {
     if (fileErr) {
       setStatus("error");
       setError(fileErr);
+      logger.warn("replay.inspect.validation_failed", { file: file.name, error: fileErr });
       return;
     }
 
     setStatus("reading");
-    const buffer = await file.arrayBuffer();
+    let buffer: ArrayBuffer;
+    try {
+      buffer = await file.arrayBuffer();
+    } catch (e) {
+      setStatus("error");
+      setError("读取文件失败");
+      Sentry.captureException(e);
+      logger.error("replay.inspect.read.failed", { file: file.name, error: e instanceof Error ? e.message : String(e) });
+      return;
+    }
 
     const w = workerRef.current;
     if (!w) {
       setStatus("error");
       setError("Worker 未初始化");
+      logger.error("replay.inspect.worker.missing");
       return;
     }
 
     setStatus("parsing");
     const id = ++requestIdRef.current;
+    logger.info("replay.inspect.worker.start", { id, file: file.name, bytes: buffer.byteLength });
 
     const onMessage = (evt: MessageEvent) => {
       const msg = evt.data as { id: number; ok: boolean; result?: ParseResult; error?: string };
@@ -151,11 +173,18 @@ export default function ReplayInspect() {
       if (msg.ok && msg.result) {
         setResult(msg.result);
         setStatus("done");
+        logger.info("replay.inspect.parse.ok", {
+          id,
+          players: msg.result.players.length,
+          unknown_roles: msg.result.players.filter((p) => p.role_id == null).length,
+          supported: msg.result.supported,
+        });
         return;
       }
 
       setStatus("error");
       setError(msg.error || "解析失败");
+      logger.error("replay.inspect.parse.failed", { id, error: msg.error || "解析失败" });
     };
 
     w.addEventListener("message", onMessage);
@@ -163,25 +192,32 @@ export default function ReplayInspect() {
   };
 
   const parseFromIncoming = useCallback(
-    (incoming: FileList | File[]) => {
+    (incoming: FileList | File[], source: "drop" | "picker") => {
       const list = Array.from(incoming);
       if (!list.length) return;
       const replay = list.find((f) => f.name.toLowerCase().endsWith(".sc2replay")) ?? list[0];
+      logger.info("replay.inspect.file.selected", {
+        source,
+        file: replay.name,
+        size: replay.size,
+        total_incoming: list.length,
+      });
       void parseFile(replay);
     },
-    [parseFile],
+    [logger, parseFile],
   );
 
   const onDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
       setDragOver(false);
-      parseFromIncoming(e.dataTransfer.files);
+      parseFromIncoming(e.dataTransfer.files, "drop");
     },
     [parseFromIncoming],
   );
 
   const jumpToCredits = (handle: string) => {
+    logger.info("replay.inspect.row.click", { player_handle: handle });
     nav(`/?handle=${encodeURIComponent(handle)}`, { replace: false });
   };
 
@@ -235,7 +271,7 @@ export default function ReplayInspect() {
             accept=".SC2Replay,.sc2replay"
             className="hidden"
             onChange={(e) => {
-              if (e.target.files?.length) parseFromIncoming(e.target.files);
+              if (e.target.files?.length) parseFromIncoming(e.target.files, "picker");
               e.target.value = "";
             }}
           />
