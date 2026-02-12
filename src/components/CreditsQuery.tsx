@@ -199,7 +199,8 @@ export default function CreditsQuery() {
           <Link to="/upload" className="ml-1 font-bold text-blue-600 hover:text-blue-700 hover:underline">
             试试手动上传 →
           </Link>
-          <span className="mx-2 text-slate-300">·</span>
+        </p>
+        <p className="mt-1 text-center text-xs text-slate-400">
           不知道句柄？
           <Link to="/replay/inspect" className="ml-1 font-bold text-blue-600 hover:text-blue-700 hover:underline">
             试试这个 →

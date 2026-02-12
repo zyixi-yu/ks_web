@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { validateReplayFile } from "../lib/replayUpload";
+import { IconChevronRight } from "./NavDrawer";
 
 type ParseResult = {
   map_name: string;
@@ -86,6 +88,13 @@ export default function ReplayInspect() {
     setError(null);
     setResult(null);
 
+    const fileErr = await validateReplayFile(file);
+    if (fileErr) {
+      setStatus("error");
+      setError(fileErr);
+      return;
+    }
+
     setStatus("reading");
     const buffer = await file.arrayBuffer();
 
@@ -153,7 +162,7 @@ export default function ReplayInspect() {
           <label className="block text-sm font-black text-slate-700">选择录像文件</label>
           <input
             type="file"
-            accept=".sc2replay"
+            accept=".SC2Replay,.sc2replay"
             className="mt-2 block w-full text-sm"
             onChange={(e) => {
               const f = e.target.files?.[0];
@@ -197,10 +206,10 @@ export default function ReplayInspect() {
                 ) : null}
 
                 <div className="mt-3 overflow-hidden rounded-xl border border-slate-200">
-                  <div className="grid grid-cols-[1fr_200px_120px_44px] gap-0 bg-slate-50 text-left text-xs font-black text-slate-600">
+                  <div className="grid grid-cols-[minmax(0,1fr)_140px_72px] gap-0 bg-slate-50 text-left text-xs font-black text-slate-600 sm:grid-cols-[minmax(0,1fr)_200px_120px_72px]">
                     <div className="px-3 py-2">昵称</div>
                     <div className="px-3 py-2">Handle</div>
-                    <div className="px-3 py-2">角色</div>
+                    <div className="hidden px-3 py-2 sm:block">角色</div>
                     <div className="px-2 py-2" />
                   </div>
 
@@ -210,20 +219,31 @@ export default function ReplayInspect() {
                         key={p.handle}
                         role="button"
                         tabIndex={0}
-                        className="grid grid-cols-[1fr_200px_120px_44px] items-center gap-0 text-left text-sm text-slate-900 transition hover:bg-slate-50 active:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-600/30"
+                        className="grid grid-cols-[minmax(0,1fr)_140px_72px] items-center gap-0 text-left text-sm text-slate-900 transition hover:bg-slate-50 active:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-600/30 sm:grid-cols-[minmax(0,1fr)_200px_120px_72px]"
                         onClick={() => jumpToCredits(p.handle)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") jumpToCredits(p.handle);
                         }}
                       >
-                        <div className="px-3 py-2 font-bold text-slate-800 line-clamp-2">{p.name}</div>
+                        <div className="min-w-0 px-3 py-2">
+                          <div className="font-bold text-slate-800 line-clamp-2 break-words">{p.name}</div>
+                          <div
+                            className="mt-0.5 text-xs text-slate-500 sm:hidden"
+                            title={p.role_id == null ? "Unknown" : String(p.role_id)}
+                          >
+                            {roleText(p.role_id)}
+                          </div>
+                        </div>
                         <div className="px-3 py-2 font-mono text-xs text-slate-700 truncate" title={p.handle}>
                           {p.handle}
                         </div>
-                        <div className="px-3 py-2 text-slate-700 truncate" title={p.role_id == null ? "Unknown" : String(p.role_id)}>
+                        <div
+                          className="hidden px-3 py-2 text-slate-700 truncate sm:block"
+                          title={p.role_id == null ? "Unknown" : String(p.role_id)}
+                        >
                           {roleText(p.role_id)}
                         </div>
-                        <div className="flex items-center justify-center px-2 py-2">
+                        <div className="flex items-center justify-center gap-1 px-2 py-2">
                           <button
                             type="button"
                             className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 hover:text-slate-700"
@@ -237,6 +257,7 @@ export default function ReplayInspect() {
                           >
                             <IconCopy className="h-4 w-4" />
                           </button>
+                          <IconChevronRight className="h-5 w-5 text-slate-300" />
                         </div>
                       </div>
                     ))}
