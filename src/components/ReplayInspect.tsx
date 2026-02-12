@@ -24,8 +24,6 @@ export default function ReplayInspect() {
   const [roleMap, setRoleMap] = useState<Record<string, string> | null>(null);
   const [roleMapError, setRoleMapError] = useState<string | null>(null);
   const [roleMapLoading, setRoleMapLoading] = useState(false);
-  const [roleMap, setRoleMap] = useState<Record<string, string> | null>(null);
-  const [roleMapError, setRoleMapError] = useState<string | null>(null);
 
   const workerRef = useRef<Worker | null>(null);
   const requestIdRef = useRef(0);
@@ -39,8 +37,10 @@ export default function ReplayInspect() {
     };
   }, []);
 
+  const supported = result?.supported ?? false;
+
   useEffect(() => {
-    if (!result?.supported) return;
+    if (!supported) return;
     if (roleMap || roleMapLoading) return;
 
     let alive = true;
@@ -48,12 +48,13 @@ export default function ReplayInspect() {
       setRoleMapLoading(true);
       setRoleMapError(null);
       try {
-        const res = await fetch("/api/roles", { headers: { Accept: "application/json" } });
+        const res = await fetch("/api/role-map", { headers: { Accept: "application/json" } });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = (await res.json()) as RoleMapResponse;
-        if (!json || typeof json !== "object" || !json.role_id_to_name) throw new Error("bad payload");
+        const json = (await res.json()) as unknown;
+        const map = (json as any as RoleMapResponse)?.role_id_to_name;
+        if (!map || typeof map !== "object") throw new Error("bad payload");
         if (!alive) return;
-        setRoleMap(json.role_id_to_name);
+        setRoleMap(map as Record<string, string>);
       } catch (e) {
         if (!alive) return;
         setRoleMap(null);
@@ -67,7 +68,18 @@ export default function ReplayInspect() {
     return () => {
       alive = false;
     };
-  }, [result?.supported, roleMap, roleMapLoading]);
+  }, [supported, roleMap, roleMapLoading]);
+
+  function formatRoleName(name: string): string {
+    // Display-only: backend may use underscores for multi-word roles (e.g. Team_Nova).
+    return (name || "").replace(/_/g, " ");
+  }
+
+  function roleText(roleId: number | null): string {
+    if (roleId == null) return "Unknown";
+    const raw = roleMap?.[String(roleId)] || "";
+    return raw ? formatRoleName(raw) : `#${roleId}`;
+  }
 
   const parseFile = async (file: File) => {
     setFileName(file.name);
@@ -106,44 +118,9 @@ export default function ReplayInspect() {
     w.postMessage({ id, buffer }, [buffer]);
   };
 
-  const supported = result?.supported ?? false;
-
-  useEffect(() => {
-    if (!supported) return;
-    if (roleMap) return;
-    let canceled = false;
-    async function load() {
-      try {
-        setRoleMapError(null);
-        const res = await fetch("/api/role-map", { headers: { Accept: "application/json" } });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = (await res.json()) as unknown;
-        const map = (json as any)?.role_id_to_name;
-        if (!map || typeof map !== "object") throw new Error("bad payload");
-        if (!canceled) setRoleMap(map as Record<string, string>);
-      } catch (e) {
-        if (!canceled) setRoleMapError(e instanceof Error ? e.message : String(e));
-      }
-    }
-    void load();
-    return () => {
-      canceled = true;
-    };
-  }, [supported, roleMap]);
-
   const jumpToCredits = (handle: string) => {
     nav(`/?handle=${encodeURIComponent(handle)}`, { replace: false });
   };
-
-  function formatRoleName(name: string): string {
-    return (name || "").replace(/_/g, " ");
-  }
-
-  function roleText(roleId: number | null): string {
-    if (roleId == null) return "Unknown";
-    const raw = roleMap?.[String(roleId)] || "";
-    return raw ? formatRoleName(raw) : `#${roleId}`;
-  }
 
   const copy = async (text: string) => {
     try {
@@ -211,6 +188,8 @@ export default function ReplayInspect() {
                   <div className="text-sm font-black text-slate-700">玩家信息</div>
                   <div className="text-[11px] text-slate-400">点击行：跳转回首页自动查询积分</div>
                 </div>
+
+                {roleMapLoading ? <div className="mt-2 text-xs text-slate-400">加载角色名称映射中...</div> : null}
                 {roleMapError ? (
                   <div className="mt-2 text-xs text-amber-700">
                     角色名称映射加载失败（{roleMapError}），将用 role_id 兜底显示。
@@ -241,7 +220,7 @@ export default function ReplayInspect() {
                         <div className="px-3 py-2 font-mono text-xs text-slate-700 truncate" title={p.handle}>
                           {p.handle}
                         </div>
-                        <div className="px-3 py-2 text-slate-700 truncate" title={roleText(p.role_id)}>
+                        <div className="px-3 py-2 text-slate-700 truncate" title={p.role_id == null ? "Unknown" : String(p.role_id)}>
                           {roleText(p.role_id)}
                         </div>
                         <div className="flex items-center justify-center px-2 py-2">
