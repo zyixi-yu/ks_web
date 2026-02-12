@@ -3,6 +3,23 @@ import { Link, useNavigate } from "react-router-dom";
 import { validateReplayFile } from "../lib/replayUpload";
 import { IconChevronRight } from "./NavDrawer";
 
+let roleMapCache: Record<string, string> | null = null;
+
+async function fetchRoleMap(timeoutMs = 8000): Promise<Record<string, string>> {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch("/api/role-map", { headers: { Accept: "application/json" }, signal: ctrl.signal });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = (await res.json()) as unknown;
+    const map = (json as any as RoleMapResponse)?.role_id_to_name;
+    if (!map || typeof map !== "object") throw new Error("bad payload");
+    return map as Record<string, string>;
+  } finally {
+    clearTimeout(t);
+  }
+}
+
 type ParseResult = {
   map_name: string;
   supported: boolean;
@@ -41,25 +58,21 @@ export default function ReplayInspect() {
 
   const supported = result?.supported ?? false;
 
+  // Load role_id -> role_name mapping once on page entry.
   useEffect(() => {
-    if (!supported) return;
-    if (roleMap || roleMapLoading) return;
-
     let alive = true;
+    setRoleMap(roleMapCache);
+
     async function loadRoleMap() {
       setRoleMapLoading(true);
       setRoleMapError(null);
       try {
-        const res = await fetch("/api/role-map", { headers: { Accept: "application/json" } });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = (await res.json()) as unknown;
-        const map = (json as any as RoleMapResponse)?.role_id_to_name;
-        if (!map || typeof map !== "object") throw new Error("bad payload");
+        const map = await fetchRoleMap(8000);
+        roleMapCache = map;
         if (!alive) return;
-        setRoleMap(map as Record<string, string>);
+        setRoleMap(map);
       } catch (e) {
         if (!alive) return;
-        setRoleMap(null);
         setRoleMapError(e instanceof Error ? e.message : String(e));
       } finally {
         if (alive) setRoleMapLoading(false);
@@ -70,7 +83,7 @@ export default function ReplayInspect() {
     return () => {
       alive = false;
     };
-  }, [supported, roleMap, roleMapLoading]);
+  }, []);
 
   function formatRoleName(name: string): string {
     // Display-only: backend may use underscores for multi-word roles (e.g. Team_Nova).
@@ -131,13 +144,7 @@ export default function ReplayInspect() {
     nav(`/?handle=${encodeURIComponent(handle)}`, { replace: false });
   };
 
-  const copy = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch {
-      // ignore
-    }
-  };
+  // copy removed (row click jumps to credits)
 
   const titleLine = useMemo(() => {
     if (status === "idle") return "录像解析（本地）";
@@ -243,21 +250,8 @@ export default function ReplayInspect() {
                         >
                           {roleText(p.role_id)}
                         </div>
-                        <div className="flex items-center justify-center gap-1 px-2 py-2">
-                          <button
-                            type="button"
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 hover:text-slate-700"
-                            aria-label="复制句柄"
-                            title="复制句柄"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              void copy(p.handle);
-                            }}
-                          >
-                            <IconCopy className="h-4 w-4" />
-                          </button>
-                          <IconChevronRight className="h-5 w-5 text-slate-300" />
+                        <div className="flex items-center justify-center px-2 py-2 text-slate-300">
+                          <IconChevronRight className="h-5 w-5" />
                         </div>
                       </div>
                     ))}
@@ -278,21 +272,4 @@ export default function ReplayInspect() {
   );
 }
 
-function IconCopy(props: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={props.className} aria-hidden="true">
-      <path
-        d="M9 8h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2Z"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M7 16H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v2"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+// (icon removed)
