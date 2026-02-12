@@ -274,9 +274,9 @@ export default function ReplayInspect() {
                 ) : null}
 
                 <div className="mt-3 overflow-hidden rounded-xl border border-slate-200">
-                  <div className="grid grid-cols-[minmax(0,1fr)_140px_72px] gap-0 bg-slate-50 text-left text-xs font-black text-slate-600 sm:grid-cols-[minmax(0,1fr)_200px_120px_72px]">
+                  <div className="grid grid-cols-[minmax(0,1fr)_36px] gap-0 bg-slate-50 text-left text-xs font-black text-slate-600 sm:grid-cols-[minmax(0,1fr)_200px_120px_72px]">
                     <div className="px-3 py-2">昵称</div>
-                    <div className="px-3 py-2">Handle</div>
+                    <div className="hidden px-3 py-2 sm:block">句柄</div>
                     <div className="hidden px-3 py-2 sm:block">角色</div>
                     <div className="px-2 py-2" />
                   </div>
@@ -287,14 +287,17 @@ export default function ReplayInspect() {
                         key={p.handle}
                         role="button"
                         tabIndex={0}
-                        className="grid grid-cols-[minmax(0,1fr)_140px_72px] items-center gap-0 text-left text-sm text-slate-900 transition hover:bg-slate-50 active:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-600/30 sm:grid-cols-[minmax(0,1fr)_200px_120px_72px]"
+                        className="grid grid-cols-[minmax(0,1fr)_36px] items-center gap-0 text-left text-sm text-slate-900 transition hover:bg-slate-50 active:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-600/30 sm:grid-cols-[minmax(0,1fr)_200px_120px_72px]"
                         onClick={() => jumpToCredits(p.handle)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") jumpToCredits(p.handle);
                         }}
                       >
                         <div className="min-w-0 px-3 py-2">
-                          <div className="font-bold text-slate-800 line-clamp-2 break-words">{decodeInspectText(p.name)}</div>
+                          <div className="truncate font-bold text-slate-800 sm:line-clamp-2 sm:break-words">{decodeInspectText(p.name)}</div>
+                          <div className="mt-0.5 truncate font-mono text-[11px] text-slate-500 sm:hidden" title={p.handle}>
+                            {p.handle}
+                          </div>
                           <div
                             className="mt-0.5 text-xs text-slate-500 sm:hidden"
                             title={p.role_id == null ? "Unknown" : String(p.role_id)}
@@ -302,7 +305,7 @@ export default function ReplayInspect() {
                             {roleText(p.role_id)}
                           </div>
                         </div>
-                        <div className="px-3 py-2 font-mono text-xs text-slate-700 truncate" title={p.handle}>
+                        <div className="hidden px-3 py-2 font-mono text-xs text-slate-700 truncate sm:block" title={p.handle}>
                           {p.handle}
                         </div>
                         <div
