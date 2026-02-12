@@ -58,10 +58,19 @@ export default function ReplayInspect() {
 
   const supported = result?.supported ?? false;
 
-  // Load role_id -> role_name mapping once on page entry.
+  // App-level cache: fetch role_id -> role_name mapping once on first visit.
+  // After cached, switching routes back/forth won't re-request.
   useEffect(() => {
     let alive = true;
-    setRoleMap(roleMapCache);
+
+    if (roleMapCache) {
+      setRoleMap(roleMapCache);
+      setRoleMapLoading(false);
+      setRoleMapError(null);
+      return () => {
+        alive = false;
+      };
+    }
 
     async function loadRoleMap() {
       setRoleMapLoading(true);
