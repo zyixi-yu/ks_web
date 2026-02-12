@@ -310,7 +310,7 @@ export default function ReplayInspect() {
                 ) : null}
 
                 <div className="mt-3 overflow-hidden rounded-xl border border-slate-200">
-                  <div className="grid grid-cols-[minmax(0,1fr)_36px] gap-0 bg-slate-50 text-left text-xs font-black text-slate-600 sm:grid-cols-[minmax(0,1fr)_200px_120px_72px]">
+                  <div className="grid grid-cols-[minmax(0,1fr)_36px] gap-0 bg-slate-50 text-left text-xs font-black text-slate-600 sm:grid-cols-[minmax(0,1fr)_170px_150px_72px]">
                     <div className="px-3 py-2">昵称</div>
                     <div className="hidden px-3 py-2 sm:block">句柄</div>
                     <div className="hidden px-3 py-2 sm:block">角色</div>
@@ -323,7 +323,7 @@ export default function ReplayInspect() {
                         key={p.handle}
                         role="button"
                         tabIndex={0}
-                        className="grid grid-cols-[minmax(0,1fr)_36px] items-center gap-0 text-left text-sm text-slate-900 transition hover:bg-slate-50 active:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-600/30 sm:grid-cols-[minmax(0,1fr)_200px_120px_72px]"
+                        className="grid grid-cols-[minmax(0,1fr)_36px] items-center gap-0 text-left text-sm text-slate-900 transition hover:bg-slate-50 active:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-600/30 sm:grid-cols-[minmax(0,1fr)_170px_150px_72px]"
                         onClick={() => jumpToCredits(p.handle)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") jumpToCredits(p.handle);
@@ -345,7 +345,7 @@ export default function ReplayInspect() {
                           {p.handle}
                         </div>
                         <div
-                          className="hidden px-3 py-2 text-slate-700 truncate sm:block"
+                          className="hidden px-3 py-2 text-slate-700 break-words sm:block"
                           title={p.role_id == null ? "Unknown" : String(p.role_id)}
                         >
                           {roleText(p.role_id)}
