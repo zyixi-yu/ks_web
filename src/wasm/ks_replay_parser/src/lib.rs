@@ -57,18 +57,6 @@ pub fn parse_replay(bytes: &[u8]) -> Result<JsValue, JsValue> {
     }
 
     use s2protocol::tracker_events::ReplayTrackerEvent;
-    use std::collections::HashMap;
-
-    // Slot id -> player index (in details.player_list)
-    let mut slot_to_idx: HashMap<u8, usize> = HashMap::new();
-    for (i, p) in details.player_list.iter().enumerate() {
-        if let Some(slot) = p.working_set_slot_id {
-            slot_to_idx.insert(slot, i);
-        }
-    }
-
-    // Tracker player_id -> slot_id (from PlayerSetup events)
-    let mut tracker_player_to_slot: HashMap<u8, u8> = HashMap::new();
 
     // role_id_by_idx aligned with details.player_list
     let mut role_id_by_idx: Vec<Option<u32>> = vec![None; details.player_list.len()];
@@ -78,20 +66,14 @@ pub fn parse_replay(bytes: &[u8]) -> Result<JsValue, JsValue> {
 
     for te in tracker_events {
         match te.event {
-            ReplayTrackerEvent::PlayerSetup(ps) => {
-                if let Some(slot) = ps.slot_id {
-                    if slot <= u8::MAX as u32 {
-                        tracker_player_to_slot.insert(ps.player_id, slot as u8);
-                    }
-                }
-            }
             ReplayTrackerEvent::UnitBorn(ev) => {
                 if ev.unit_type_name == "ReplayStatsFunctionalRole" {
                     let role_idx = decode_int_from_point(ev.x, ev.y);
                     let tracker_player_id = ev.upkeep_player_id;
-                    if let Some(&slot_id) = tracker_player_to_slot.get(&tracker_player_id) {
-                        if let Some(&pi) = slot_to_idx.get(&slot_id) {
-                            role_id_by_idx[pi] = Some(role_idx);
+                    if tracker_player_id > 0 {
+                        let idx = (tracker_player_id - 1) as usize;
+                        if idx < role_id_by_idx.len() {
+                            role_id_by_idx[idx] = Some(role_idx);
                         }
                     }
                 }
