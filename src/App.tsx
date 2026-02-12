@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
+import * as Sentry from "@sentry/react";
+
+let didLogLangProbe = false;
 import CreditsQuery from "./components/CreditsQuery";
 import Leaderboard from "./components/Leaderboard";
 import I18nSearch from "./components/I18nSearch";
@@ -22,9 +25,37 @@ import NavDrawer, {
 import { clearAdminToken, loadAdminToken, saveAdminToken, takeBootstrapToken, validateAdminToken } from "./lib/adminToken";
 
 export default function App() {
+  const { logger } = Sentry;
   const [menuOpen, setMenuOpen] = useState(false);
   const [adminEnabled, setAdminEnabled] = useState(false);
   const [adminToken, setAdminToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (didLogLangProbe) return;
+    didLogLangProbe = true;
+
+    try {
+      const langsRaw = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language]).filter(
+        (x): x is string => typeof x === "string" && x.trim().length > 0,
+      );
+      const langs = langsRaw.map((x) => x.trim());
+      const primary = (langs[0] || "").toLowerCase();
+      const base = primary.split("-")[0] || primary;
+      const hasZh = langs.some((x) => x.toLowerCase().startsWith("zh"));
+
+      if (!primary.startsWith("zh")) {
+        logger.info("i18n.probe.primary_non_zh", {
+          primary_language: langs[0] || "",
+          languages: langs,
+          base_language: base,
+          has_zh_in_list: hasZh,
+          path: window.location.pathname,
+        });
+      }
+    } catch {
+      // ignore
+    }
+  }, [logger]);
 
   useEffect(() => {
     let alive = true;
