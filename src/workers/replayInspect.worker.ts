@@ -8,7 +8,7 @@ export type ReplayInspectRequest = {
 export type ReplayInspectResult = {
   map_name: string;
   supported: boolean;
-  players: Array<{ name: string; handle: string; role: string }>;
+  players: Array<{ name: string; handle: string; role_id: number | null }>;
 };
 
 export type ReplayInspectResponse =

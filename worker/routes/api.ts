@@ -21,6 +21,35 @@ api.route("/i18n", i18nRoutes);
 api.route("/config", configRoutes);
 api.route("/admin", adminRoutes);
 
+api.get("/roles", async (c) => {
+  c.header("X-KS-Mock-KV", (globalThis as any).__KS_NO_CACHE ? "1" : "0");
+
+  if (!c.env.KS_KV || typeof (c.env.KS_KV as any).get !== "function") {
+    return jsonError(c, 500, "KV binding missing: KS_KV");
+  }
+
+  const url = new URL(c.req.url);
+  const cacheKey = new Request(url.toString(), { method: "GET" });
+  const cached = await defaultCache().match(cacheKey);
+  if (cached) return cached;
+
+  const key = "bridge_cn.json";
+  const parsed = await kvGetJson(c.env.KS_KV, key);
+  if (!parsed) return jsonError(c, 404, `KV key not found: ${key}`);
+
+  const obj = parsed as any;
+  const generated_at = typeof obj?.generated_at === "string" ? obj.generated_at : "";
+  const role_id_to_name = obj?.role_id_to_name;
+  if (!role_id_to_name || typeof role_id_to_name !== "object") {
+    return jsonError(c, 500, "bridge_cn.json missing role_id_to_name");
+  }
+
+  const payload = { generated_at, role_id_to_name };
+  const resp = jsonOk(c, payload, { cacheControl: apiCacheControl() });
+  c.executionCtx.waitUntil(defaultCache().put(cacheKey, resp.clone()));
+  return resp;
+});
+
 api.get("/player", async (c) => {
   c.header("X-KS-Mock-KV", (globalThis as any).__KS_NO_CACHE ? "1" : "0");
   const url = new URL(c.req.url);
@@ -96,6 +125,34 @@ api.get("/leaderboard", async (c) => {
     return jsonError(c, 500, (e instanceof Error ? e.message : "") || "bridge_cn.json format error");
   }
 
+  const resp = jsonOk(c, payload, { cacheControl: apiCacheControl() });
+  c.executionCtx.waitUntil(defaultCache().put(cacheKey, resp.clone()));
+  return resp;
+});
+
+api.get("/role-map", async (c) => {
+  c.header("X-KS-Mock-KV", (globalThis as any).__KS_NO_CACHE ? "1" : "0");
+  if (!c.env.KS_KV || typeof (c.env.KS_KV as any).get !== "function") {
+    return jsonError(c, 500, "KV binding missing: KS_KV");
+  }
+
+  const url = new URL(c.req.url);
+  const cacheKey = new Request(url.toString(), { method: "GET" });
+  const cached = await defaultCache().match(cacheKey);
+  if (cached) return cached;
+
+  const key = "bridge_cn.json";
+  const parsed = await kvGetJson(c.env.KS_KV, key);
+  if (!parsed) return jsonError(c, 404, `KV key not found: ${key}`);
+  if (!parsed || typeof parsed !== "object") return jsonError(c, 500, "bridge_cn.json format error");
+
+  const obj = parsed as Record<string, unknown>;
+  const generatedAt = obj["generated_at"];
+  const roleMap = obj["role_id_to_name"];
+  if (typeof generatedAt !== "string" || !generatedAt.trim()) return jsonError(c, 500, "bridge_cn.json missing generated_at");
+  if (!roleMap || typeof roleMap !== "object") return jsonError(c, 500, "bridge_cn.json missing role_id_to_name");
+
+  const payload = { generated_at: generatedAt, role_id_to_name: roleMap };
   const resp = jsonOk(c, payload, { cacheControl: apiCacheControl() });
   c.executionCtx.waitUntil(defaultCache().put(cacheKey, resp.clone()));
   return resp;

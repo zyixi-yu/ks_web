@@ -4,7 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 type ParseResult = {
   map_name: string;
   supported: boolean;
-  players: Array<{ name: string; handle: string; role: string }>;
+  players: Array<{ name: string; handle: string; role_id: number | null }>;
+};
+
+type RoleMapResponse = {
+  generated_at: string;
+  role_id_to_name: Record<string, string>;
 };
 
 type Status = "idle" | "reading" | "parsing" | "done" | "error";
@@ -15,6 +20,12 @@ export default function ReplayInspect() {
   const [fileName, setFileName] = useState<string | null>(null);
   const [result, setResult] = useState<ParseResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const [roleMap, setRoleMap] = useState<Record<string, string> | null>(null);
+  const [roleMapError, setRoleMapError] = useState<string | null>(null);
+  const [roleMapLoading, setRoleMapLoading] = useState(false);
+  const [roleMap, setRoleMap] = useState<Record<string, string> | null>(null);
+  const [roleMapError, setRoleMapError] = useState<string | null>(null);
 
   const workerRef = useRef<Worker | null>(null);
   const requestIdRef = useRef(0);
@@ -27,6 +38,36 @@ export default function ReplayInspect() {
       workerRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (!result?.supported) return;
+    if (roleMap || roleMapLoading) return;
+
+    let alive = true;
+    async function loadRoleMap() {
+      setRoleMapLoading(true);
+      setRoleMapError(null);
+      try {
+        const res = await fetch("/api/roles", { headers: { Accept: "application/json" } });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = (await res.json()) as RoleMapResponse;
+        if (!json || typeof json !== "object" || !json.role_id_to_name) throw new Error("bad payload");
+        if (!alive) return;
+        setRoleMap(json.role_id_to_name);
+      } catch (e) {
+        if (!alive) return;
+        setRoleMap(null);
+        setRoleMapError(e instanceof Error ? e.message : String(e));
+      } finally {
+        if (alive) setRoleMapLoading(false);
+      }
+    }
+
+    void loadRoleMap();
+    return () => {
+      alive = false;
+    };
+  }, [result?.supported, roleMap, roleMapLoading]);
 
   const parseFile = async (file: File) => {
     setFileName(file.name);
@@ -67,9 +108,42 @@ export default function ReplayInspect() {
 
   const supported = result?.supported ?? false;
 
+  useEffect(() => {
+    if (!supported) return;
+    if (roleMap) return;
+    let canceled = false;
+    async function load() {
+      try {
+        setRoleMapError(null);
+        const res = await fetch("/api/role-map", { headers: { Accept: "application/json" } });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = (await res.json()) as unknown;
+        const map = (json as any)?.role_id_to_name;
+        if (!map || typeof map !== "object") throw new Error("bad payload");
+        if (!canceled) setRoleMap(map as Record<string, string>);
+      } catch (e) {
+        if (!canceled) setRoleMapError(e instanceof Error ? e.message : String(e));
+      }
+    }
+    void load();
+    return () => {
+      canceled = true;
+    };
+  }, [supported, roleMap]);
+
   const jumpToCredits = (handle: string) => {
     nav(`/?handle=${encodeURIComponent(handle)}`, { replace: false });
   };
+
+  function formatRoleName(name: string): string {
+    return (name || "").replace(/_/g, " ");
+  }
+
+  function roleText(roleId: number | null): string {
+    if (roleId == null) return "Unknown";
+    const raw = roleMap?.[String(roleId)] || "";
+    return raw ? formatRoleName(raw) : `#${roleId}`;
+  }
 
   const copy = async (text: string) => {
     try {
@@ -137,6 +211,11 @@ export default function ReplayInspect() {
                   <div className="text-sm font-black text-slate-700">玩家信息</div>
                   <div className="text-[11px] text-slate-400">点击行：跳转回首页自动查询积分</div>
                 </div>
+                {roleMapError ? (
+                  <div className="mt-2 text-xs text-amber-700">
+                    角色名称映射加载失败（{roleMapError}），将用 role_id 兜底显示。
+                  </div>
+                ) : null}
 
                 <div className="mt-3 overflow-hidden rounded-xl border border-slate-200">
                   <div className="grid grid-cols-[1fr_200px_120px_44px] gap-0 bg-slate-50 text-left text-xs font-black text-slate-600">
@@ -162,8 +241,8 @@ export default function ReplayInspect() {
                         <div className="px-3 py-2 font-mono text-xs text-slate-700 truncate" title={p.handle}>
                           {p.handle}
                         </div>
-                        <div className="px-3 py-2 text-slate-700 truncate" title={p.role}>
-                          {p.role}
+                        <div className="px-3 py-2 text-slate-700 truncate" title={roleText(p.role_id)}>
+                          {roleText(p.role_id)}
                         </div>
                         <div className="flex items-center justify-center px-2 py-2">
                           <button
