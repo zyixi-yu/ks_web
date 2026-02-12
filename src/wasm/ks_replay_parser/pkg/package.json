@@ -1,0 +1,15 @@
+{
+  "name": "ks_replay_parser",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "ks_replay_parser_bg.wasm",
+    "ks_replay_parser.js",
+    "ks_replay_parser.d.ts"
+  ],
+  "main": "ks_replay_parser.js",
+  "types": "ks_replay_parser.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

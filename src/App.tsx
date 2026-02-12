@@ -8,6 +8,7 @@ import Proposals from "./components/Proposals";
 import PatchNotes from "./components/PatchNotes";
 import ConfigEditor from "./components/ConfigEditor";
 import ReplayUpload from "./components/ReplayUpload";
+import ReplayInspect from "./components/ReplayInspect";
 import NavDrawer, {
   IconClipboardList,
   IconCoin,
@@ -144,6 +145,8 @@ export default function App() {
           <Route path="/player" element={<PlayerRoleQuery />} />
           <Route path="/player/:handle" element={<PlayerRoleQuery />} />
           <Route path="/upload" element={<ReplayUpload />} />
+          {/* hidden entry: no nav item yet */}
+          <Route path="/replay/inspect" element={<ReplayInspect />} />
           <Route
             path="/config"
             element={
