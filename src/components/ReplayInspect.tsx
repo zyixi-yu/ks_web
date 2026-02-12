@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { validateReplayFile } from "../lib/replayUpload";
 import { IconChevronRight } from "./NavDrawer";
@@ -33,12 +33,24 @@ type RoleMapResponse = {
 
 type Status = "idle" | "reading" | "parsing" | "done" | "error";
 
+function decodeInspectText(input: string): string {
+  return (input || "")
+    .replace(/<sp\s*\/\s*>/gi, " ")
+    .replace(/<n\s*\/\s*>/gi, "\n")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'");
+}
+
 export default function ReplayInspect() {
   const nav = useNavigate();
   const [status, setStatus] = useState<Status>("idle");
   const [fileName, setFileName] = useState<string | null>(null);
   const [result, setResult] = useState<ParseResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [dragOver, setDragOver] = useState(false);
 
   const [roleMap, setRoleMap] = useState<Record<string, string> | null>(null);
   const [roleMapError, setRoleMapError] = useState<string | null>(null);
@@ -46,6 +58,7 @@ export default function ReplayInspect() {
 
   const workerRef = useRef<Worker | null>(null);
   const requestIdRef = useRef(0);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const w = new Worker(new URL("../workers/replayInspect.worker.ts", import.meta.url), { type: "module" });
@@ -149,6 +162,25 @@ export default function ReplayInspect() {
     w.postMessage({ id, buffer }, [buffer]);
   };
 
+  const parseFromIncoming = useCallback(
+    (incoming: FileList | File[]) => {
+      const list = Array.from(incoming);
+      if (!list.length) return;
+      const replay = list.find((f) => f.name.toLowerCase().endsWith(".sc2replay")) ?? list[0];
+      void parseFile(replay);
+    },
+    [parseFile],
+  );
+
+  const onDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setDragOver(false);
+      parseFromIncoming(e.dataTransfer.files);
+    },
+    [parseFromIncoming],
+  );
+
   const jumpToCredits = (handle: string) => {
     nav(`/?handle=${encodeURIComponent(handle)}`, { replace: false });
   };
@@ -175,14 +207,35 @@ export default function ReplayInspect() {
         </p>
 
         <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
-          <label className="block text-sm font-black text-slate-700">选择录像文件</label>
+          <div className="text-sm font-black text-slate-700">选择录像文件</div>
+          <div
+            className={[
+              "mt-2 flex min-h-[120px] cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-6 transition",
+              dragOver ? "border-blue-500 bg-blue-50" : "border-slate-300 hover:border-slate-400 hover:bg-white",
+            ].join(" ")}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragOver(true);
+            }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={onDrop}
+            onClick={() => inputRef.current?.click()}
+          >
+            <svg viewBox="0 0 24 24" fill="none" className="h-8 w-8 text-slate-400" aria-hidden="true">
+              <path d="M12 16V4m0 0L8 8m4-4l4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M20 16v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <div className="text-center text-sm text-slate-500">
+              拖拽 <code className="rounded bg-slate-100 px-1 py-0.5 text-xs">.SC2Replay</code> 到这里，或点击手动选择
+            </div>
+          </div>
           <input
+            ref={inputRef}
             type="file"
             accept=".SC2Replay,.sc2replay"
-            className="mt-2 block w-full text-sm"
+            className="hidden"
             onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) void parseFile(f);
+              if (e.target.files?.length) parseFromIncoming(e.target.files);
               e.target.value = "";
             }}
           />
@@ -199,7 +252,9 @@ export default function ReplayInspect() {
           <div className="mt-4 space-y-3">
             <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
               <div className="text-xs font-black text-slate-500">地图名称</div>
-              <div className="mt-1 break-words text-sm font-black text-slate-900">{result.map_name || "(未知)"}</div>
+              <div className="mt-1 break-words whitespace-pre-wrap text-sm font-black text-slate-900">
+                {decodeInspectText(result.map_name) || "(未知)"}
+              </div>
               {!supported && (
                 <div className="mt-2 text-xs text-slate-500">
                   非凯瑞甘生存地图（标题不包含 “凯瑞甘生存 / Kerrigan Survival”），不支持解析玩家信息。
@@ -242,7 +297,7 @@ export default function ReplayInspect() {
                         }}
                       >
                         <div className="min-w-0 px-3 py-2">
-                          <div className="font-bold text-slate-800 line-clamp-2 break-words">{p.name}</div>
+                          <div className="font-bold text-slate-800 line-clamp-2 break-words">{decodeInspectText(p.name)}</div>
                           <div
                             className="mt-0.5 text-xs text-slate-500 sm:hidden"
                             title={p.role_id == null ? "Unknown" : String(p.role_id)}
