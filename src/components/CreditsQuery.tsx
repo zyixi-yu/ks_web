@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import * as Sentry from "@sentry/react";
 import { copyToClipboard } from "../lib/clipboard";
 import { computeCreditBreakdown, decodeCreditCode, type CreditsResponse } from "../lib/credits";
 import { deleteRecentHandle, loadRecentHandles, saveRecentHandle, type RecentHandle } from "../lib/recentHandles";
 import { formatTimeCN } from "../lib/time";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 type CreditsResult = {
   data: CreditsResponse;
@@ -17,6 +17,7 @@ function isNonEmptyString(x: unknown): x is string {
 
 export default function CreditsQuery() {
   const { logger } = Sentry;
+  const location = useLocation();
   const [handle, setHandle] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,6 +28,14 @@ export default function CreditsQuery() {
   useEffect(() => {
     setRecent(loadRecentHandles());
   }, []);
+
+  const handleFromUrl = useMemo(() => {
+    const qs = new URLSearchParams(location.search);
+    return (qs.get("handle") || "").trim();
+  }, [location.search]);
+
+  const autoQueryRef = useRef<string | null>(null);
+  const runQueryRef = useRef<(rawHandle: string) => void>(() => {});
 
   const command = useMemo(() => {
     if (!result?.data?.code) return "";
@@ -158,6 +167,18 @@ export default function CreditsQuery() {
     }
   }
 
+  runQueryRef.current = (rawHandle: string) => {
+    void runQuery(rawHandle);
+  };
+
+  useEffect(() => {
+    if (!handleFromUrl) return;
+    if (autoQueryRef.current === handleFromUrl) return;
+    autoQueryRef.current = handleFromUrl;
+    setHandle(handleFromUrl);
+    runQueryRef.current(handleFromUrl);
+  }, [handleFromUrl]);
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -177,6 +198,11 @@ export default function CreditsQuery() {
           录像上传工具不可用？
           <Link to="/upload" className="ml-1 font-bold text-blue-600 hover:text-blue-700 hover:underline">
             试试手动上传 →
+          </Link>
+          <span className="mx-2 text-slate-300">·</span>
+          不知道句柄？
+          <Link to="/replay/inspect" className="ml-1 font-bold text-blue-600 hover:text-blue-700 hover:underline">
+            试试这个 →
           </Link>
         </p>
 
