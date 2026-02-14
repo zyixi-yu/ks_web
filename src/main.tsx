@@ -4,6 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import * as Sentry from "@sentry/react";
 import App from "./App";
 import "./index.css";
+import { getOrCreateDid } from "./lib/did";
+import { maybeDailyUvPing } from "./lib/uvPing";
 
 function stashTokenFromUrl() {
   try {
@@ -32,6 +34,10 @@ Sentry.init({
   enableLogs: true,
   tracesSampleRate: 1.0,
 });
+
+const did = getOrCreateDid();
+Sentry.setUser({ id: did });
+maybeDailyUvPing();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
