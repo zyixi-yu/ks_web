@@ -8,7 +8,9 @@ function utcDay(): string {
 }
 
 /**
- * Send a single UV ping per day (best-effort), using Sentry captureMessage.
+ * Send a single UV ping per day (best-effort), using Sentry logger.
+ *
+ * This avoids creating message events/issues in Sentry.
  */
 export function maybeDailyUvPing(): void {
   const day = utcDay();
@@ -21,11 +23,8 @@ export function maybeDailyUvPing(): void {
     return;
   }
 
-  Sentry.captureMessage("uv.ping", {
-    level: "info",
-    extra: {
-      day,
-      path: window.location.pathname,
-    },
+  Sentry.logger.info("uv.ping", {
+    day,
+    path: window.location.pathname,
   });
 }
