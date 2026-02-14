@@ -71,7 +71,11 @@ function TierPill({
   })();
 
   return (
-    <span className={["inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-black", color].join(" ")}>
+    <span
+      className={["inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-1 text-xs font-black", color].join(
+        " ",
+      )}
+    >
       {tier}
     </span>
   );
@@ -91,10 +95,10 @@ function TeamMmrCard({
   return (
     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
       <div className="flex items-center justify-between gap-3">
-        <div className="text-sm font-black text-slate-900">{team}</div>
+        <div className="whitespace-nowrap text-sm font-black text-slate-900">{team}</div>
         <div className="flex items-center gap-2">
           {typeof leaderboardRank === "number" ? (
-            <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-black text-slate-700">
+            <span className="whitespace-nowrap rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-black text-slate-700">
               榜单 第{leaderboardRank}名
             </span>
           ) : null}
