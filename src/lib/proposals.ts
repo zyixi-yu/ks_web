@@ -43,6 +43,7 @@ export type ProposalStatus =
 
 export function weightForRank(rank: string | null | undefined): number {
   const norm = String(rank || "").trim().toLowerCase();
+  if (norm === "grandmaster") return 3;
   if (norm === "master") return 2;
   if (norm === "diamond") return 1;
   return 0;
