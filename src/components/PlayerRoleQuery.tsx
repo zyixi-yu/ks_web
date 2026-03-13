@@ -17,13 +17,15 @@ type PlayerRole = {
   win_rate: number | null;
 };
 
+type CouncilTier = "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" | "宗师";
+
 type PlayerApiResponse = {
   generated_at: string;
   player_handle: string;
   cores: { survivor: number; kerrigan: number };
   ranks?: {
-    survivor: { percentile: number; tier: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" };
-    kerrigan: { percentile: number; tier: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" };
+    survivor: { percentile: number; tier: CouncilTier };
+    kerrigan: { percentile: number; tier: CouncilTier };
   };
   leaderboard_ranks?: {
     survivor?: { rank: number; mmr: number; identity: string; display_name: string };
@@ -59,9 +61,10 @@ function parsePlayerApiResponse(x: unknown): PlayerApiResponse | null {
 function TierPill({
   tier,
 }: {
-  tier: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师";
+  tier: CouncilTier;
 }) {
   const color = (() => {
+    if (tier === "宗师") return "border-rose-200 bg-rose-50 text-rose-800";
     if (tier === "大师") return "border-purple-200 bg-purple-50 text-purple-800";
     if (tier === "钻石") return "border-sky-200 bg-sky-50 text-sky-800";
     if (tier === "白金") return "border-teal-200 bg-teal-50 text-teal-800";
@@ -89,7 +92,7 @@ function TeamMmrCard({
 }: {
   team: "幸存者" | "凯瑞甘";
   mmr: number;
-  tier?: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师";
+  tier?: CouncilTier;
   leaderboardRank?: number;
 }) {
   return (

@@ -146,6 +146,8 @@ export type PlayerRoleRow = {
   win_rate: number | null;
 };
 
+type CouncilTier = "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" | "宗师";
+
 export function computePlayerRoles(
   rawJson: unknown,
   playerHandle: string,
@@ -154,8 +156,8 @@ export function computePlayerRoles(
   player_handle: string;
   cores: { survivor: number; kerrigan: number };
   ranks?: {
-    survivor: { percentile: number; tier: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" };
-    kerrigan: { percentile: number; tier: "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" };
+    survivor: { percentile: number; tier: CouncilTier };
+    kerrigan: { percentile: number; tier: CouncilTier };
   };
   leaderboard_ranks?: {
     survivor?: { rank: number; mmr: number; identity: string; display_name: string };
@@ -260,6 +262,16 @@ export function computePlayerRoles(
   rolesSurvivor.sort(sortRows);
   rolesKerrigan.sort(sortRows);
 
+  const normalizedHandle = playerHandle.trim().toUpperCase();
+  const grandmasters = obj["grandmasters"];
+  const isGrandmaster =
+    Array.isArray(grandmasters) &&
+    grandmasters.some((entry) => {
+      if (!entry || typeof entry !== "object" || Array.isArray(entry)) return false;
+      const handles = toStringArray((entry as Record<string, unknown>)["player_handles"]);
+      return handles.some((handle) => handle.trim().toUpperCase() === normalizedHandle);
+    });
+
   function percentileForMmr(mmr: number, thresholds: number[]): number {
     // thresholds: length 101, increasing; return the highest p where mmr >= thresholds[p]
     let best = 0;
@@ -271,7 +283,7 @@ export function computePlayerRoles(
     return Math.max(0, Math.min(100, best));
   }
 
-  function tierForPercentile(p: number): "青铜" | "白银" | "黄金" | "白金" | "钻石" | "大师" {
+  function tierForPercentile(p: number): Exclude<CouncilTier, "宗师"> {
     // 口径：>= 下界进入更高段位
     // Bronze [0,25), Silver [25,50), Gold [50,75), Platinum [75,95), Diamond [95,99), Master [99,100]
     if (p >= 99) return "大师";
@@ -284,8 +296,8 @@ export function computePlayerRoles(
 
   let ranks:
     | {
-        survivor: { percentile: number; tier: ReturnType<typeof tierForPercentile> };
-        kerrigan: { percentile: number; tier: ReturnType<typeof tierForPercentile> };
+        survivor: { percentile: number; tier: CouncilTier };
+        kerrigan: { percentile: number; tier: CouncilTier };
       }
     | undefined;
   const mmrPercentile = obj["mmr_percentile"];
@@ -301,6 +313,18 @@ export function computePlayerRoles(
         kerrigan: { percentile: pKerri, tier: tierForPercentile(pKerri) },
       };
     }
+  }
+
+  if (isGrandmaster) {
+    ranks = ranks
+      ? {
+          survivor: { ...ranks.survivor, tier: "宗师" },
+          kerrigan: { ...ranks.kerrigan, tier: "宗师" },
+        }
+      : {
+          survivor: { percentile: 100, tier: "宗师" },
+          kerrigan: { percentile: 100, tier: "宗师" },
+        };
   }
 
   // NOTE: 对齐 /api/leaderboard：复用 computeLeaderboard 的 Top50 结果，不自己单独排序/排名。

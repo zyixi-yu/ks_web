@@ -135,8 +135,8 @@ export default function Proposals() {
     const survTier = typeof ranks?.survivor?.tier === "string" ? ranks.survivor.tier : null;
     const kerriTier = typeof ranks?.kerrigan?.tier === "string" ? ranks.kerrigan.tier : null;
 
-    const diamondOrMaster = (tier: string | null) => tier === "钻石" || tier === "大师";
-    const tiersOk = diamondOrMaster(survTier) && diamondOrMaster(kerriTier);
+    const councilTierOk = (tier: string | null) => tier === "钻石" || tier === "大师" || tier === "宗师";
+    const tiersOk = councilTierOk(survTier) && councilTierOk(kerriTier);
     details.push(`段位：幸存者 ${survTier || "未知"}，凯瑞甘 ${kerriTier || "未知"}`);
 
     const rolesSurv = Array.isArray(player?.roles_survivor) ? player.roles_survivor : [];
@@ -147,7 +147,7 @@ export default function Proposals() {
     const playsOk = totalPlays > 200;
     details.push(`总有效对局：${totalPlays}`);
 
-    if (!tiersOk) details.push("未满足：双阵营需要达到 钻石/大师");
+    if (!tiersOk) details.push("未满足：双阵营需要达到 钻石/大师/宗师");
     if (!playsOk) details.push("未满足：总有效对局需要 > 200");
 
     return { ok: tiersOk && playsOk, details };
@@ -224,11 +224,11 @@ export default function Proposals() {
 
         <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
           <div>
-            <span className="font-black text-slate-900">投票资格</span>：钻石/大师（双阵营），总有效对局 &gt;
+            <span className="font-black text-slate-900">投票资格</span>：钻石/大师/宗师（双阵营），总有效对局 &gt;
             200，近30天有效对局 ≥ 10。
           </div>
           <div className="mt-1">
-            <span className="font-black text-slate-900">权重</span>：钻石=1，大师=2；<span className="font-black text-slate-900">规则</span>：创建后
+            <span className="font-black text-slate-900">权重</span>：钻石=1，大师=2，宗师=3；<span className="font-black text-slate-900">规则</span>：创建后
             {PROPOSAL_RULES.decisionAfterDays}天且≥{PROPOSAL_RULES.quorumVotes}人投票进入裁决，赞同率 &gt;{" "}
             {Math.round(PROPOSAL_RULES.passThreshold * 100)}% 视为通过（待实施）；创建后{PROPOSAL_RULES.quorumDeadlineDays}
             天仍不足{PROPOSAL_RULES.quorumVotes}人投票则过期。
