@@ -82,6 +82,10 @@ function prune() {
 function readState() {
   try { return JSON.parse(fs.readFileSync(statePath, 'utf8')); } catch { return {}; }
 }
+function processAlive(pid) {
+  if (!Number.isInteger(pid) || pid <= 0) return false;
+  try { process.kill(pid, 0); return true; } catch { return false; }
+}
 function failure(code) { const error = new Error(code); error.safeCode = code; return error; }
 function errorCode(error) { return error?.safeCode || 'operation_failed'; }
 
@@ -139,13 +143,18 @@ async function watch() {
   process.on('SIGINT', signal);
   const note = (event, extra = {}) => append({ event: `observer.${event}`, received_at: now(), ...extra });
   const heartbeat = setInterval(() => {
+    const previousHeartbeat = state.heartbeat_at;
     state.heartbeat_at = now();
-    try { writeState(state); } catch { signal(); }
+    try {
+      if (Date.parse(state.heartbeat_at) - Date.parse(previousHeartbeat) > 45_000) note('heartbeat_gap', { since: previousHeartbeat });
+      writeState(state);
+    } catch { signal(); }
   }, 15_000);
   let delay = 5_000;
   let previousTail = previous.tail_id;
   try {
     note('started');
+    if (previous.phase && previous.phase !== 'stopped') note('unclean_restart', { since: previous.heartbeat_at });
     while (!stopped) {
       let tailId;
       let connectedAt = 0;
@@ -209,7 +218,7 @@ async function watch() {
             clearTimeout(renew);
             socket = undefined;
             state.phase = stopped ? 'stopping' : 'disconnected';
-            try { note('disconnected'); resolve(); } catch { reject(failure('log_write_failed')); }
+            try { note('disconnected', { last_pong_at: state.last_pong_at }); resolve(); } catch { reject(failure('log_write_failed')); }
           });
         });
       } catch (error) {
@@ -281,7 +290,7 @@ async function main() {
   if (command === 'doctor') return doctor();
   if (command === 'status') {
     const state = readState();
-    console.log(JSON.stringify({ ...state, healthy: statusHealth(state), logs: directory }, null, 2));
+    console.log(JSON.stringify({ ...state, healthy: statusHealth(state) && processAlive(state.pid), logs: directory }, null, 2));
     return;
   }
   if (command === 'events') {
