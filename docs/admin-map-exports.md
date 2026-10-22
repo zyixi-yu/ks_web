@@ -11,3 +11,5 @@ MAP_PACKAGE_READ_TOKEN 是项目 52 的独立 read_package_registry deploy token
 管理员查看游戏验证码只读 sms_verify_code_v1，遵循原始 180 秒有效期，不清码、不续期。导出准备读取独立只读机器接口，不调用会清码的旧 config/read。
 
 部署使用现有 GitLab 和 Workers 免费计划，不开通 Access、R2 或付费订阅；受现有实例存储容量与 Workers 免费额度限制。验证：pnpm typecheck、pnpm exec tsx --test worker/tests/management.test.ts、pnpm build。真实验证还须包含 Windows 保存地图、跨项目上传读回和登录后下载摘要核对。
+
+独立 GitLab 流水线计划每天 Asia/Shanghai 06:00 运行，计划页“运行”按钮立即执行同一导出任务。计划使用 ref=main，仅设置 CN_MAP_EXPORT=true 和机器凭据，不固定 CN_MAP_SOURCE_SHA；任务记录此次流水线的实际提交及创建时间，后台标记“计划 / 手动”。翻译触发仍使用对应 MR 合并 SHA。两种入口共用 cn-map-file-export 资源组串行执行。

@@ -84,6 +84,12 @@ test("catalogue retains the latest ten ordered versions; older completion cannot
   items = updatedCatalog(items, { ...entry(13), merged_at: "2025-10-22T10:00:00Z" });
   assert.equal(items[0].pipeline_id, 12); assert.equal(items.length, 10);
 });
+test("scheduled versions have a distinct source label and remain in the latest ten", () => {
+  const scheduled = parseExport({ ...entry(3), export_kind: "scheduled", mr_iid: 0, merged_at: "2026-10-23T22:00:00Z" });
+  assert.equal(scheduled.export_kind, "scheduled");
+  assert.equal(updatedCatalog([entry(1)], scheduled)[0].version, scheduled.version);
+  assert.throws(() => parseExport({ ...scheduled, export_kind: "translation_merge" }));
+});
 test("failed private storage validation preserves existing catalogue", async () => {
   values.set(EXPORT_CATALOG_KEY, [entry()]); writes = [];
   globalThis.fetch = async () => new Response("unavailable", { status: 503 });
