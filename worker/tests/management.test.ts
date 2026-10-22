@@ -5,6 +5,19 @@ import { passwordDigest } from "../services/adminAuth";
 import app from "../app";
 import { EXPORT_CATALOG_KEY, parseExport, updatedCatalog } from "../services/mapExports";
 
+// Node has no Workers native stream; route tests use its size/error contract.
+// The native implementation is additionally exercised in workerd and live downloads.
+(globalThis as any).FixedLengthStream = class extends TransformStream<Uint8Array, Uint8Array> {
+  constructor(expected: number) {
+    let received = 0;
+    super({ transform(chunk, controller) {
+      received += chunk.byteLength;
+      if (received > expected) throw new Error("too many bytes");
+      controller.enqueue(chunk);
+    }, flush() { if (received !== expected) throw new Error("too few bytes"); } });
+  }
+};
+
 const password = "p".repeat(43);
 const account = { username: "admin", salt: "a".repeat(32), hash: await passwordDigest("a".repeat(32), password), version: "b".repeat(32) };
 const sessionSecret = "s".repeat(43);

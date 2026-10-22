@@ -13,3 +13,5 @@ DRIVE_CLIENT_ID、DRIVE_CLIENT_SECRET、DRIVE_REFRESH_TOKEN、DRIVE_FOLDER_ID �
 部署使用 Google Drive 免费空间和现有 Workers 免费计划，不开通 Access、R2 或付费订阅；受 Google 账号共享存储空间、Drive API 和 Workers 免费额度限制。验证：pnpm typecheck、pnpm exec tsx --test worker/tests/management.test.ts、pnpm build。真实验证还须包含 Windows 保存地图、Drive 上传读回和登录后下载摘要核对。
 
 独立 GitLab 流水线计划每天 Asia/Shanghai 06:00 运行，计划页“运行”按钮立即执行同一导出任务。计划使用 ref=main，仅设置 CN_MAP_EXPORT=true 和机器凭据，不固定 CN_MAP_SOURCE_SHA；任务记录此次流水线的实际提交及创建时间，后台标记“计划 / 手动”。翻译触发仍使用对应 MR 合并 SHA。两种入口共用 cn-map-file-export 资源组串行执行。
+
+下载转发使用 Workers 原生 `FixedLengthStream`，保留实际 Content-Length 并校验字节数量。不要替换为逐网络块的 JavaScript TransformStream 计数：真实约 30 MB 下载曾触发 `exceededCpu`，导致 HTTP 200 后截断。CI 必须完整回读并校验 SHA256 后才登记版本。

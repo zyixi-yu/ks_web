@@ -77,17 +77,10 @@ export async function driveDownload(env: Env, entry: MapExport): Promise<Respons
     await response.body?.cancel();
     throw new Error(`Drive download HTTP ${response.status}`);
   }
-  // Drive may use chunked transfer. Validate bytes as they stream rather than
-  // requiring Content-Length; metadata and CI's full readback supply the digest.
-  let received = 0;
-  const body = response.body.pipeThrough(new TransformStream<Uint8Array, Uint8Array>({
-    transform(chunk, controller) {
-      received += chunk.byteLength;
-      if (received > entry.bytes) throw new Error("Drive download exceeds expected size");
-      controller.enqueue(chunk);
-    },
-    flush() { if (received !== entry.bytes) throw new Error("Drive download is incomplete"); },
-  }));
+  // Native byte accounting keeps a real Content-Length and avoids a JavaScript
+  // callback per network chunk. The latter exhausted Worker CPU mid-download.
+  // CI still verifies the complete downloaded digest before catalogue registration.
+  const body = response.body.pipeThrough(new FixedLengthStream(entry.bytes));
   return new Response(body, { headers: { "Content-Type": "application/octet-stream",
     "Content-Disposition": `attachment; filename="KS2_CN_${entry.source_sha.slice(0, 12)}.SC2Map"`,
     "Content-Length": String(entry.bytes), "Cache-Control": "private, no-store",
