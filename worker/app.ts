@@ -2,10 +2,20 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import apiRoutes from "./routes/api";
 import assetsRoutes from "./routes/assets";
+import adminAuthRoutes, { adminHeaders, requireAdministrator } from "./services/adminAuth";
+import managementRoutes from "./routes/management";
+import mapExportRoutes from "./routes/mapExport";
 
 type HonoEnv = { Bindings: Env };
 
 const app = new Hono<HonoEnv>();
+
+app.use("/admin", adminHeaders);
+app.use("/admin/*", adminHeaders);
+app.route("/admin/auth", adminAuthRoutes);
+app.use("/admin/api/*", requireAdministrator);
+app.route("/admin/api", managementRoutes);
+app.route("/api/map-export", mapExportRoutes);
 
 app.use(
   "/api/*",

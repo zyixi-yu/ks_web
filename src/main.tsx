@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import * as Sentry from "@sentry/react";
 import App from "./App";
+import AdminDashboard from "./components/AdminDashboard";
 import "./index.css";
 import { getOrCreateDid } from "./lib/did";
 import { maybeDailyUvPing } from "./lib/uvPing";
@@ -24,9 +25,10 @@ function stashTokenFromUrl() {
   }
 }
 
-stashTokenFromUrl();
+const isManagement = window.location.pathname === "/admin" || window.location.pathname.startsWith("/admin/");
+if (!isManagement) stashTokenFromUrl();
 
-Sentry.init({
+if (!isManagement) Sentry.init({
   dsn: "https://a729b7e7493f3ba65d296cb04f4819d9@o4510812457205760.ingest.us.sentry.io/4510822605193216",
   // Setting this option to true will send default PII data to Sentry.
   // For example, automatic IP address collection on events
@@ -35,14 +37,16 @@ Sentry.init({
   tracesSampleRate: 1.0,
 });
 
-const did = getOrCreateDid();
-Sentry.setUser({ id: did });
-maybeDailyUvPing();
+if (!isManagement) {
+  const did = getOrCreateDid();
+  Sentry.setUser({ id: did });
+  maybeDailyUvPing();
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      {isManagement ? <AdminDashboard /> : <App />}
     </BrowserRouter>
   </React.StrictMode>,
 );
