@@ -48,9 +48,11 @@ export function packageUrl(version: string, filename: string): string {
 
 export async function packageFetch(env: Env, version: string, filename: string, method = "GET"): Promise<Response> {
   if (!env.MAP_PACKAGE_READ_TOKEN) throw new Error("Private package access is not configured");
-  return fetch(packageUrl(version, filename), {
-    method, headers: { "DEPLOY-TOKEN": env.MAP_PACKAGE_READ_TOKEN }, redirect: "manual",
+  const response = await fetch(packageUrl(version, filename), {
+    method, headers: { "DEPLOY-TOKEN": env.MAP_PACKAGE_READ_TOKEN, "User-Agent": "KS2-MapExport/1.0" }, redirect: "manual",
   });
+  if (!response.ok) console.error("private_package_http_error", { status: response.status, method });
+  return response;
 }
 
 export function updatedCatalog(items: MapExport[], entry: MapExport): MapExport[] {

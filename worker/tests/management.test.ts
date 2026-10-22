@@ -101,6 +101,7 @@ test("any listed version downloads through authenticated streaming without leaki
   globalThis.fetch = async (url, init) => {
     assert.match(String(url), /\/cn-map-export\/[a-f0-9]{40}-1\/KerriganSurvival2_CN.SC2Map$/);
     assert.equal(new Headers(init?.headers).get("DEPLOY-TOKEN"), "read-secret");
+    assert.equal(new Headers(init?.headers).get("User-Agent"), "KS2-MapExport/1.0");
     assert.equal(init?.redirect, "manual");
     return new Response(new Uint8Array(4096), { headers: { "Content-Length": "4096" } });
   };
