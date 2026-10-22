@@ -13,7 +13,10 @@ declare global {
     ADMIN_ACCOUNTS?: string;
     ADMIN_SESSION_SECRET?: string;
     ADMIN_LOGIN_LIMIT: { limit(options: { key: string }): Promise<{ success: boolean }> };
-    MAP_PACKAGE_READ_TOKEN?: string;
+    DRIVE_CLIENT_ID?: string;
+    DRIVE_CLIENT_SECRET?: string;
+    DRIVE_REFRESH_TOKEN?: string;
+    DRIVE_FOLDER_ID?: string;
     MAP_EXPORT_TOKEN?: string;
 
     // 配置读写鉴权 token：复用 VERIFY_CODE_TOKEN（Authorization: <token> 或 Authorization: Bearer <token>）

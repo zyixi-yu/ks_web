@@ -1,7 +1,9 @@
 import { Hono } from "hono";
 import { bodyLimit } from "hono/body-limit";
 import { constantTimeEqual, parseBearerToken } from "../services/auth";
-import { catalog, EXPORT_CATALOG_KEY, MAP_FILE, packageFetch, parseExport, updatedCatalog } from "../services/mapExports";
+import { catalog, EXPORT_CATALOG_KEY, parseExport, updatedCatalog } from "../services/mapExports";
+
+import { beginDriveUpload, driveDownload, verifiedDriveEntry } from "../services/driveStorage";
 
 const routes = new Hono<{ Bindings: Env }>();
 routes.use("*", async (c, next) => {
@@ -23,17 +25,25 @@ routes.get("/bridge", async c => {
   if (!body) return c.json({ error: "Bridge unavailable" }, 503);
   return c.body(body, 200, { "Content-Type": "application/json" });
 });
-routes.post("/complete", bodyLimit({ maxSize: 16384, onError: c => c.json({ error: "Request too large" }, 413) }), async c => {
-  if (Number(c.req.header("Content-Length") || 0) > 16384) return c.json({ error: "Request too large" }, 413);
+const smallBody = bodyLimit({ maxSize: 16384, onError: c => c.json({ error: "Request too large" }, 413) });
+routes.post("/upload", smallBody, async c => {
   let entry;
   try { entry = parseExport(await c.req.json()); } catch { return c.json({ error: "Invalid manifest" }, 400); }
-  const response = await packageFetch(c.env, entry.version, "manifest.json");
-  if (!response.ok) return c.json({ error: "Uploaded manifest unavailable" }, 502);
+  try { return c.json({ upload_url: await beginDriveUpload(c.env, entry) }); }
+  catch { return c.json({ error: "Drive upload unavailable" }, 502); }
+});
+routes.get("/objects/:id", async c => {
+  try { return await driveDownload(c.env, await verifiedDriveEntry(c.env, c.req.param("id"))); }
+  catch { return c.json({ error: "Uploaded map unavailable" }, 502); }
+});
+routes.post("/complete", smallBody, async c => {
+  let entry;
+  try { entry = parseExport(await c.req.json()); } catch { return c.json({ error: "Invalid manifest" }, 400); }
+  if (!entry.drive_file_id) return c.json({ error: "Drive file ID is required" }, 400);
   let stored;
-  try { stored = parseExport(await response.json()); } catch { return c.json({ error: "Uploaded manifest invalid" }, 502); }
+  try { stored = await verifiedDriveEntry(c.env, entry.drive_file_id); }
+  catch { return c.json({ error: "Uploaded file unavailable or invalid" }, 502); }
   if (JSON.stringify(entry) !== JSON.stringify(stored)) return c.json({ error: "Manifest mismatch" }, 409);
-  const file = await packageFetch(c.env, entry.version, MAP_FILE, "HEAD");
-  if (!file.ok || Number(file.headers.get("Content-Length")) !== entry.bytes) return c.json({ error: "Uploaded file unavailable" }, 502);
   await c.env.KS_KV.put(EXPORT_CATALOG_KEY, JSON.stringify(updatedCatalog(await catalog(c.env), entry)));
   return c.json({ ok: true, version: entry.version });
 });
