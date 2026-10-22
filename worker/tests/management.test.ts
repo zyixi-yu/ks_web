@@ -1,18 +1,21 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { exportJWK, generateKeyPair, SignJWT } from "jose";
+import { SignJWT } from "jose";
+import { passwordDigest } from "../services/adminAuth";
 import app from "../app";
 import { EXPORT_CATALOG_KEY, parseExport, updatedCatalog } from "../services/mapExports";
 
-const issuer = "https://ks-test.cloudflareaccess.com";
-const { publicKey, privateKey } = await generateKeyPair("RS256");
-const key = { ...await exportJWK(publicKey), kid: "ks-test", alg: "RS256", use: "sig" };
-const token = (overrides: Record<string, unknown> = {}) => new SignJWT({ email: "admin@example.com", ...overrides })
-  .setProtectedHeader({ alg: "RS256", kid: "ks-test" }).setIssuer(issuer).setAudience("admin-aud").setSubject("admin-id").setIssuedAt().setExpirationTime("1h").sign(privateKey);
+const password = "p".repeat(43);
+const account = { username: "admin", salt: "a".repeat(32), hash: await passwordDigest("a".repeat(32), password), version: "b".repeat(32) };
+const sessionSecret = "s".repeat(43);
+const token = (overrides: Record<string, unknown> = {}) => new SignJWT({ version: account.version, ...overrides })
+  .setProtectedHeader({ alg: "HS256" }).setIssuer("ks-admin").setAudience("ks-admin").setSubject("admin").setIssuedAt().setExpirationTime("1h").sign(new TextEncoder().encode(sessionSecret));
+let rateAllowed = true;
 const values = new Map<string, unknown>();
 let writes: string[] = [];
 const env = {
-  ACCESS_TEAM_DOMAIN: issuer, ACCESS_AUD: "admin-aud", ADMIN_EMAILS: "admin@example.com",
+  ADMIN_ACCOUNTS: JSON.stringify([account]), ADMIN_SESSION_SECRET: sessionSecret,
+  ADMIN_LOGIN_LIMIT: { limit: async () => ({ success: rateAllowed }) },
   VERIFY_CODE_TOKEN: "super-secret", MAP_EXPORT_TOKEN: "build-secret", MAP_PACKAGE_READ_TOKEN: "read-secret",
   ASSETS: { fetch: async () => new Response("Admin page") },
   KS_KV: {
@@ -23,28 +26,41 @@ const env = {
 } as unknown as Env;
 const entry = (n = 1) => parseExport({ version: `${"a".repeat(40)}-${n}`, source_sha: "a".repeat(40), build_sha: "b".repeat(40), maps_sha: "c".repeat(40), bridge_sha256: "d".repeat(64), sha256: "e".repeat(64), bytes: 4096, map_version: "2.830", map_name: "凯瑞甘生存2", map_index: 0, mr_iid: 5935, pipeline_id: n, created_at: "2026-10-22T12:00:00Z", merged_at: "2026-10-22T10:00:00Z" });
 const realFetch = globalThis.fetch;
-globalThis.fetch = async (input, init) => {
-  if (String(input).endsWith("/cdn-cgi/access/certs")) return Response.json({ keys: [key] });
-  throw new Error("Unexpected upstream");
-};
-const request = async (path: string, jwt?: string, init: RequestInit = {}) => app.request(`https://ks.194823.xyz${path}`, { ...init, headers: { ...(jwt ? { "Cf-Access-Jwt-Assertion": jwt } : {}), ...init.headers } }, env);
+globalThis.fetch = async () => { throw new Error("Unexpected upstream"); };
+const request = async (path: string, jwt?: string, init: RequestInit = {}) => app.request(`https://ks.194823.xyz${path}`, { ...init, headers: { ...(jwt ? { Cookie: `__Host-KS_ADMIN=${jwt}` } : {}), ...init.headers } }, env);
+const login = (username: string, supplied = password, origin = "https://ks.194823.xyz") => request("/admin/auth/login", undefined, { method: "POST", headers: { Origin: origin, "Content-Type": "application/json" }, body: JSON.stringify({ username, password: supplied }) });
 
-test("anonymous and forged identity headers cannot access page, APIs, or files", async () => {
-  for (const path of ["/admin", "/admin/api/maps", "/admin/api/verification-code", `/admin/api/maps/${entry().version}/download`]) {
+test("login shell is public; APIs and files reject anonymous and forged identities", async () => {
+  assert.equal((await request("/admin")).status, 200);
+  for (const path of ["/admin/api/maps", "/admin/api/verification-code", `/admin/api/maps/${entry().version}/download`]) {
     assert.equal((await request(path, undefined, { headers: { "Cf-Access-Authenticated-User-Email": "admin@example.com" } })).status, 401);
   }
-  assert.equal((await request("/admin/api/session", "forged.jwt.value")).status, 403);
+  assert.equal((await request("/admin/api/session", "forged.jwt.value")).status, 401);
 });
-test("verified exact email may sign in; another email or audience may not", async () => {
-  const response = await request("/admin/api/session", await token());
+test("fixed account signs in with secure cookie; invalid accounts and passwords fail", async () => {
+  const response = await login("admin");
   assert.equal(response.status, 200);
-  assert.equal(((await response.json()) as { email: string }).email, "admin@example.com");
-  assert.equal(response.headers.get("cache-control"), "private, no-store");
-  assert.equal((await request("/admin/api/session", await token({ email: "other@example.com" }))).status, 403);
-  const wrongAud = await new SignJWT({ email: "admin@example.com" }).setProtectedHeader({ alg: "RS256", kid: "ks-test" }).setIssuer(issuer).setAudience("other-app").setSubject("admin-id").setIssuedAt().setExpirationTime("1h").sign(privateKey);
-  assert.equal((await request("/admin/api/session", wrongAud)).status, 403);
-  const expired = await new SignJWT({ email: "admin@example.com" }).setProtectedHeader({ alg: "RS256", kid: "ks-test" }).setIssuer(issuer).setAudience("admin-aud").setSubject("admin-id").setIssuedAt(1).setExpirationTime(2).sign(privateKey);
-  assert.equal((await request("/admin/api/session", expired)).status, 403);
+  const cookie = response.headers.get("set-cookie") || "";
+  assert.match(cookie, /__Host-KS_ADMIN=/); assert.match(cookie, /HttpOnly/); assert.match(cookie, /Secure/); assert.match(cookie, /SameSite=Strict/); assert.match(cookie, /Path=\//);
+  const session = await request("/admin/api/session", cookie.split(";")[0].split("=")[1]);
+  assert.deepEqual(await session.json(), { username: "admin" });
+  assert.equal(session.headers.get("cache-control"), "private, no-store");
+  assert.equal((await login("other")).status, 401);
+  assert.equal((await login("admin", "x".repeat(43))).status, 401);
+  assert.equal((await request("/admin/api/session", await token({ version: "revoked" }))).status, 401);
+  const expired = await new SignJWT({ version: account.version }).setProtectedHeader({ alg: "HS256" }).setIssuer("ks-admin").setAudience("ks-admin").setSubject("admin").setIssuedAt(1).setExpirationTime(2).sign(new TextEncoder().encode(sessionSecret));
+  assert.equal((await request("/admin/api/session", expired)).status, 401);
+});
+test("cross-site login/logout, oversized payloads, and excess attempts are rejected", async () => {
+  assert.equal((await login("admin", password, "https://attacker.example")).status, 403);
+  assert.equal((await request("/admin/auth/logout", undefined, { method: "POST" })).status, 403);
+  const large = await request("/admin/auth/login", undefined, { method: "POST", headers: { Origin: "https://ks.194823.xyz", "Content-Type": "application/json" }, body: "x".repeat(2048) });
+  assert.equal(large.status, 413);
+  rateAllowed = false;
+  assert.equal((await login("admin")).status, 429);
+  rateAllowed = true;
+  const logout = await request("/admin/auth/logout", await token(), { method: "POST", headers: { Origin: "https://ks.194823.xyz" } });
+  assert.equal(logout.status, 200); assert.match(logout.headers.get("set-cookie") || "", /Max-Age=0/);
 });
 test("administrator is not a super-admin or an export machine", async () => {
   const jwt = await token();

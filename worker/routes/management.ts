@@ -1,9 +1,9 @@
 import { Hono } from "hono";
 import { catalog, packageFetch, MAP_FILE } from "../services/mapExports";
 
-const management = new Hono<{ Bindings: Env; Variables: { adminEmail: string } }>();
+const management = new Hono<{ Bindings: Env; Variables: { adminUsername: string } }>();
 
-management.get("/session", c => c.json({ email: c.get("adminEmail") }));
+management.get("/session", c => c.json({ username: c.get("adminUsername") }));
 management.get("/maps", async c => c.json({ items: await catalog(c.env) }));
 management.get("/maps/:version/download", async c => {
   const entry = (await catalog(c.env)).find(x => x.version === c.req.param("version"));

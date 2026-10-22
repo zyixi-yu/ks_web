@@ -1,34 +1,13 @@
-# 管理后台与 CN 地图文件导出
+# CN 地图私有下载
 
-翻译 MR（`feat/cn_text` → `main`）合并后，ks_ai 的 `CnMapExportMonitor` 为该合并提交创建一次 `CN-Map-Export` 流水线。它与现有战网发布监视器独立；导出只执行 CN 内容准备、Editor 另存为、MPQ 校验、私有上传及回读校验，不调用战网登录/发布，不改变飞书地图轮转状态。
+翻译 MR（feat/cn_text → main）合并后，ks_ai 独立监视器排队启动 CN-Map-Export。Windows Runner 在交互桌面准备并另存完整 SC2Map，不进入发布、登录或短信流程。地图源固定为翻译合并 SHA；素材 SHA、构建 SHA、桥接数据摘要、版本、MR、流水线、大小和 SHA256 写入清单。
 
-## 权限边界
+完整文件存入私有 GitLab 项目 zyixi/ks-cn-map-downloads（52）的 Generic Package Registry，每个版本一个 SC2Map 和 manifest.json，不分块、不提交二进制到 Git。目标项目只允许源项目 34 的 CI_JOB_TOKEN 跨项目访问；运行任务的用户还必须有目标项目权限。上传后完整下载核对摘要再发布目录。失败不替换已有目录，后台显示最新 10 个版本。历史包暂不自动删除。
 
-- `/admin`、`/admin/api/*`：Cloudflare Access 签名 JWT、指定 AUD/issuer、精确管理员邮箱白名单。不能仅凭邮箱请求头访问。
-- `/admin/api/maps`：最近 10 个成功导出的版本，按合并时间排序；可任选一个下载。
-- `/admin/api/verification-code`：只读当前未过期的短信验证码；不清除或续期。
-- `/api/config/*`：继续原来的超管 token 权限；管理员 JWT 不赋予配置权限。
-- `/api/map-export/*`：独立机器 token。仅提供导出所需的白名单配置和 bridge 快照，或校验上传并发布目录；不调用会清码的旧 config/read。
-- GitLab 包保持私有。下载由 Worker 后端流式代理，项目只读部署令牌不会给浏览器。
+后台 /admin 使用固定账号，最多 3 个。没有公开注册或密码重置端点。账号配置 ADMIN_ACCOUNTS 为服务端 secret，记录 username/salt/hash/version。密码必须由安全随机数生成 32 字节并编码为 43 字符 base64url；不支持自选弱密码。保存带 salt 与域分隔的 SHA256 摘要，明文只交付给管理员。轮换凭据时同步更换 version，撤销该账号旧会话。ADMIN_SESSION_SECRET 独立随机生成。会话为 8 小时签名 HttpOnly/Secure/SameSite=Strict Cookie，所有登录/退出要求同源 POST；免费 Worker rate-limit binding 限每 IP、每节点每分钟 8 次尝试（非全局精确限额）。
 
-## 生产配置
+MAP_PACKAGE_READ_TOKEN 是项目 52 的独立 read_package_registry deploy token，仅 Worker 持有。下载只允许目录内版本，经鉴权流式转发，无公开桶或存储令牌。MAP_EXPORT_TOKEN 是独立机器凭据，保存在 ks_ai/log/server/map-export-token（0600）并传给导出 CI，不具备超管权限。三个权限面与原 VERIFY_CODE_TOKEN 配置链路分离。
 
-Worker secrets：`MAP_EXPORT_TOKEN`、`MAP_PACKAGE_READ_TOKEN`。
-Worker variables：`ACCESS_TEAM_DOMAIN`（完整 https issuer）、`ACCESS_AUD`、`ADMIN_EMAILS`（逗号分隔完整邮箱）。
+管理员查看游戏验证码只读 sms_verify_code_v1，遵循原始 180 秒有效期，不清码、不续期。导出准备读取独立只读机器接口，不调用会清码的旧 config/read。
 
-`MAP_PACKAGE_READ_TOKEN` 必须是项目 34 的部署令牌，仅勾选 `read_package_registry`，由项目 Maintainer 创建。不要用管理员 PAT 或 CI 临时 job token 代替长期下载凭证。
-
-Access 自托管应用路径 `ks.194823.xyz/admin`，覆盖其子路径；邮箱 OTP，精确白名单，8 小时会话。Worker 二次验证确保其他域名或 workers.dev 入口不能绕过权限。若免费套餐激活要求绑卡/超额计费授权，先完成用户选择，不能擅自升级或同意扣费。
-
-ks_ai 本机机器 token 放入 `log/server/map-export-token`，权限 0600，不提交 Git。监视器状态在 `log/server/cn-map-export-state.json`；首次仅补建最新一次真实翻译合并，之后处理新合并。POST 前持久化待对账状态；网络结果不明时根据 `CN_MAP_EXPORT_KEY` 查询，不盲重发。已失败构建保留失败结果，不无限重试。
-
-## 元数据和完整性
-
-每个版本保存 source SHA、构建代码 SHA、场景素材 SHA、bridge SHA256、翻译 MR、流水线、地图编号/版本/名称、合并/构建时间、大小与地图 SHA256。
-
-文件先上传至项目 34 Generic Package `cn-map-export/<sourceSHA>-<pipelineID>/KerriganSurvival2_CN.SC2Map`，CI 下载回读核对大小和 SHA256 后才上传 manifest 并更新目录。Worker 再核对私有 manifest 和文件大小，失败保留已有目录。界面只列最新 10 个；更老的包暂保留于 GitLab，不宣称已实现存储清理。
-
-## 验证
-
-`pnpm exec tsx --test worker/tests/management.test.ts`、`pnpm typecheck`、`pnpm build`。
-生产验收必须包括实际 Editor 导出、私有包回读、允许邮箱登录、任选旧版本下载 hash 核对、未登录/伪造请求拒绝、超管配置权限隔离。合成 UI 数据和本地 JWT 测试不替代生产验收。
+部署使用现有 GitLab 和 Workers 免费计划，不开通 Access、R2 或付费订阅；受现有实例存储容量与 Workers 免费额度限制。验证：pnpm typecheck、pnpm exec tsx --test worker/tests/management.test.ts、pnpm build。真实验证还须包含 Windows 保存地图、跨项目上传读回和登录后下载摘要核对。

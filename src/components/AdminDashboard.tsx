@@ -1,16 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 import type { MapExport } from "../../worker/services/mapExports";
 
+class SessionExpired extends Error {}
+
 type CodeState = { active: boolean; code?: string; expires_at?: number };
 
 async function read<T>(path: string): Promise<T> {
   const response = await fetch(`/admin/api/${path}`, { cache: "no-store", credentials: "same-origin", redirect: "error" });
-  if (!response.ok) throw new Error(response.status === 401 || response.status === 403 ? "登录已过期，请重新登录。" : "暂时无法加载，请稍后重试。");
+  if (response.status === 401 || response.status === 403) throw new SessionExpired("请登录管理后台。");
+  if (!response.ok) throw new Error("暂时无法加载，请稍后重试。");
   return response.json();
 }
 
 export default function AdminDashboard() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [loginName, setLoginName] = useState("admin");
+  const [password, setPassword] = useState("");
+  const [checked, setChecked] = useState(false);
   const [items, setItems] = useState<MapExport[]>([]);
   const [code, setCode] = useState<CodeState>({ active: false });
   const [error, setError] = useState("");
@@ -19,23 +25,50 @@ export default function AdminDashboard() {
   const refresh = useCallback(async () => {
     setBusy(true); setError("");
     try {
-      const [session, maps, verification] = await Promise.all([read<{ email: string }>("session"), read<{ items: MapExport[] }>("maps"), read<CodeState>("verification-code")]);
-      setEmail(session.email); setItems(maps.items); setCode(verification);
-    } catch (e) { setCode({ active: false }); setError(e instanceof Error ? e.message : "加载失败"); }
-    finally { setBusy(false); }
+      const [session, maps, verification] = await Promise.all([read<{ username: string }>("session"), read<{ items: MapExport[] }>("maps"), read<CodeState>("verification-code")]);
+      setUsername(session.username); setItems(maps.items); setCode(verification);
+    } catch (e) { setCode({ active: false }); if (e instanceof SessionExpired) { setUsername(""); setItems([]); } else setError(e instanceof Error ? e.message : "加载失败"); }
+    finally { setBusy(false); setChecked(true); }
   }, []);
   useEffect(() => {
     void refresh();
     const tick = setInterval(() => setNow(Date.now()), 1000);
-    const poll = setInterval(() => { if (document.visibilityState === "visible") void refresh(); }, 15000);
-    return () => { clearInterval(tick); clearInterval(poll); };
+    return () => clearInterval(tick);
   }, [refresh]);
+  useEffect(() => {
+    if (!username) return;
+    const poll = setInterval(() => { if (document.visibilityState === "visible") void refresh(); }, 15000);
+    return () => clearInterval(poll);
+  }, [username, refresh]);
+  const login = async (event: React.FormEvent) => {
+    event.preventDefault(); setBusy(true); setError("");
+    try {
+      const response = await fetch("/admin/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username: loginName, password }), credentials: "same-origin" });
+      if (!response.ok) throw new Error(response.status === 429 ? "尝试次数过多，请稍后再试。" : "账号或密码不正确，或登录服务暂不可用。");
+      setPassword(""); await refresh();
+    } catch (e) { setError(e instanceof Error ? e.message : "登录失败"); }
+    finally { setBusy(false); }
+  };
+  const logout = async () => {
+    const response = await fetch("/admin/auth/logout", { method: "POST", credentials: "same-origin" });
+    if (!response.ok) { setError("退出失败，请稍后重试。"); return; }
+    setUsername(""); setItems([]); setCode({ active: false }); setError("");
+  };
+  if (!username) return <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 text-slate-900"><main className="w-full max-w-sm rounded-2xl border bg-white p-7 shadow-sm">
+    <a href="/" className="text-sm text-cyan-700">← KS 工具箱</a><h1 className="mt-4 text-2xl font-black">管理后台</h1><p className="mt-2 text-sm text-slate-500">登录后查看地图版本与当前游戏验证码。</p>
+    {error && <p role="alert" className="mt-4 text-sm text-red-700">{error}</p>}
+    {checked ? <form onSubmit={event => void login(event)} className="mt-6 space-y-4">
+      <label className="block text-sm font-medium">账号<input className="mt-1 block w-full rounded-lg border p-3" value={loginName} onChange={event => setLoginName(event.target.value)} autoComplete="username" required maxLength={32} /></label>
+      <label className="block text-sm font-medium">密码<input className="mt-1 block w-full rounded-lg border p-3" type="password" value={password} onChange={event => setPassword(event.target.value)} autoComplete="current-password" required maxLength={128} /></label>
+      <button disabled={busy} className="w-full rounded-lg bg-cyan-700 p-3 font-bold text-white disabled:opacity-40">{busy ? "正在登录…" : "登录"}</button>
+    </form> : <p className="mt-6 text-sm text-slate-500">正在检查登录状态…</p>}
+  </main></div>;
   const remaining = Math.max(0, (code.expires_at || 0) - Math.floor(now / 1000));
   const date = (value: string) => new Date(value).toLocaleString("zh-CN", { timeZone: "Asia/Shanghai", hour12: false });
   return <div className="min-h-screen bg-slate-50 text-slate-900">
     <header className="border-b bg-white"><div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-5">
       <div><a href="/" className="text-sm text-cyan-700">← KS 工具箱</a><h1 className="mt-1 text-2xl font-black">管理后台</h1></div>
-      <div className="text-right text-sm"><p className="text-slate-600">{email || "正在验证登录…"}</p><a className="text-cyan-700 underline" href="/cdn-cgi/access/logout">退出登录</a></div>
+      <div className="text-right text-sm"><p className="text-slate-600">{username}</p><button className="text-cyan-700 underline" onClick={() => void logout()}>退出登录</button></div>
     </div></header>
     <main className="mx-auto max-w-5xl space-y-6 px-4 py-6">
       {error && <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-800">{error} <a href="/admin" className="underline">重新加载</a></div>}

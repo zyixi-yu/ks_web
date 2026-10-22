@@ -10,9 +10,9 @@ declare global {
 
     // 短信验证码读写鉴权 token（Authorization: <token> 或 Authorization: Bearer <token>）
     VERIFY_CODE_TOKEN?: string;
-    ACCESS_TEAM_DOMAIN?: string;
-    ACCESS_AUD?: string;
-    ADMIN_EMAILS?: string;
+    ADMIN_ACCOUNTS?: string;
+    ADMIN_SESSION_SECRET?: string;
+    ADMIN_LOGIN_LIMIT: { limit(options: { key: string }): Promise<{ success: boolean }> };
     MAP_PACKAGE_READ_TOKEN?: string;
     MAP_EXPORT_TOKEN?: string;
 

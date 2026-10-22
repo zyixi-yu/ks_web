@@ -8,6 +8,7 @@
     "binding": "ASSETS",
     "run_worker_first": ["/admin", "/admin/*"]
   },
+  "ratelimits": [{ "name": "ADMIN_LOGIN_LIMIT", "namespace_id": "5220261022", "simple": { "limit": 8, "period": 60 } }],
   "kv_namespaces": [
     {
       "binding": "KS_KV",

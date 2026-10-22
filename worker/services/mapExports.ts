@@ -1,6 +1,6 @@
 export const EXPORT_CATALOG_KEY = "cn_map_exports_v1";
 export const PACKAGE_NAME = "cn-map-export";
-export const GITLAB_API = "https://git.kerrigansurvival.com/api/v4/projects/34";
+export const GITLAB_API = "https://git.kerrigansurvival.com/api/v4/projects/52";
 export const MAP_FILE = "KerriganSurvival2_CN.SC2Map";
 
 export interface MapExport {
