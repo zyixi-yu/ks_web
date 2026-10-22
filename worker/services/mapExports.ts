@@ -49,7 +49,7 @@ export function packageUrl(version: string, filename: string): string {
 export async function packageFetch(env: Env, version: string, filename: string, method = "GET"): Promise<Response> {
   if (!env.MAP_PACKAGE_READ_TOKEN) throw new Error("Private package access is not configured");
   return fetch(packageUrl(version, filename), {
-    method, headers: { "DEPLOY-TOKEN": env.MAP_PACKAGE_READ_TOKEN }, redirect: "error",
+    method, headers: { "DEPLOY-TOKEN": env.MAP_PACKAGE_READ_TOKEN }, redirect: "manual",
   });
 }
 

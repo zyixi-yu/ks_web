@@ -101,12 +101,28 @@ test("any listed version downloads through authenticated streaming without leaki
   globalThis.fetch = async (url, init) => {
     assert.match(String(url), /\/cn-map-export\/[a-f0-9]{40}-1\/KerriganSurvival2_CN.SC2Map$/);
     assert.equal(new Headers(init?.headers).get("DEPLOY-TOKEN"), "read-secret");
-    assert.equal(init?.redirect, "error");
+    assert.equal(init?.redirect, "manual");
     return new Response(new Uint8Array(4096), { headers: { "Content-Length": "4096" } });
   };
   const response = await request(`/admin/api/maps/${entry(1).version}/download`, await token());
   assert.equal(response.status, 200); assert.equal((await response.arrayBuffer()).byteLength, 4096);
   assert.equal(response.headers.get("deploy-token"), null);
   assert.equal((await request("/admin/api/maps/not-listed/download", await token())).status, 404);
+  globalThis.fetch = realFetch;
+});
+test("private storage redirects are rejected without forwarding its credential", async () => {
+  values.set(EXPORT_CATALOG_KEY, [entry()]); writes = [];
+  let requests = 0;
+  globalThis.fetch = async (_url, init) => {
+    requests++;
+    assert.equal(init?.redirect, "manual");
+    return new Response(null, { status: 302, headers: { Location: "https://untrusted.example/map" } });
+  };
+  const response = await request(`/admin/api/maps/${entry().version}/download`, await token());
+  assert.equal(response.status, 502);
+  assert.equal(requests, 1);
+  const complete = await request("/api/map-export/complete", undefined, { method: "POST", headers: { Authorization: "Bearer build-secret", "Content-Type": "application/json" }, body: JSON.stringify(entry()) });
+  assert.equal(complete.status, 502);
+  assert.deepEqual(writes, []);
   globalThis.fetch = realFetch;
 });
