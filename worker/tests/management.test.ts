@@ -16,7 +16,7 @@ let writes: string[] = [];
 const env = {
   ADMIN_ACCOUNTS: JSON.stringify([account]), ADMIN_SESSION_SECRET: sessionSecret,
   ADMIN_LOGIN_LIMIT: { limit: async () => ({ success: rateAllowed }) },
-  VERIFY_CODE_TOKEN: "super-secret", MAP_EXPORT_TOKEN: "build-secret", MAP_PACKAGE_READ_TOKEN: "read-secret",
+  VERIFY_CODE_TOKEN: "super-secret", MAP_EXPORT_TOKEN: "build-secret", DRIVE_CLIENT_ID: "client-id", DRIVE_CLIENT_SECRET: "client-secret", DRIVE_REFRESH_TOKEN: "refresh-secret", DRIVE_FOLDER_ID: "map-folder-12345",
   ASSETS: { fetch: async () => new Response("Admin page") },
   KS_KV: {
     get: async (key: string, type?: string) => type === "json" ? values.get(key) ?? null : values.has(key) ? JSON.stringify(values.get(key)) : null,
@@ -24,7 +24,7 @@ const env = {
     delete: async () => { throw new Error("These routes must never clear codes or configuration"); },
   },
 } as unknown as Env;
-const entry = (n = 1) => parseExport({ version: `${"a".repeat(40)}-${n}`, source_sha: "a".repeat(40), build_sha: "b".repeat(40), maps_sha: "c".repeat(40), bridge_sha256: "d".repeat(64), sha256: "e".repeat(64), bytes: 4096, map_version: "2.830", map_name: "凯瑞甘生存2", map_index: 0, mr_iid: 5935, pipeline_id: n, created_at: "2026-10-22T12:00:00Z", merged_at: "2026-10-22T10:00:00Z" });
+const entry = (n = 1) => parseExport({ drive_file_id: `drive-file-${n}-12345`, version: `${"a".repeat(40)}-${n}`, source_sha: "a".repeat(40), build_sha: "b".repeat(40), maps_sha: "c".repeat(40), bridge_sha256: "d".repeat(64), sha256: "e".repeat(64), bytes: 4096, map_version: "2.830", map_name: "凯瑞甘生存2", map_index: 0, mr_iid: 5935, pipeline_id: n, created_at: "2026-10-22T12:00:00Z", merged_at: "2026-10-22T10:00:00Z" });
 const realFetch = globalThis.fetch;
 globalThis.fetch = async () => { throw new Error("Unexpected upstream"); };
 const request = async (path: string, jwt?: string, init: RequestInit = {}) => app.request(`https://ks.194823.xyz${path}`, { ...init, headers: { ...(jwt ? { Cookie: `__Host-KS_ADMIN=${jwt}` } : {}), ...init.headers } }, env);
@@ -96,34 +96,97 @@ test("failed private storage validation preserves existing catalogue", async () 
   const response = await request("/api/map-export/complete", undefined, { method: "POST", headers: { Authorization: "Bearer build-secret", "Content-Type": "application/json" }, body: JSON.stringify(entry(2)) });
   assert.equal(response.status, 502); assert.deepEqual(writes, []);
 });
-test("any listed version downloads through authenticated streaming without leaking storage token", async () => {
-  values.set(EXPORT_CATALOG_KEY, [entry(2), entry(1)]);
+function driveMetadata(item = entry()) {
+  const { drive_file_id, ...manifest } = item;
+  return { id: drive_file_id, name: `${item.version}.SC2Map`, size: String(item.bytes), sha256Checksum: item.sha256,
+    mimeType: "application/octet-stream", description: JSON.stringify(manifest), parents: [env.DRIVE_FOLDER_ID],
+    appProperties: { ks2_export: "1", version: item.version }, trashed: false };
+}
+function driveMock(handler: (url: string, init?: RequestInit) => Response | Promise<Response>) {
   globalThis.fetch = async (url, init) => {
-    assert.match(String(url), /\/cn-map-export\/[a-f0-9]{40}-1\/KerriganSurvival2_CN.SC2Map$/);
-    assert.equal(new Headers(init?.headers).get("DEPLOY-TOKEN"), "read-secret");
-    assert.equal(new Headers(init?.headers).get("User-Agent"), "KS2-MapExport/1.0");
     assert.equal(init?.redirect, "manual");
-    return new Response(new Uint8Array(4096), { headers: { "Content-Length": "4096" } });
+    if (String(url) === "https://oauth2.googleapis.com/token") return Response.json({ access_token: "drive-access", expires_in: 3600 });
+    assert.equal(new Headers(init?.headers).get("Authorization"), "Bearer drive-access");
+    assert.equal(new URL(String(url)).origin, "https://www.googleapis.com");
+    return handler(String(url), init);
   };
-  const response = await request(`/admin/api/maps/${entry(1).version}/download`, await token());
+}
+const machine = { Authorization: "Bearer build-secret", "Content-Type": "application/json" };
+
+test("any listed Drive version streams only after folder and integrity validation", async () => {
+  values.set(EXPORT_CATALOG_KEY, [entry(2), entry(1)]);
+  driveMock(url => url.includes("alt=media")
+    ? new Response(new Uint8Array(4096), { headers: { "Content-Length": "4096", "Authorization": "private-upstream" } })
+    : Response.json(driveMetadata()));
+  const response = await request(`/admin/api/maps/${entry().version}/download`, await token());
   assert.equal(response.status, 200); assert.equal((await response.arrayBuffer()).byteLength, 4096);
-  assert.equal(response.headers.get("deploy-token"), null);
+  assert.equal(response.headers.get("authorization"), null);
+  assert.equal(response.headers.get("cache-control"), "private, no-store");
   assert.equal((await request("/admin/api/maps/not-listed/download", await token())).status, 404);
-  globalThis.fetch = realFetch;
 });
-test("private storage redirects are rejected without forwarding its credential", async () => {
+test("chunked Drive download validates actual size and requests identity encoding", async () => {
+  values.set(EXPORT_CATALOG_KEY, [entry()]);
+  for (const size of [4096, 4095, 4097]) {
+    driveMock((url, init) => {
+      if (!url.includes("alt=media")) return Response.json(driveMetadata());
+      assert.equal(new Headers(init?.headers).get("Accept-Encoding"), "identity");
+      return new Response(new Uint8Array(size));
+    });
+    const result = await request(`/admin/api/maps/${entry().version}/download`, await token());
+    assert.equal(result.status, 200);
+    if (size === 4096) assert.equal((await result.arrayBuffer()).byteLength, size);
+    else await assert.rejects(result.arrayBuffer());
+  }
+  driveMock(url => url.includes("alt=media")
+    ? new Response(new Uint8Array(4096), { headers: { "Content-Encoding": "gzip" } })
+    : Response.json(driveMetadata()));
+  assert.equal((await request(`/admin/api/maps/${entry().version}/download`, await token())).status, 502);
+});
+test("Drive completion rejects corrupt, moved, trashed and substituted files without changing latest", async () => {
+  for (const change of [{ sha256Checksum: "f".repeat(64) }, { size: "3" }, { parents: ["other-folder"] },
+    { trashed: true }, { name: "another-file" }, { id: "another-file-id" }, { appProperties: {} }]) {
+    writes = [];
+    driveMock(() => Response.json({ ...driveMetadata(), ...change }));
+    const result = await request("/api/map-export/complete", undefined, { method: "POST", headers: machine, body: JSON.stringify(entry()) });
+    assert.equal(result.status, 502); assert.deepEqual(writes, []);
+  }
+  driveMock(() => Response.json(driveMetadata()));
+  const mismatch = await request("/api/map-export/complete", undefined, { method: "POST", headers: machine, body: JSON.stringify({ ...entry(), map_version: "wrong" }) });
+  assert.equal(mismatch.status, 409);
+});
+test("verified Drive completion registers a downloadable version", async () => {
+  driveMock(() => Response.json(driveMetadata()));
+  const result = await request("/api/map-export/complete", undefined, { method: "POST", headers: machine, body: JSON.stringify(entry()) });
+  assert.equal(result.status, 200);
+  assert.equal((values.get(EXPORT_CATALOG_KEY) as any[]).find(x => x.version === entry().version).drive_file_id, entry().drive_file_id);
+});
+test("upload creates only an app-owned private map and returns a scoped session to the machine", async () => {
+  assert.equal((await request("/api/map-export/upload", await token(), { method: "POST", body: JSON.stringify(entry()) })).status, 401);
+  driveMock((url, init) => {
+    assert.match(url, /uploadType=resumable/);
+    const data = JSON.parse(String(init?.body));
+    assert.deepEqual(data.parents, [env.DRIVE_FOLDER_ID]);
+    assert.equal(data.permissions, undefined);
+    assert.equal(JSON.parse(data.description).drive_file_id, undefined);
+    return new Response(null, { headers: { Location: "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&upload_id=temporary" } });
+  });
+  const result = await request("/api/map-export/upload", undefined, { method: "POST", headers: machine, body: JSON.stringify(entry()) });
+  assert.equal(result.status, 200);
+  assert.equal(result.headers.get("cache-control"), "no-store");
+});
+test("redirects and unexpected upload locations never receive credentials", async () => {
   values.set(EXPORT_CATALOG_KEY, [entry()]); writes = [];
   let requests = 0;
-  globalThis.fetch = async (_url, init) => {
-    requests++;
-    assert.equal(init?.redirect, "manual");
-    return new Response(null, { status: 302, headers: { Location: "https://untrusted.example/map" } });
-  };
-  const response = await request(`/admin/api/maps/${entry().version}/download`, await token());
-  assert.equal(response.status, 502);
+  driveMock(() => { requests++; return new Response(null, { status: 302, headers: { Location: "https://untrusted.example/map" } }); });
+  assert.equal((await request(`/admin/api/maps/${entry().version}/download`, await token())).status, 502);
   assert.equal(requests, 1);
-  const complete = await request("/api/map-export/complete", undefined, { method: "POST", headers: { Authorization: "Bearer build-secret", "Content-Type": "application/json" }, body: JSON.stringify(entry()) });
-  assert.equal(complete.status, 502);
+  driveMock(() => new Response(null, { headers: { Location: "https://untrusted.example/upload" } }));
+  assert.equal((await request("/api/map-export/upload", undefined, { method: "POST", headers: machine, body: JSON.stringify(entry()) })).status, 502);
   assert.deepEqual(writes, []);
+});
+test("machine readback rejects anonymous access and unrelated Drive files", async () => {
+  assert.equal((await request(`/api/map-export/objects/${entry().drive_file_id}`)).status, 401);
+  driveMock(() => Response.json({ ...driveMetadata(), parents: ["unrelated-folder"] }));
+  assert.equal((await request(`/api/map-export/objects/${entry().drive_file_id}`, undefined, { headers: machine })).status, 502);
   globalThis.fetch = realFetch;
 });
