@@ -113,7 +113,8 @@ function driveMetadata(item = entry()) {
   const { drive_file_id, ...manifest } = item;
   return { id: drive_file_id, name: `${item.version}.SC2Map`, size: String(item.bytes), sha256Checksum: item.sha256,
     mimeType: "application/octet-stream", description: JSON.stringify(manifest), parents: [env.DRIVE_FOLDER_ID],
-    appProperties: { ks2_export: "1", version: item.version }, trashed: false };
+    appProperties: { ks2_export: "1", version: item.version }, trashed: false, ownedByMe: true,
+    createdTime: new Date().toISOString(), modifiedTime: new Date().toISOString() };
 }
 function driveMock(handler: (url: string, init?: RequestInit) => Response | Promise<Response>) {
   globalThis.fetch = async (url, init) => {

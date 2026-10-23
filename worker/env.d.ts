@@ -18,6 +18,7 @@ declare global {
     DRIVE_REFRESH_TOKEN?: string;
     DRIVE_FOLDER_ID?: string;
     MAP_EXPORT_TOKEN?: string;
+    MAP_RETENTION_ENABLED?: string;
 
     // 配置读写鉴权 token：复用 VERIFY_CODE_TOKEN（Authorization: <token> 或 Authorization: Bearer <token>）
   }

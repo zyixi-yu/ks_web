@@ -21,7 +21,7 @@ async function accessToken(env: Env): Promise<string> {
   return data.access_token;
 }
 
-async function driveFetch(env: Env, url: string, init: RequestInit = {}): Promise<Response> {
+export async function driveFetch(env: Env, url: string, init: RequestInit = {}): Promise<Response> {
   return fetch(url, { ...init, redirect: "manual", headers: {
     ...Object.fromEntries(new Headers(init.headers)), Authorization: `Bearer ${await accessToken(env)}`,
   } });

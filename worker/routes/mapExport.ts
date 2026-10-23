@@ -4,6 +4,7 @@ import { constantTimeEqual, parseBearerToken } from "../services/auth";
 import { catalog, EXPORT_CATALOG_KEY, parseExport, updatedCatalog } from "../services/mapExports";
 
 import { beginDriveUpload, driveDownload, verifiedDriveEntry } from "../services/driveStorage";
+import { cleanupMaps, ExpiredMapUpload, maintainMaps, registerDriveMap } from "../services/mapRetention";
 
 const routes = new Hono<{ Bindings: Env }>();
 routes.use("*", async (c, next) => {
@@ -44,7 +45,24 @@ routes.post("/complete", smallBody, async c => {
   try { stored = await verifiedDriveEntry(c.env, entry.drive_file_id); }
   catch { return c.json({ error: "Uploaded file unavailable or invalid" }, 502); }
   if (JSON.stringify(entry) !== JSON.stringify(stored)) return c.json({ error: "Manifest mismatch" }, 409);
-  await c.env.KS_KV.put(EXPORT_CATALOG_KEY, JSON.stringify(updatedCatalog(await catalog(c.env), entry)));
+  const current = await catalog(c.env);
+  try { await registerDriveMap(c.env, entry, current); }
+  catch (error) { return c.json({ error: error instanceof ExpiredMapUpload ? "Upload expired; create a new upload" : "Map registration unavailable" }, error instanceof ExpiredMapUpload ? 409 : 502); }
+  // An idempotent acknowledgement must not rewrite an old regional KV snapshot.
+  if (!current.some(x => JSON.stringify(x) === JSON.stringify(entry))) {
+    await c.env.KS_KV.put(EXPORT_CATALOG_KEY, JSON.stringify(updatedCatalog(current, entry)));
+  }
+  if (c.env.MAP_RETENTION_ENABLED === "true") c.executionCtx.waitUntil(maintainMaps(c.env));
   return c.json({ ok: true, version: entry.version });
+});
+routes.post("/cleanup", smallBody, async c => {
+  let dryRun: boolean;
+  try {
+    const input = await c.req.json();
+    if (!input || typeof input.dry_run !== "boolean" || Object.keys(input).length !== 1) throw new Error();
+    dryRun = input.dry_run;
+  } catch { return c.json({ error: "Specify dry_run" }, 400); }
+  try { return c.json(await cleanupMaps(c.env, dryRun)); }
+  catch { return c.json({ error: "Cleanup deferred; storage or catalogue could not be verified" }, 503); }
 });
 export default routes;
