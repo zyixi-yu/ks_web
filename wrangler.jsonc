@@ -3,6 +3,8 @@
   "name": "ks",
   "compatibility_date": "2026-01-24",
   "main": "worker/index.ts",
+  "vars": { "MAP_RETENTION_ENABLED": "true" },
+  "triggers": { "crons": ["30 23 * * *"] },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
@@ -18,6 +20,8 @@
   "env": {
     "preview": {
       "name": "ks-web-preview",
+      "vars": { "MAP_RETENTION_ENABLED": "false" },
+      "triggers": { "crons": [] },
       "kv_namespaces": [
         {
           "binding": "KS_KV",
